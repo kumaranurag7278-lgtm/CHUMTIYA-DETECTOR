@@ -132,6 +132,12 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+@theme inline {
+  --font-sans:
+    "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Space Grotesk", ui-monospace, monospace;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -140,5 +146,96 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
 }
+
+/* --- Stage & question transitions --- */
+
+@keyframes stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes stage-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes q-in {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes q-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+}
+
+@keyframes result-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility stage-enter {
+  animation: stage-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility stage-exit {
+  animation: stage-out 0.35s ease-in both;
+}
+
+@utility q-enter {
+  animation: q-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility q-exit {
+  animation: q-out 0.45s cubic-bezier(0.55, 0, 1, 0.45) both;
+}
+
+@utility result-pop {
+  animation: result-pop 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .q-enter,
+  .q-exit,
+  .stage-enter,
+  .stage-exit,
+  .result-pop {
+    animation-name: stage-in;
+    animation-duration: 0.2s;
+  }
+}
+
