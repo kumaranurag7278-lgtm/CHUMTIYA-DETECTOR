@@ -1,24 +1,60 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Landing } from "@/components/Landing";
+import { Survey } from "@/components/Survey";
+import { Result } from "@/components/Result";
+import { computeOutcome, type Outcome } from "@/lib/scoring";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "Chutiya Detector — A 10-Question Personality Diagnosis";
+const DESCRIPTION =
+  "A fast, funny 10-question survey that measures exactly how convinced you are that everyone around you is an idiot. Not a real test.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+type Stage = "landing" | "survey" | "result";
+
 function Index() {
+  const [stage, setStage] = useState<Stage>("landing");
+  const [leaving, setLeaving] = useState(false);
+  const [outcome, setOutcome] = useState<Outcome | null>(null);
+  const [runId, setRunId] = useState(0);
+
+  const start = () => {
+    setLeaving(true);
+    window.setTimeout(() => {
+      setLeaving(false);
+      setStage("survey");
+    }, 350);
+  };
+
+  const finish = (answers: number[]) => {
+    setOutcome(computeOutcome(answers));
+    setStage("result");
+  };
+
+  const retry = () => {
+    setOutcome(null);
+    setRunId((n) => n + 1);
+    setStage("survey");
+  };
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="min-h-[100svh] bg-background text-foreground">
+      {stage === "landing" && <Landing onStart={start} leaving={leaving} />}
+      {stage === "survey" && <Survey key={runId} onFinish={finish} />}
+      {stage === "result" && outcome && <Result outcome={outcome} onRetry={retry} />}
+    </main>
   );
 }

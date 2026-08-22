@@ -34,7 +34,8 @@ export function computeOutcome(answerIndexes: number[]): Outcome {
   });
 
   const percentage = Math.round((total / MAX_SCORE) * 100);
-  const band = bands.find((b) => percentage >= b.min && percentage <= b.max)?.label ?? bands[0].label;
+  const band =
+    bands.find((b) => percentage >= b.min && percentage <= b.max)?.label ?? "Surprisingly Normal";
 
   let trait: Trait = "normal";
   if (percentage > 20) {

@@ -36,6 +36,9 @@ export function Survey({ onFinish }: Props) {
     }, HIGHLIGHT_MS);
   };
 
+  const current = questions[step];
+  if (!current) return null;
+
   return (
     <section className="flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 py-12">
       <div className="mx-auto w-full max-w-2xl">
@@ -43,7 +46,7 @@ export function Survey({ onFinish }: Props) {
         <div className="mt-10">
           <QuestionCard
             key={step}
-            question={questions[step]}
+            question={current}
             selected={selected}
             onSelect={handleSelect}
             phase={phase}
