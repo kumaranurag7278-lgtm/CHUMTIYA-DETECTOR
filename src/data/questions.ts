@@ -21,7 +21,7 @@ export type Question = {
 
 export const questions: Question[] = [
   {
-    question: "Do you think going to parties or concerts is mostly a waste of time?",
+    question: "Be honest: are parties and concerts mostly just loud rooms full of nothing?",
     answers: [
       { text: "Complete waste. Loud rooms full of nothing.", score: 4, trait: "anti-mainstream" },
       { text: "Usually, yeah.", score: 3, trait: "anti-mainstream" },
@@ -31,7 +31,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Be honest: what percentage of people in your country would you classify as chutiya?",
+    question: "What percentage of people around you would you quietly classify as chutiya?",
     answers: [
       { text: "Basically all of them.", score: 4, trait: "cynicism" },
       { text: "Comfortably the majority.", score: 3, trait: "cynicism" },
@@ -51,7 +51,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Someone is genuinely excited about something you consider pointless. What happens in your head?",
+    question: "Someone is losing their mind over something you think is completely pointless. What's happening in your head?",
     answers: [
       { text: "I'm happy for them, honestly.", score: 0, trait: "normal" },
       { text: "Not my thing, but sure.", score: 1, trait: "normal" },
@@ -61,7 +61,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "How often do you catch yourself thinking you're the smartest person in the room?",
+    question: "How often do you walk into a room and immediately feel intellectually superior to everyone in it?",
     answers: [
       { text: "Every room. Every time.", score: 4, trait: "superiority" },
       { text: "Most rooms, let's be real.", score: 3, trait: "superiority" },
@@ -91,7 +91,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Someone strongly disagrees with you. What's your very first assumption?",
+    question: "Someone disagrees with you. Deep down, what's your first explanation?",
     answers: [
       { text: "They might know something I don't.", score: 0, trait: "normal" },
       { text: "We're probably defining the words differently.", score: 1, trait: "overthinking" },
