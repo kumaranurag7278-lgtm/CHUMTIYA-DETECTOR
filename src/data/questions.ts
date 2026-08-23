@@ -81,7 +81,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "People who blindly follow every trend are basically NPCs. Agree?",
+    question: "People who follow trends are NPCs?",
     answers: [
       { text: "They're not even running their own software.", score: 4, trait: "anti-mainstream" },
       { text: "Mostly agree.", score: 3, trait: "anti-mainstream" },
