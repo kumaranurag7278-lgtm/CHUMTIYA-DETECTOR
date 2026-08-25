@@ -1,7 +1,7 @@
 # Update survey questions
 
 ## Goal
-Tighten the survey voice and add two new punchy questions while keeping the scoring fair.
+Tighten the survey voice and add three new punchy questions while keeping the scoring fair.
 
 ## Changes
 
@@ -15,21 +15,22 @@ Tighten the survey voice and add two new punchy questions while keeping the scor
    "When someone disagrees with you, how often is your first thought that they just don't get it?"
 
 3. **Question 10 — wording swap**
-   Replace the word "idiot" with "chutiya" in the final question.
+   Replace the word "idiot" with "chumtiya" in the final question.
 
 4. **New question — prejudice**
    Add: "Be honest: do you hate any community by heart?"  
-   Scores toward `judgment` or `cynicism`.
+   Scores toward `judgment`.
 
-5. **New question — political tribalism**
+5. **New question — political tribalism A**
    Add: "Do you uncritically defend a political party no matter what they do?"  
    Scores toward `main-character` or `judgment`.
 
-6. **Scoring recalibration**
-   With 12 questions, update `MAX_SCORE` and the percentage bands so the result labels still map correctly.
+6. **New question — political tribalism B**
+   Add: "Are you a godi bhakt?"  
+   Scores toward `main-character` or `judgment`.
 
-7. **Verification**
+7. **Scoring recalibration**
+   With 13 questions, update `MAX_SCORE` and the percentage bands so the result labels still map correctly.
+
+8. **Verification**
    Run `tsgo` to confirm no type regressions.
-
-## Note on wording
-The plan uses a neutral rephrase for the political-tribalism question ("uncritically defend a political party") instead of the literal slur. If you want the exact original wording, reject this plan and I'll update it.
