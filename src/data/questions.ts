@@ -61,15 +61,16 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Do you secretly enjoy being the most knowledgeable person in a conversation?",
+    question: "Do you gossip about people's insecurities or secrets for fun \u2014 and make jokes out of them?",
     answers: [
-      { text: "It's the only reason I show up.", score: 4, trait: "superiority" },
-      { text: "I do get a small rush, yes.", score: 3, trait: "superiority" },
-      { text: "Sometimes.", score: 2, trait: "superiority" },
-      { text: "Not really.", score: 1, trait: "normal" },
-      { text: "I prefer learning from others.", score: 0, trait: "normal" },
+      { text: "It's basically my main hobby.", score: 4, trait: "judgment" },
+      { text: "Often, and the jokes are good.", score: 3, trait: "judgment" },
+      { text: "Sometimes, with close friends.", score: 2, trait: "judgment" },
+      { text: "Rarely, and I feel bad after.", score: 1, trait: "normal" },
+      { text: "Never \u2014 that's just cruel.", score: 0, trait: "normal" },
     ],
   },
+
   {
     question: "Friday night. Group plan just landed in your phone. What do you actually want?",
     answers: [
@@ -98,26 +99,6 @@ export const questions: Question[] = [
       { text: "I replay the argument for the next three hours.", score: 2, trait: "overthinking" },
       { text: "They didn't understand what I said.", score: 3, trait: "superiority" },
       { text: "They're simply not equipped for this conversation.", score: 4, trait: "superiority" },
-    ],
-  },
-  {
-    question: "How often do you look at someone's life choices and think, \"why would you do that?\"",
-    answers: [
-      { text: "Several times a day.", score: 4, trait: "main-character" },
-      { text: "Most days.", score: 3, trait: "main-character" },
-      { text: "Now and then.", score: 2, trait: "judgment" },
-      { text: "Rarely — everyone's got reasons.", score: 1, trait: "normal" },
-      { text: "Honestly never, not my business.", score: 0, trait: "normal" },
-    ],
-  },
-  {
-    question: "Final question. Do you genuinely feel like everyone around you is a chumtiya except you?",
-    answers: [
-      { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
-      { text: "Mostly yes, with a few exceptions.", score: 3, trait: "superiority" },
-      { text: "Some days, yes.", score: 2, trait: "cynicism" },
-      { text: "No, I'm a chumtiya too sometimes.", score: 1, trait: "normal" },
-      { text: "Not at all — I learn from people constantly.", score: 0, trait: "normal" },
     ],
   },
   {
@@ -150,6 +131,17 @@ export const questions: Question[] = [
       { text: "I don't even know what that means.", score: 0, trait: "normal" },
     ],
   },
+  {
+    question: "Final question. Do you genuinely feel like everyone around you is a chumtiya except you?",
+    answers: [
+      { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
+      { text: "Mostly yes, with a few exceptions.", score: 3, trait: "superiority" },
+      { text: "Some days, yes.", score: 2, trait: "cynicism" },
+      { text: "No, I'm a chumtiya too sometimes.", score: 1, trait: "normal" },
+      { text: "Not at all — I learn from people constantly.", score: 0, trait: "normal" },
+    ],
+  },
+
 ];
 
 export const MAX_SCORE = questions.length * 4;
