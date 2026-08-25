@@ -51,23 +51,23 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Someone is losing their mind over something you think is completely pointless. What's happening in your head?",
-    answers: [
-      { text: "I'm happy for them, honestly.", score: 0, trait: "normal" },
-      { text: "Not my thing, but sure.", score: 1, trait: "normal" },
-      { text: "I nod and quietly wonder why.", score: 2, trait: "judgment" },
-      { text: "I lose a little respect for them.", score: 3, trait: "judgment" },
-      { text: "I explain, at length, why it's stupid.", score: 4, trait: "judgment" },
-    ],
-  },
-  {
-    question: "How often do you walk into a room and immediately feel intellectually superior to everyone in it?",
+    question: "Do you usually feel like you're the smartest / most superior person in the room?",
     answers: [
       { text: "Every room. Every time.", score: 4, trait: "superiority" },
       { text: "Most rooms, let's be real.", score: 3, trait: "superiority" },
       { text: "Sometimes, depends on the room.", score: 2, trait: "superiority" },
       { text: "Rarely.", score: 1, trait: "normal" },
       { text: "Never — plenty of people outclass me.", score: 0, trait: "normal" },
+    ],
+  },
+  {
+    question: "Do you secretly enjoy being the most knowledgeable person in a conversation?",
+    answers: [
+      { text: "It's the only reason I show up.", score: 4, trait: "superiority" },
+      { text: "I do get a small rush, yes.", score: 3, trait: "superiority" },
+      { text: "Sometimes.", score: 2, trait: "superiority" },
+      { text: "Not really.", score: 1, trait: "normal" },
+      { text: "I prefer learning from others.", score: 0, trait: "normal" },
     ],
   },
   {
@@ -111,13 +111,43 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Final question. Do you genuinely feel like everyone around you is an idiot except you?",
+    question: "Final question. Do you genuinely feel like everyone around you is a chumtiya except you?",
     answers: [
       { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
       { text: "Mostly yes, with a few exceptions.", score: 3, trait: "superiority" },
       { text: "Some days, yes.", score: 2, trait: "cynicism" },
-      { text: "No, I'm an idiot too sometimes.", score: 1, trait: "normal" },
+      { text: "No, I'm a chumtiya too sometimes.", score: 1, trait: "normal" },
       { text: "Not at all — I learn from people constantly.", score: 0, trait: "normal" },
+    ],
+  },
+  {
+    question: "Be honest: do you hate any community by heart?",
+    answers: [
+      { text: "Yes. And I have receipts.", score: 4, trait: "judgment" },
+      { text: "A couple, quietly.", score: 3, trait: "judgment" },
+      { text: "Maybe one, but I keep it to myself.", score: 2, trait: "judgment" },
+      { text: "I dislike individuals, not groups.", score: 1, trait: "normal" },
+      { text: "No, that's messed up.", score: 0, trait: "normal" },
+    ],
+  },
+  {
+    question: "Do you uncritically defend a political party no matter what they do?",
+    answers: [
+      { text: "My party, right or wrong.", score: 4, trait: "main-character" },
+      { text: "Mostly, yeah.", score: 3, trait: "main-character" },
+      { text: "Only on the big stuff.", score: 2, trait: "judgment" },
+      { text: "I call them out when they're wrong.", score: 1, trait: "normal" },
+      { text: "I don't blindly follow any party.", score: 0, trait: "normal" },
+    ],
+  },
+  {
+    question: "Are you a godi bhakt?",
+    answers: [
+      { text: "Yes, proudly.", score: 4, trait: "main-character" },
+      { text: "Pretty much.", score: 3, trait: "main-character" },
+      { text: "I lean that way.", score: 2, trait: "judgment" },
+      { text: "Not really.", score: 1, trait: "normal" },
+      { text: "I don't even know what that means.", score: 0, trait: "normal" },
     ],
   },
 ];
