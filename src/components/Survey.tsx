@@ -42,7 +42,11 @@ export function Survey({ onFinish }: Props) {
   if (!current) return null;
 
   return (
-    <section className="flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 py-12">
+    <section
+      className={`flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 py-12 ${
+        finishing ? "stage-exit" : ""
+      }`}
+    >
       <div className="mx-auto w-full max-w-2xl">
         <ProgressBar current={step + 1} total={questions.length} />
         <div className="mt-10">
