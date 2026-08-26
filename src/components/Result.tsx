@@ -8,6 +8,35 @@ type Props = {
 
 export function Result({ outcome, onRetry }: Props) {
   const [shown, setShown] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const share = async () => {
+    const text = [
+      "🧪 CHUTIYA DETECTOR",
+      "━━━━━━━━━━━━━━",
+      `Chutiya Level: ${outcome.percentage}%`,
+      `Verdict: ${outcome.band}`,
+      `Primary Trait: ${outcome.traitName}`,
+      "━━━━━━━━━━━━━━",
+      "Think everyone around you is a chutiya? Prove it.",
+    ].join("\n");
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Chutiya Detector", text, url: window.location.origin });
+        return;
+      }
+      throw new Error("no-share");
+    } catch {
+      try {
+        await navigator.clipboard.writeText(`${text}\n${window.location.origin}`);
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2000);
+      } catch {
+        /* clipboard unavailable — do nothing */
+      }
+    }
+  };
 
   useEffect(() => {
     const target = outcome.percentage;

@@ -261,6 +261,8 @@
 @media (prefers-reduced-motion: reduce) {
   .q-enter,
   .q-exit,
+  .q-enter-back,
+  .q-exit-back,
   .stage-enter,
   .stage-exit,
   .result-pop {
