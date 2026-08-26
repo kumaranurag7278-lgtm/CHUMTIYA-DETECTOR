@@ -22,11 +22,11 @@ export function Survey({ onFinish }: Props) {
     const next = [...answers, index];
 
     window.setTimeout(() => {
+      setPhase("out");
       if (step === questions.length - 1) {
-        onFinish(next);
+        window.setTimeout(() => onFinish(next), SLIDE_MS);
         return;
       }
-      setPhase("out");
       window.setTimeout(() => {
         setAnswers(next);
         setStep(step + 1);
