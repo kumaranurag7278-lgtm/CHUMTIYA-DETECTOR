@@ -15,10 +15,42 @@ export function Survey({ onFinish }: Props) {
   const [answers, setAnswers] = useState<number[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
   const [phase, setPhase] = useState<"in" | "out">("in");
+  const [dir, setDir] = useState<1 | -1>(1);
   const [finishing, setFinishing] = useState(false);
+  const touchStart = useState<{ x: number; y: number } | null>(null);
+  const [, setTouchStart] = touchStart;
+
+  const goBack = () => {
+    if (step === 0 || selected !== null) return;
+    setDir(-1);
+    setPhase("out");
+    window.setTimeout(() => {
+      setAnswers(answers.slice(0, step - 1));
+      setStep(step - 1);
+      setPhase("in");
+    }, SLIDE_MS);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    if (t) setTouchStart({ x: t.clientX, y: t.clientY });
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart[0];
+    setTouchStart(null);
+    if (!start) return;
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    // Swipe right = go back to previous question
+    if (dx > 70 && Math.abs(dy) < 80) goBack();
+  };
 
   const handleSelect = (index: number) => {
     if (selected !== null) return;
+    setDir(1);
     setSelected(index);
     const next = [...answers, index];
 
