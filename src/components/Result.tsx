@@ -78,12 +78,20 @@ export function Result({ outcome, onRetry }: Props) {
           </p>
         </div>
 
-        <button
-          onClick={onRetry}
-          className="mt-12 rounded-full border border-border px-8 py-3.5 text-sm font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent"
-        >
-          Try Again
-        </button>
+        <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <button
+            onClick={share}
+            className="rounded-full bg-accent px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform duration-200 hover:scale-[1.03] active:scale-95"
+          >
+            {copied ? "Copied!" : "Share Result"}
+          </button>
+          <button
+            onClick={onRetry}
+            className="rounded-full border border-border px-8 py-3.5 text-sm font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     </section>
   );
