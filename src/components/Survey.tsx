@@ -75,7 +75,9 @@ export function Survey({ onFinish }: Props) {
 
   return (
     <section
-      className={`flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 py-12 ${
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className={`flex min-h-[100svh] touch-pan-y flex-col justify-center overflow-hidden px-6 py-12 ${
         finishing ? "stage-exit" : ""
       }`}
     >
@@ -88,8 +90,14 @@ export function Survey({ onFinish }: Props) {
             selected={selected}
             onSelect={handleSelect}
             phase={phase}
+            dir={dir}
           />
         </div>
+        {step > 0 && (
+          <p className="mt-8 text-center font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase opacity-60">
+            Swipe right to go back
+          </p>
+        )}
       </div>
     </section>
   );
