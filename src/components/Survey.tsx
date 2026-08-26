@@ -15,6 +15,7 @@ export function Survey({ onFinish }: Props) {
   const [answers, setAnswers] = useState<number[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
   const [phase, setPhase] = useState<"in" | "out">("in");
+  const [finishing, setFinishing] = useState(false);
 
   const handleSelect = (index: number) => {
     if (selected !== null) return;
@@ -22,11 +23,12 @@ export function Survey({ onFinish }: Props) {
     const next = [...answers, index];
 
     window.setTimeout(() => {
+      setPhase("out");
       if (step === questions.length - 1) {
-        onFinish(next);
+        setFinishing(true);
+        window.setTimeout(() => onFinish(next), SLIDE_MS);
         return;
       }
-      setPhase("out");
       window.setTimeout(() => {
         setAnswers(next);
         setStep(step + 1);
@@ -40,7 +42,11 @@ export function Survey({ onFinish }: Props) {
   if (!current) return null;
 
   return (
-    <section className="flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 py-12">
+    <section
+      className={`flex min-h-[100svh] flex-col justify-center overflow-hidden px-6 py-12 ${
+        finishing ? "stage-exit" : ""
+      }`}
+    >
       <div className="mx-auto w-full max-w-2xl">
         <ProgressBar current={step + 1} total={questions.length} />
         <div className="mt-10">
