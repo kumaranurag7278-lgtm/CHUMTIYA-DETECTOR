@@ -224,6 +224,36 @@
   animation: q-out 0.45s cubic-bezier(0.55, 0, 1, 0.45) both;
 }
 
+@keyframes q-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes q-out-back {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+}
+
+@utility q-enter-back {
+  animation: q-in-back 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility q-exit-back {
+  animation: q-out-back 0.45s cubic-bezier(0.55, 0, 1, 0.45) both;
+}
+
 @utility result-pop {
   animation: result-pop 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -231,6 +261,8 @@
 @media (prefers-reduced-motion: reduce) {
   .q-enter,
   .q-exit,
+  .q-enter-back,
+  .q-exit-back,
   .stage-enter,
   .stage-exit,
   .result-pop {

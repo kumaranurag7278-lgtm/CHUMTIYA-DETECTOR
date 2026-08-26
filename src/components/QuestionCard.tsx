@@ -5,11 +5,20 @@ type Props = {
   selected: number | null;
   onSelect: (index: number) => void;
   phase: "in" | "out";
+  dir: 1 | -1;
 };
 
-export function QuestionCard({ question, selected, onSelect, phase }: Props) {
+export function QuestionCard({ question, selected, onSelect, phase, dir }: Props) {
+  const cls =
+    phase === "out"
+      ? dir === 1
+        ? "q-exit"
+        : "q-exit-back"
+      : dir === 1
+        ? "q-enter"
+        : "q-enter-back";
   return (
-    <div className={phase === "out" ? "q-exit" : "q-enter"}>
+    <div className={cls}>
       <h2 className="text-balance text-[clamp(1.6rem,4.5vw,3rem)] leading-[1.1] font-bold tracking-tight">
         {question.question}
       </h2>
