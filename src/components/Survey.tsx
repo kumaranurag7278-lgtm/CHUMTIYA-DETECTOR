@@ -15,6 +15,7 @@ export function Survey({ onFinish }: Props) {
   const [answers, setAnswers] = useState<number[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
   const [phase, setPhase] = useState<"in" | "out">("in");
+  const [finishing, setFinishing] = useState(false);
 
   const handleSelect = (index: number) => {
     if (selected !== null) return;
@@ -24,6 +25,7 @@ export function Survey({ onFinish }: Props) {
     window.setTimeout(() => {
       setPhase("out");
       if (step === questions.length - 1) {
+        setFinishing(true);
         window.setTimeout(() => onFinish(next), SLIDE_MS);
         return;
       }
