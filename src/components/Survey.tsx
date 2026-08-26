@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { questions } from "@/data/questions";
 import { ProgressBar } from "./ProgressBar";
 import { QuestionCard } from "./QuestionCard";
@@ -32,12 +32,12 @@ export function Survey({ onFinish }: Props) {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     const t = e.touches[0];
-    if (t) setTouchStart({ x: t.clientX, y: t.clientY });
+    if (t) touchStartRef.current = { x: t.clientX, y: t.clientY };
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    const start = touchStart[0];
-    setTouchStart(null);
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
     if (!start) return;
     const t = e.changedTouches[0];
     if (!t) return;
