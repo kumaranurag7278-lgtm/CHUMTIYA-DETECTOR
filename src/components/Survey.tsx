@@ -17,8 +17,7 @@ export function Survey({ onFinish }: Props) {
   const [phase, setPhase] = useState<"in" | "out">("in");
   const [dir, setDir] = useState<1 | -1>(1);
   const [finishing, setFinishing] = useState(false);
-  const touchStart = useState<{ x: number; y: number } | null>(null);
-  const [, setTouchStart] = touchStart;
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const goBack = () => {
     if (step === 0 || selected !== null) return;
