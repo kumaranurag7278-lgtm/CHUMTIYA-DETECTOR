@@ -72,6 +72,16 @@ export const questions: Question[] = [
   },
 
   {
+    question: "If someone makes fun of you or jokes about you, you get rage baited easily \u2014 but when you make fun of others, you find it hilarious. Agree?",
+    answers: [
+      { text: "100%. I can dish it but I can't take it.", score: 4, trait: "judgment" },
+      { text: "Mostly true.", score: 3, trait: "judgment" },
+      { text: "Sometimes, depends on the joke.", score: 2, trait: "judgment" },
+      { text: "I try not to make fun of people.", score: 1, trait: "normal" },
+      { text: "No, I laugh at myself too.", score: 0, trait: "normal" },
+    ],
+  },
+  {
     question: "Friday night. Group plan just landed in your phone. What do you actually want?",
     answers: [
       { text: "Go out. Obviously.", score: 0, trait: "normal" },
