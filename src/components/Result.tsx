@@ -6,9 +6,28 @@ type Props = {
   onRetry: () => void;
 };
 
+const CONFETTI_COLORS = [
+  "bg-accent",
+  "bg-foreground",
+  "bg-chart-2",
+  "bg-chart-4",
+  "bg-chart-5",
+];
+
+const CONFETTI_PIECES = Array.from({ length: 40 }, (_, i) => ({
+  left: (i * 37 + 13) % 100,
+  delay: ((i * 97) % 100) / 100 * 0.4,
+  duration: 2.2 + ((i * 53) % 100) / 100 * 1.6,
+  size: 6 + ((i * 29) % 3) * 3,
+  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+  drift: ((i * 61) % 60) - 30,
+  spin: 360 + ((i * 71) % 360),
+}));
+
 export function Result({ outcome, onRetry }: Props) {
   const [shown, setShown] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   const share = async () => {
     const text = [
@@ -56,8 +75,25 @@ export function Result({ outcome, onRetry }: Props) {
   }, [outcome.percentage]);
 
   return (
-    <section className="flex min-h-[100svh] flex-col items-center justify-center px-6 py-16 text-center">
-      <div className="stage-enter mx-auto w-full max-w-xl">
+    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 py-16 text-center">
+      <div aria-hidden="true" className="confetti-layer pointer-events-none absolute inset-0">
+        {CONFETTI_PIECES.map((p, i) => (
+          <span
+            key={i}
+            className={`confetti-piece absolute ${p.color}`}
+            style={{
+              left: `${p.left}%`,
+              width: p.size,
+              height: p.size * 0.6,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`,
+              ["--drift" as string]: `${p.drift}px`,
+              ["--spin" as string]: `${p.spin}deg`,
+            }}
+          />
+        ))}
+      </div>
+      <div className="stage-enter relative mx-auto w-full max-w-xl">
         <p className="font-mono text-xs tracking-[0.4em] text-muted-foreground uppercase">
           Your Chutiya Level
         </p>
@@ -86,12 +122,37 @@ export function Result({ outcome, onRetry }: Props) {
             {copied ? "Copied!" : "Share Result"}
           </button>
           <button
-            onClick={onRetry}
+            onClick={() => setConfirming(true)}
             className="rounded-full border border-border px-8 py-3.5 text-sm font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent"
           >
             Try Again
           </button>
         </div>
+
+        {confirming && (
+          <div className="mt-8 rounded-2xl border border-border bg-card p-6 animate-scale-in">
+            <p className="text-sm font-bold tracking-[0.15em] uppercase">
+              Lose this result?
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Your {outcome.percentage}% verdict will be gone forever. RIP.
+            </p>
+            <div className="mt-5 flex justify-center gap-3">
+              <button
+                onClick={onRetry}
+                className="rounded-full bg-destructive px-6 py-2.5 text-xs font-bold tracking-[0.2em] text-destructive-foreground uppercase transition-transform duration-200 hover:scale-[1.03] active:scale-95"
+              >
+                Yes, Retry
+              </button>
+              <button
+                onClick={() => setConfirming(false)}
+                className="rounded-full border border-border px-6 py-2.5 text-xs font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent"
+              >
+                Keep Result
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

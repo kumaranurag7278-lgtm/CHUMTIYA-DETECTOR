@@ -258,6 +258,44 @@
   animation: result-pop 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* --- Hint fade & confetti --- */
+
+@keyframes hint-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
+@utility hint-fade {
+  animation: hint-fade-in 0.6s ease-out both;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift, 0px), 110vh, 0)
+      rotate(var(--spin, 540deg));
+  }
+}
+
+.confetti-piece {
+  top: -4vh;
+  border-radius: 1px;
+  animation-name: confetti-fall;
+  animation-timing-function: cubic-bezier(0.25, 0.4, 0.55, 1);
+  animation-fill-mode: both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .q-enter,
   .q-exit,
@@ -268,6 +306,10 @@
   .result-pop {
     animation-name: stage-in;
     animation-duration: 0.2s;
+  }
+
+  .confetti-layer {
+    display: none;
   }
 }
 

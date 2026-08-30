@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { questions } from "@/data/questions";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { ProgressBar } from "./ProgressBar";
 import { QuestionCard } from "./QuestionCard";
 
@@ -9,18 +10,30 @@ type Props = {
 
 const HIGHLIGHT_MS = 160;
 const SLIDE_MS = 450;
+const HINT_MS = 6000;
 
 export function Survey({ onFinish }: Props) {
+  const isMobile = useIsMobile();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
   const [phase, setPhase] = useState<"in" | "out">("in");
   const [dir, setDir] = useState<1 | -1>(1);
   const [finishing, setFinishing] = useState(false);
+  const [hintDismissed, setHintDismissed] = useState(false);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  const showHint = isMobile && step > 0 && !hintDismissed;
+
+  useEffect(() => {
+    if (!showHint) return;
+    const t = window.setTimeout(() => setHintDismissed(true), HINT_MS);
+    return () => window.clearTimeout(t);
+  }, [showHint]);
 
   const goBack = () => {
     if (step === 0 || selected !== null) return;
+    setHintDismissed(true);
     setDir(-1);
     setPhase("out");
     window.setTimeout(() => {
@@ -92,8 +105,8 @@ export function Survey({ onFinish }: Props) {
             dir={dir}
           />
         </div>
-        {step > 0 && (
-          <p className="mt-8 text-center font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase opacity-60">
+        {showHint && (
+          <p className="hint-fade mt-8 text-center font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
             Swipe right to go back
           </p>
         )}
