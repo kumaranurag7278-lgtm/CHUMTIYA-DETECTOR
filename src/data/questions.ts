@@ -95,7 +95,7 @@ export const questions: Question[] = [
   {
     question: "People who follow trends are NPCs?",
     answers: [
-      { text: "They're not even running their own software.", score: 4, trait: "anti-mainstream" },
+      { text: "They're game bots God sent for my entertainment.", score: 4, trait: "anti-mainstream" },
       { text: "Mostly agree.", score: 3, trait: "anti-mainstream" },
       { text: "Some are, some aren't.", score: 2, trait: "judgment" },
       { text: "That's a bit harsh.", score: 1, trait: "normal" },
