@@ -6,9 +6,28 @@ type Props = {
   onRetry: () => void;
 };
 
+const CONFETTI_COLORS = [
+  "bg-accent",
+  "bg-foreground",
+  "bg-chart-2",
+  "bg-chart-4",
+  "bg-chart-5",
+];
+
+const CONFETTI_PIECES = Array.from({ length: 40 }, (_, i) => ({
+  left: (i * 37 + 13) % 100,
+  delay: ((i * 97) % 100) / 100 * 0.4,
+  duration: 2.2 + ((i * 53) % 100) / 100 * 1.6,
+  size: 6 + ((i * 29) % 3) * 3,
+  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+  drift: ((i * 61) % 60) - 30,
+  spin: 360 + ((i * 71) % 360),
+}));
+
 export function Result({ outcome, onRetry }: Props) {
   const [shown, setShown] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   const share = async () => {
     const text = [
