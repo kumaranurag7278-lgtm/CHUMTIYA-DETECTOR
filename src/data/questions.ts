@@ -2,6 +2,7 @@ export type Trait =
   | "superiority"
   | "cynicism"
   | "judgment"
+  | "complainer"
   | "isolation"
   | "overthinking"
   | "anti-mainstream"
@@ -185,6 +186,11 @@ export const traitInfo: Record<Trait, { name: string; description: string }> = {
   judgment: {
     name: "Social Judgment",
     description: "You have detailed opinions about how other people live. Unfortunately, nobody asked.",
+  },
+  complainer: {
+    name: "Professional Complainer",
+    description:
+      "You'll narrate your stress to five different people, but somehow the to-do list stays untouched. Oscar-worthy suffering.",
   },
   isolation: {
     name: "People Are Annoying\u2122",
