@@ -143,6 +143,16 @@ export const questions: Question[] = [
     ],
   },
   {
+    question: "You stress about work or studies all the time, rant to friends about it, but never actually do anything to fix it. Agree?",
+    answers: [
+      { text: "Complaining is my cardio.", score: 4, trait: "complainer" },
+      { text: "Mostly yes.", score: 3, trait: "complainer" },
+      { text: "Sometimes, but I do try.", score: 2, trait: "complainer" },
+      { text: "I rant, then I act.", score: 1, trait: "normal" },
+      { text: "No, I just get things done.", score: 0, trait: "normal" },
+    ],
+  },
+  {
     question: "Final question. Do you genuinely feel like everyone around you is a chumtiya except you?",
     answers: [
       { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
