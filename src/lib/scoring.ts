@@ -5,6 +5,7 @@ const TRAIT_PRIORITY: Trait[] = [
   "superiority",
   "main-character",
   "judgment",
+  "complainer",
   "cynicism",
   "anti-mainstream",
   "isolation",
