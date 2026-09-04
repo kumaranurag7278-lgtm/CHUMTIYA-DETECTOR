@@ -32,7 +32,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "What percentage of people around you would you quietly classify as chutiya?",
+    question: "What percentage of people around you would you quietly classify as chumtiya?",
     answers: [
       { text: "Basically all of them.", score: 4, trait: "cynicism" },
       { text: "Comfortably the majority.", score: 3, trait: "cynicism" },
@@ -176,10 +176,10 @@ export type Band = {
 export const bands: Band[] = [
   { min: 0, max: 20, label: "Surprisingly Normal" },
   { min: 21, max: 40, label: "Slightly Sus" },
-  { min: 41, max: 60, label: "Certified Chutiya" },
-  { min: 61, max: 80, label: "Advanced Chutiya" },
-  { min: 81, max: 95, label: "Premium Chutiya" },
-  { min: 96, max: 100, label: "Final Boss Chutiya" },
+  { min: 41, max: 60, label: "Certified Chumtiya" },
+  { min: 61, max: 80, label: "Advanced Chumtiya" },
+  { min: 81, max: 95, label: "Premium Chumtiya" },
+  { min: 96, max: 100, label: "Final Boss Chumtiya" },
 ];
 
 export const traitInfo: Record<Trait, { name: string; description: string }> = {
