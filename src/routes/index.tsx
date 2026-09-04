@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Stage = "landing" | "survey" | "result";
+type Stage = "landing" | "disclaimer" | "survey" | "result";
 
 function Index() {
   const [stage, setStage] = useState<Stage>("landing");
@@ -36,8 +36,12 @@ function Index() {
     setLeaving(true);
     window.setTimeout(() => {
       setLeaving(false);
-      setStage("survey");
+      setStage("disclaimer");
     }, 350);
+  };
+
+  const proceedToSurvey = () => {
+    setStage("survey");
   };
 
   const finish = (answers: number[]) => {
@@ -54,6 +58,7 @@ function Index() {
   return (
     <main className="min-h-[100svh] bg-background text-foreground">
       {stage === "landing" && <Landing onStart={start} leaving={leaving} />}
+      {stage === "disclaimer" && <DisclaimerModal onContinue={proceedToSurvey} />}
       {stage === "survey" && <Survey key={runId} onFinish={finish} />}
       {stage === "result" && outcome && <Result outcome={outcome} onRetry={retry} />}
     </main>
