@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Landing } from "@/components/Landing";
+import { DisclaimerModal } from "@/components/DisclaimerModal";
 import { Survey } from "@/components/Survey";
 import { Result } from "@/components/Result";
 import { computeOutcome, type Outcome } from "@/lib/scoring";
