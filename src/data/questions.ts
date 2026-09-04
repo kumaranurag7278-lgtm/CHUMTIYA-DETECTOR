@@ -153,6 +153,16 @@ export const questions: Question[] = [
     ],
   },
   {
+    question: "Be honest: do you think the person who made this site is a chumtiya?",
+    answers: [
+      { text: "100% sala chumtiya hi hai.", score: 2, trait: "judgment" },
+      { text: "Probably, yes.", score: 1, trait: "judgment" },
+      { text: "A little, yeah.", score: 1, trait: "judgment" },
+      { text: "I don't know.", score: 0, trait: "normal" },
+      { text: "No, he seems cool.", score: 0, trait: "normal" },
+    ],
+  },
+  {
     question: "Final question. Do you genuinely feel like everyone around you is a chumtiya except you?",
     answers: [
       { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
