@@ -52,13 +52,13 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Do you usually feel like you're the smartest / most superior person in the room?",
+    question: "Do you feel like you're the smartest in the room \u2014 and anyone who seems better than you is probably just a chumtiya?",
     answers: [
       { text: "Every room. Every time.", score: 4, trait: "superiority" },
       { text: "Most rooms, let's be real.", score: 3, trait: "superiority" },
       { text: "Sometimes, depends on the room.", score: 2, trait: "superiority" },
       { text: "Rarely.", score: 1, trait: "normal" },
-      { text: "Never — plenty of people outclass me.", score: 0, trait: "normal" },
+      { text: "Never \u2014 plenty of people outclass me.", score: 0, trait: "normal" },
     ],
   },
   {
