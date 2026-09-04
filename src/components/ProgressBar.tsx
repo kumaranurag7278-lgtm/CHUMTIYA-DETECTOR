@@ -12,7 +12,7 @@ export function ProgressBar({ current, total }: Props) {
         <span>
           {pad(current)} / {pad(total)}
         </span>
-        <span className="hidden sm:inline">Chutiya Detector</span>
+        <span className="hidden sm:inline">Chumtiya Detector</span>
       </div>
       <div className="h-[3px] w-full overflow-hidden rounded-full bg-secondary">
         <div

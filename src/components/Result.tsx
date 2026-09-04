@@ -31,18 +31,18 @@ export function Result({ outcome, onRetry }: Props) {
 
   const share = async () => {
     const text = [
-      "🧪 CHUTIYA DETECTOR",
+      "🧪 CHUMTIYA DETECTOR",
       "━━━━━━━━━━━━━━",
-      `Chutiya Level: ${outcome.percentage}%`,
+      `Chumtiya Level: ${outcome.percentage}%`,
       `Verdict: ${outcome.band}`,
       `Primary Trait: ${outcome.traitName}`,
       "━━━━━━━━━━━━━━",
-      "Think everyone around you is a chutiya? Prove it.",
+      "Think everyone around you is a chumtiya? Prove it.",
     ].join("\n");
 
     try {
       if (navigator.share) {
-        await navigator.share({ title: "Chutiya Detector", text, url: window.location.origin });
+        await navigator.share({ title: "Chumtiya Detector", text, url: window.location.origin });
         return;
       }
       throw new Error("no-share");
@@ -95,7 +95,7 @@ export function Result({ outcome, onRetry }: Props) {
       </div>
       <div className="stage-enter relative mx-auto w-full max-w-xl">
         <p className="font-mono text-xs tracking-[0.4em] text-muted-foreground uppercase">
-          Your Chutiya Level
+          Your Chumtiya Level
         </p>
         <p className="mt-4 text-[clamp(4.5rem,22vw,12rem)] leading-[0.85] font-black tracking-tighter text-accent tabular-nums">
           {shown}%

@@ -14,7 +14,7 @@ export function Landing({ onStart, leaving }: Props) {
         Diagnostic v1.0
       </p>
       <h1 className="mt-6 text-[clamp(2.75rem,12vw,9rem)] leading-[0.85] font-black tracking-tighter">
-        CHUTIYA
+        CHUMTIYA
         <br />
         <span className="text-accent">DETECTOR</span>
       </h1>
@@ -25,7 +25,7 @@ export function Landing({ onStart, leaving }: Props) {
         onClick={onStart}
         className="mt-12 rounded-full bg-accent px-10 py-4 text-sm font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform duration-200 hover:scale-[1.04] active:scale-[0.98]"
       >
-        Detect Chutiya
+        Detect Chumtiya
       </button>
       <p className="mt-10 max-w-xs font-mono text-[11px] leading-relaxed text-muted-foreground/60 uppercase">
         Not a real psychological test. Results are for laughs only.
