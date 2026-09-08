@@ -278,6 +278,14 @@
   animation: result-pop 0.5s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+@utility modal-enter {
+  animation: modal-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility overlay-fade {
+  animation: overlay-in 0.25s ease-out both;
+}
+
 /* --- Hint fade & confetti --- */
 
 @keyframes hint-fade-in {
