@@ -18,7 +18,7 @@ export function DisclaimerModal({ onContinue }: Props) {
       aria-labelledby="disclaimer-title"
       className="fixed inset-0 z-50 flex items-center justify-center px-6 py-8"
     >
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
+      <div className="overlay-fade absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
       <div className="modal-enter relative w-full max-w-md overflow-hidden rounded-3xl border border-border bg-card/95 p-8 shadow-2xl sm:p-10">
         <div className="flex flex-col items-center text-center">
           <span
