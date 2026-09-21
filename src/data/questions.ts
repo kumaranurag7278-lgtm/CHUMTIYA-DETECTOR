@@ -32,13 +32,13 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "What percentage of people around you would you quietly classify as chumtiya?",
+    question: "Be honest: do you think the person who made this site is a chumtiya?",
     answers: [
-      { text: "Basically all of them.", score: 4, trait: "cynicism" },
-      { text: "Comfortably the majority.", score: 3, trait: "cynicism" },
-      { text: "About half, on a good day.", score: 2, trait: "cynicism" },
-      { text: "A loud minority.", score: 1, trait: "normal" },
-      { text: "People are mostly alright.", score: 0, trait: "normal" },
+      { text: "100% sala chumtiya hi hai.", score: 2, trait: "judgment" },
+      { text: "Probably, yes.", score: 1, trait: "judgment" },
+      { text: "A little, yeah.", score: 1, trait: "judgment" },
+      { text: "I don't know.", score: 0, trait: "normal" },
+      { text: "No, he seems cool.", score: 0, trait: "normal" },
     ],
   },
   {
@@ -52,7 +52,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Do you feel like you're the smartest in the room \u2014 and anyone who seems better than you is probably just a chumtiya?",
+    question: "Do you always feel like you're the smartest person in the room — and everyone else is a chumtiya?",
     answers: [
       { text: "Every room. Every time.", score: 4, trait: "superiority" },
       { text: "Most rooms, let's be real.", score: 3, trait: "superiority" },
@@ -83,23 +83,23 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Friday night. Group plan just landed in your phone. What do you actually want?",
+    question: "Are you the kind of person who always cancels plans at the last moment?",
     answers: [
-      { text: "Go out. Obviously.", score: 0, trait: "normal" },
-      { text: "Go, but leave early.", score: 1, trait: "normal" },
-      { text: "Depends entirely on my mood.", score: 2, trait: "isolation" },
-      { text: "Make an excuse, stay in.", score: 3, trait: "isolation" },
-      { text: "Mute the group. Alone is objectively better.", score: 4, trait: "isolation" },
+      { text: "Always. My cancellation text is basically scheduled.", score: 4, trait: "isolation" },
+      { text: "Very often — the plan sounded better yesterday.", score: 3, trait: "isolation" },
+      { text: "Sometimes, if my social battery dies.", score: 2, trait: "isolation" },
+      { text: "Rarely, and only for a real reason.", score: 1, trait: "normal" },
+      { text: "Never. If I said I'll come, I show up.", score: 0, trait: "normal" },
     ],
   },
   {
-    question: "People who follow trends are NPCs?",
+    question: "When you see people enjoying themselves or doing something different, is your first thought that they're chumtiya or cringe?",
     answers: [
-      { text: "They're game bots God sent for my entertainment.", score: 4, trait: "anti-mainstream" },
-      { text: "Mostly agree.", score: 3, trait: "anti-mainstream" },
-      { text: "Some are, some aren't.", score: 2, trait: "judgment" },
-      { text: "That's a bit harsh.", score: 1, trait: "normal" },
-      { text: "Nah, people are allowed to like things.", score: 0, trait: "normal" },
+      { text: "Immediately. The cringe detector never rests.", score: 4, trait: "judgment" },
+      { text: "Usually — I judge first and ask questions never.", score: 3, trait: "judgment" },
+      { text: "Sometimes, if it's genuinely ridiculous.", score: 2, trait: "judgment" },
+      { text: "Rarely. It doesn't really affect me.", score: 1, trait: "normal" },
+      { text: "No. Let people enjoy things.", score: 0, trait: "normal" },
     ],
   },
   {
@@ -110,6 +110,36 @@ export const questions: Question[] = [
       { text: "I replay the argument for the next three hours.", score: 2, trait: "overthinking" },
       { text: "They didn't understand what I said.", score: 3, trait: "superiority" },
       { text: "They're simply not equipped for this conversation.", score: 4, trait: "superiority" },
+    ],
+  },
+  {
+    question: "Have you ever ghosted or ditched old friends because you found new friends or better options?",
+    answers: [
+      { text: "Yes. Upgrades are upgrades — no regrets.", score: 4, trait: "judgment" },
+      { text: "More than once, if I'm honest.", score: 3, trait: "isolation" },
+      { text: "Maybe once. I handled it badly.", score: 2, trait: "judgment" },
+      { text: "We drifted apart, but I didn't ghost them.", score: 1, trait: "normal" },
+      { text: "No. New friends don't replace old ones.", score: 0, trait: "normal" },
+    ],
+  },
+  {
+    question: "Do you usually try to make yourself the centre of attention — or do some corny shit just to get noticed?",
+    answers: [
+      { text: "Obviously. Every room needs a main character.", score: 4, trait: "main-character" },
+      { text: "Often. Silence feels like bad publicity.", score: 3, trait: "main-character" },
+      { text: "Sometimes, when the room is too boring.", score: 2, trait: "main-character" },
+      { text: "Rarely. I don't need the spotlight.", score: 1, trait: "normal" },
+      { text: "Never. I'm happy letting others shine.", score: 0, trait: "normal" },
+    ],
+  },
+  {
+    question: "When you mess up, do you play the victim and somehow make it everyone else's fault?",
+    answers: [
+      { text: "Baby, I cheated because I was depressed — this is somehow your fault.", score: 4, trait: "main-character" },
+      { text: "Usually. Accountability ruins the storyline.", score: 3, trait: "main-character" },
+      { text: "Sometimes, before I calm down and admit it.", score: 2, trait: "judgment" },
+      { text: "Rarely. I try to own what I did.", score: 1, trait: "normal" },
+      { text: "No. If I messed up, I say so.", score: 0, trait: "normal" },
     ],
   },
   {
@@ -133,7 +163,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Are you a godi bhakt?",
+    question: "Are you a Modi bhakt? Does your Sanatan Dharma only come out near mosques — 'jaldi se Jai Shree Ram bol deta hoon, inki gaand jal jayegi, hahaha'?",
     answers: [
       { text: "Yes, proudly.", score: 4, trait: "main-character" },
       { text: "Pretty much.", score: 3, trait: "main-character" },
@@ -150,16 +180,6 @@ export const questions: Question[] = [
       { text: "Sometimes, but I do try.", score: 2, trait: "complainer" },
       { text: "I rant, then I act.", score: 1, trait: "normal" },
       { text: "No, I just get things done.", score: 0, trait: "normal" },
-    ],
-  },
-  {
-    question: "Be honest: do you think the person who made this site is a chumtiya?",
-    answers: [
-      { text: "100% sala chumtiya hi hai.", score: 2, trait: "judgment" },
-      { text: "Probably, yes.", score: 1, trait: "judgment" },
-      { text: "A little, yeah.", score: 1, trait: "judgment" },
-      { text: "I don't know.", score: 0, trait: "normal" },
-      { text: "No, he seems cool.", score: 0, trait: "normal" },
     ],
   },
   {
