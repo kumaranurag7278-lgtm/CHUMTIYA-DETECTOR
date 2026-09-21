@@ -6,9 +6,9 @@ import { Survey } from "@/components/Survey";
 import { Result } from "@/components/Result";
 import { computeOutcome, type Outcome } from "@/lib/scoring";
 
-const TITLE = "Chumtiya Detector — A 17-Question Personality Diagnosis";
+const TITLE = "Chumtiya Detector — A 16-Question Personality Diagnosis";
 const DESCRIPTION =
-  "A fast, funny 17-question survey that measures exactly how convinced you are that everyone around you is a chumtiya. Not a real test.";
+  "A fast, funny 16-question survey that measures exactly how convinced you are that everyone around you is a chumtiya. Not a real test.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
