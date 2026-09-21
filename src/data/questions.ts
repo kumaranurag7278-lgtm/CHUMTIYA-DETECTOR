@@ -32,13 +32,13 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Be honest: do you think the person who made this site is a chumtiya?",
+    question: "Final question. Do you genuinely feel like everyone around you is a chumtiya except you?",
     answers: [
-      { text: "100% sala chumtiya hi hai.", score: 2, trait: "judgment" },
-      { text: "Probably, yes.", score: 1, trait: "judgment" },
-      { text: "A little, yeah.", score: 1, trait: "judgment" },
-      { text: "I don't know.", score: 0, trait: "normal" },
-      { text: "No, he seems cool.", score: 0, trait: "normal" },
+      { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
+      { text: "Mostly yes, with a few exceptions.", score: 3, trait: "superiority" },
+      { text: "Some days, yes.", score: 2, trait: "cynicism" },
+      { text: "No, I'm a chumtiya too sometimes.", score: 1, trait: "normal" },
+      { text: "Not at all — I learn from people constantly.", score: 0, trait: "normal" },
     ],
   },
   {
@@ -153,13 +153,13 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Do you uncritically defend a political party no matter what they do?",
+    question: "Be honest: do you think the person who made this site is a chumtiya?",
     answers: [
-      { text: "My party, right or wrong.", score: 4, trait: "main-character" },
-      { text: "Mostly, yeah.", score: 3, trait: "main-character" },
-      { text: "Only on the big stuff.", score: 2, trait: "judgment" },
-      { text: "I call them out when they're wrong.", score: 1, trait: "normal" },
-      { text: "I don't blindly follow any party.", score: 0, trait: "normal" },
+      { text: "100% sala chumtiya hi hai.", score: 2, trait: "judgment" },
+      { text: "Probably, yes.", score: 1, trait: "judgment" },
+      { text: "A little, yeah.", score: 1, trait: "judgment" },
+      { text: "I don't know.", score: 0, trait: "normal" },
+      { text: "No, he seems cool.", score: 0, trait: "normal" },
     ],
   },
   {
