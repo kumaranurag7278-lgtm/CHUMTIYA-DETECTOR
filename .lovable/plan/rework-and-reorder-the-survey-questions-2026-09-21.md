@@ -16,13 +16,14 @@ Polish the requested wording, replace the specified questions, add three new per
 8. **Judging other people's fun:** Replace the trends/NPC question with: “When you see people enjoying themselves or doing something different, is your first thought that they're chumtiya or cringe?” Add five answers from immediate harsh judgment to letting people enjoy things, scored toward judgment at the high end.
 9. Assuming people who disagree simply do not understand — keep.
 10. **Ghosting old friends:** Add: “Have you ever ghosted or ditched old friends because you found new friends or better options?” Add five answers from doing it without regret to staying loyal, scored toward judgment/isolation.
-11. **Attention-seeking:** Add: “Do you usually try to make yourself the centre of attention?” Add five answers from constantly seeking attention to being comfortable outside the spotlight, scored toward main-character behavior.
-12. **Playing the victim:** Add: “When you mess up, do you play the victim and somehow make it everyone else's fault?” Include a top-answer joke based on: “Obviously. I'm the cutie — they made me do it,” then scale down to accepting responsibility. Score the high end toward main-character/judgment.
+11. **Attention-seeking:** Add: “Do you usually try to make yourself the centre of attention? Or do some corny shit to grab attention ?” Add five answers from constantly seeking attention to being comfortable outside the spotlight, scored toward main-character behavior.
+12. **Playing the victim:** Add: “When you mess up, do you play the victim and somehow make it everyone else's fault?” Include a top-answer joke based on: “Baby i cheated on you because  — its your fault i was depressed .,” then scale down to accepting responsibility. Score the high end toward main-character/judgment.
 13. Hating a community — keep.
 14. Uncritically defending a political party — keep.
-15. “Are you a godi bhakt?” — keep.
+15. “Are you a Modi bhakt? Does your Sanatan Dharma only come out near mosques("jaldi se jai shree ram bol deta hu inki gaand jl jayegi hahahhaha? ” — keep.
 16. Stressing and ranting about work/studies without acting — keep.
 17. Existing “everyone around you is a chumtiya except you” final question — keep as the finale.
+  &nbsp;
 
 ## Supporting updates
 
