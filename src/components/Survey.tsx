@@ -24,6 +24,7 @@ export function Survey({ onFinish }: Props) {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const showHint = isMobile && step > 0 && !hintDismissed;
+  const canGoBack = step > 0 && selected === null;
 
   useEffect(() => {
     if (!showHint) return;
@@ -32,12 +33,11 @@ export function Survey({ onFinish }: Props) {
   }, [showHint]);
 
   const goBack = () => {
-    if (step === 0 || selected !== null) return;
+    if (!canGoBack) return;
     setHintDismissed(true);
     setDir(-1);
     setPhase("out");
     window.setTimeout(() => {
-      setAnswers(answers.slice(0, step - 1));
       setStep(step - 1);
       setPhase("in");
     }, SLIDE_MS);
@@ -64,7 +64,8 @@ export function Survey({ onFinish }: Props) {
     if (selected !== null) return;
     setDir(1);
     setSelected(index);
-    const next = [...answers, index];
+    const next = [...answers];
+    next[step] = index;
 
     window.setTimeout(() => {
       setPhase("out");
@@ -89,27 +90,39 @@ export function Survey({ onFinish }: Props) {
     <section
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className={`flex min-h-[100svh] touch-pan-y flex-col justify-center overflow-hidden px-6 py-12 ${
+      className={`flex min-h-[100svh] touch-pan-y flex-col justify-center overflow-hidden px-4 py-8 sm:px-6 sm:py-12 ${
         finishing ? "stage-exit" : ""
       }`}
     >
       <div className="mx-auto w-full max-w-2xl">
         <ProgressBar current={step + 1} total={questions.length} />
-        <div className="mt-10">
+        <div className="mt-7 sm:mt-10">
           <QuestionCard
             key={step}
             question={current}
             selected={selected}
+            previous={answers[step] ?? null}
             onSelect={handleSelect}
             phase={phase}
             dir={dir}
           />
         </div>
-        {showHint && (
-          <p className="hint-fade mt-8 text-center font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-            Swipe right to go back
-          </p>
-        )}
+
+        <div className="mt-6 flex min-h-[3rem] items-center justify-between gap-3 sm:mt-8">
+          <button
+            type="button"
+            onClick={goBack}
+            disabled={!canGoBack}
+            className="inline-flex min-h-[2.75rem] items-center gap-2 rounded-full border border-border px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 disabled:pointer-events-none disabled:opacity-0 hover:border-accent hover:text-accent"
+          >
+            <span aria-hidden="true">←</span> Back
+          </button>
+          {showHint && (
+            <p className="hint-fade font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
+              Swipe right to go back
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );
