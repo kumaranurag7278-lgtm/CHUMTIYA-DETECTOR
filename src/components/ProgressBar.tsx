@@ -8,8 +8,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export function ProgressBar({ current, total }: Props) {
   return (
     <div className="w-full">
-      <div className="mb-3 flex items-baseline justify-between font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase">
-        <span>
+      <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3 font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase sm:flex sm:justify-between sm:text-xs sm:tracking-[0.3em]">
+        <span className="truncate">
           {pad(current)} / {pad(total)}
         </span>
         <span className="hidden sm:inline">Chumtiya Detector</span>

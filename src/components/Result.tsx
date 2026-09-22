@@ -75,7 +75,7 @@ export function Result({ outcome, onRetry }: Props) {
   }, [outcome.percentage]);
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 py-16 text-center">
+    <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 py-12 text-center sm:px-6 sm:py-16">
       <div aria-hidden="true" className="confetti-layer pointer-events-none absolute inset-0">
         {CONFETTI_PIECES.map((p, i) => (
           <span
@@ -94,59 +94,61 @@ export function Result({ outcome, onRetry }: Props) {
         ))}
       </div>
       <div className="stage-enter relative mx-auto w-full max-w-xl">
-        <p className="font-mono text-xs tracking-[0.4em] text-muted-foreground uppercase">
+        <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase sm:text-xs sm:tracking-[0.4em]">
           Your Chumtiya Level
         </p>
-        <p className="mt-4 text-[clamp(4.5rem,22vw,12rem)] leading-[0.85] font-black tracking-tighter text-accent tabular-nums">
+        <p className="mt-3 text-[clamp(4rem,24vw,12rem)] leading-[0.85] font-black tracking-tighter text-accent tabular-nums sm:mt-4">
           {shown}%
         </p>
-        <h2 className="result-pop mt-4 text-[clamp(1.5rem,6vw,3rem)] leading-tight font-black tracking-tight uppercase">
+        <h2 className="result-pop mt-3 text-balance text-[clamp(1.35rem,6.5vw,3rem)] leading-tight font-black tracking-tight uppercase sm:mt-4">
           {outcome.band}
         </h2>
 
-        <div className="mt-14 border-t border-border pt-10">
-          <p className="font-mono text-xs tracking-[0.4em] text-muted-foreground uppercase">
+        <div className="mt-10 border-t border-border pt-8 sm:mt-14 sm:pt-10">
+          <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase sm:text-xs sm:tracking-[0.4em]">
             Primary Trait
           </p>
-          <h3 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">{outcome.traitName}</h3>
-          <p className="mt-4 text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <h3 className="mt-3 text-balance text-xl font-bold tracking-tight sm:text-3xl">
+            {outcome.traitName}
+          </h3>
+          <p className="mt-3 text-pretty text-[0.95rem] leading-relaxed text-muted-foreground sm:mt-4 sm:text-lg">
             {outcome.traitDescription}
           </p>
         </div>
 
-        <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div className="mt-9 flex flex-col items-center gap-3 sm:mt-12 sm:flex-row sm:justify-center sm:gap-4">
           <button
             onClick={share}
-            className="rounded-full bg-accent px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform duration-200 hover:scale-[1.03] active:scale-95"
+            className="min-h-[3rem] w-full max-w-xs rounded-full bg-accent px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform duration-200 hover:scale-[1.03] active:scale-95 sm:w-auto"
           >
             {copied ? "Copied!" : "Share Result"}
           </button>
           <button
             onClick={() => setConfirming(true)}
-            className="rounded-full border border-border px-8 py-3.5 text-sm font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent"
+            className="min-h-[3rem] w-full max-w-xs rounded-full border border-border px-8 py-3.5 text-sm font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent sm:w-auto"
           >
             Try Again
           </button>
         </div>
 
         {confirming && (
-          <div className="mt-8 rounded-2xl border border-border bg-card p-6 animate-scale-in">
+          <div className="mt-7 rounded-2xl border border-border bg-card p-5 animate-scale-in sm:mt-8 sm:p-6">
             <p className="text-sm font-bold tracking-[0.15em] uppercase">
               Lose this result?
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               Your {outcome.percentage}% verdict will be gone forever. RIP.
             </p>
-            <div className="mt-5 flex justify-center gap-3">
+            <div className="mt-5 flex flex-col justify-center gap-2.5 sm:flex-row sm:gap-3">
               <button
                 onClick={onRetry}
-                className="rounded-full bg-destructive px-6 py-2.5 text-xs font-bold tracking-[0.2em] text-destructive-foreground uppercase transition-transform duration-200 hover:scale-[1.03] active:scale-95"
+                className="min-h-[2.75rem] rounded-full bg-destructive px-6 py-2.5 text-xs font-bold tracking-[0.2em] text-destructive-foreground uppercase transition-transform duration-200 hover:scale-[1.03] active:scale-95"
               >
                 Yes, Retry
               </button>
               <button
                 onClick={() => setConfirming(false)}
-                className="rounded-full border border-border px-6 py-2.5 text-xs font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent"
+                className="min-h-[2.75rem] rounded-full border border-border px-6 py-2.5 text-xs font-bold tracking-[0.2em] uppercase transition-colors duration-200 hover:border-accent hover:text-accent"
               >
                 Keep Result
               </button>
