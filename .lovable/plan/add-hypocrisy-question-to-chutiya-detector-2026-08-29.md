@@ -25,10 +25,13 @@ Use the same 5-answer scale as the other questions:
 ## Files to edit
 
 1. `src/data/questions.ts`
-  - Insert the new question object at index 5.
-  - `MAX_SCORE` is already `questions.length * 4`, so it will auto-update from 48 to 52.
+
+- Insert the new question object at index 5.
+- `MAX_SCORE` is already `questions.length * 4`, so it will auto-update from 48 to 52.
+
 2. `src/routes/index.tsx`
-  - Update metadata that mentions "12 questions" to "13 questions".
+
+- Update metadata that mentions "12 questions" to "13 questions".
 
 ## Verification
 

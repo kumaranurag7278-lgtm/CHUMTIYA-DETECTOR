@@ -13,4 +13,5 @@
 Net question count goes from 13 to 12. `MAX_SCORE` is derived from `questions.length`, so scoring and the percentage bands stay correct with no extra changes.
 
 ## Verification
+
 Run `tsgo` to confirm no type regressions, and check the survey flow in the preview.

@@ -522,7 +522,7 @@ Example conceptual structure:
 
 questions = [
 
-  {
+{
 
     question: "...",
 
@@ -540,7 +540,7 @@ questions = [
 
     ]
 
-  }
+}
 
 ]
 
@@ -617,7 +617,6 @@ DO NOT overengineer this project.
 The final website should feel like a polished 2–5 minute internet experience that someone would send to a friend saying:
 
 "Bro take this test 💀"
-
 
 ## Development
 
