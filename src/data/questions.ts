@@ -163,7 +163,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Are you a Modi bhakt? Does your Sanatan Dharma only come out near mosques — 'jaldi se Jai Shree Ram bol deta hoon, inki gaand jal jayegi, hahaha'?",
+    question: "Are you a Godi bhakt? Does your Sanatan Dharma only come out near mosques — 'jaldi se Jai Shree Ram bol deta hoon, inki gaand jal jayegi, hahaha'?",
     answers: [
       { text: "Yes, proudly.", score: 4, trait: "main-character" },
       { text: "Pretty much.", score: 3, trait: "main-character" },
