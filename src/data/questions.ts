@@ -22,6 +22,16 @@ export type Question = {
 
 export const questions: Question[] = [
   {
+    question: "Do you genuinely feel like everyone around you is a chumtiya except you?",
+    answers: [
+      { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
+      { text: "Mostly yes, with a few exceptions.", score: 3, trait: "superiority" },
+      { text: "Some days, yes.", score: 2, trait: "cynicism" },
+      { text: "No, I'm a chumtiya too sometimes.", score: 1, trait: "normal" },
+      { text: "Not at all — I learn from people constantly.", score: 0, trait: "normal" },
+    ],
+  },
+  {
     question: "Be honest: are parties and concerts mostly just loud rooms full of nothing?",
     answers: [
       { text: "Complete waste. Loud rooms full of nothing.", score: 4, trait: "anti-mainstream" },
@@ -29,16 +39,6 @@ export const questions: Question[] = [
       { text: "Depends who's there.", score: 2, trait: "judgment" },
       { text: "Not really, they're fine.", score: 1, trait: "normal" },
       { text: "No, I actually love them.", score: 0, trait: "normal" },
-    ],
-  },
-  {
-    question: "Final question. Do you genuinely feel like everyone around you is a chumtiya except you?",
-    answers: [
-      { text: "Yes. And it's exhausting being right.", score: 4, trait: "main-character" },
-      { text: "Mostly yes, with a few exceptions.", score: 3, trait: "superiority" },
-      { text: "Some days, yes.", score: 2, trait: "cynicism" },
-      { text: "No, I'm a chumtiya too sometimes.", score: 1, trait: "normal" },
-      { text: "Not at all — I learn from people constantly.", score: 0, trait: "normal" },
     ],
   },
   {
