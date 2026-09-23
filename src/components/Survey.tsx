@@ -25,6 +25,8 @@ export function Survey({ onFinish }: Props) {
 
   const showHint = isMobile && step > 0 && !hintDismissed;
   const canGoBack = step > 0 && selected === null;
+  const canGoForward =
+    selected === null && step < questions.length - 1 && answers[step] != null;
 
   useEffect(() => {
     if (!showHint) return;
@@ -43,6 +45,17 @@ export function Survey({ onFinish }: Props) {
     }, SLIDE_MS);
   };
 
+  const goForward = () => {
+    if (!canGoForward) return;
+    setHintDismissed(true);
+    setDir(1);
+    setPhase("out");
+    window.setTimeout(() => {
+      setStep(step + 1);
+      setPhase("in");
+    }, SLIDE_MS);
+  };
+
   const handleTouchStart = (e: React.TouchEvent) => {
     const t = e.touches[0];
     if (t) touchStartRef.current = { x: t.clientX, y: t.clientY };
@@ -56,8 +69,11 @@ export function Survey({ onFinish }: Props) {
     if (!t) return;
     const dx = t.clientX - start.x;
     const dy = t.clientY - start.y;
-    // Swipe right = go back to previous question
-    if (dx > 70 && Math.abs(dy) < 80) goBack();
+    // Swipe right = previous question, swipe left = next (if already answered)
+    if (Math.abs(dy) < 80) {
+      if (dx > 70) goBack();
+      else if (dx < -70) goForward();
+    }
   };
 
   const handleSelect = (index: number) => {
@@ -119,9 +135,17 @@ export function Survey({ onFinish }: Props) {
           </button>
           {showHint && (
             <p className="hint-fade font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
-              Swipe right to go back
+              Swipe to move between questions
             </p>
           )}
+          <button
+            type="button"
+            onClick={goForward}
+            disabled={!canGoForward}
+            className="inline-flex min-h-[2.75rem] items-center gap-2 rounded-full border border-border px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 disabled:pointer-events-none disabled:opacity-0 hover:border-accent hover:text-accent"
+          >
+            Next <span aria-hidden="true">→</span>
+          </button>
         </div>
       </div>
     </section>
