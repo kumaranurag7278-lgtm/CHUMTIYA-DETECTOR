@@ -52,7 +52,8 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Do you always feel like you're the smartest person in the room — and everyone else is a chumtiya?",
+    question:
+      "Do you always feel like you're the smartest person in the room — and everyone else is a chumtiya?",
     answers: [
       { text: "Every room. Every time.", score: 4, trait: "superiority" },
       { text: "Most rooms, let's be real.", score: 3, trait: "superiority" },
@@ -62,7 +63,8 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Do you gossip about people's insecurities or secrets for fun \u2014 and make jokes out of them?",
+    question:
+      "Do you gossip about people's insecurities or secrets for fun \u2014 and make jokes out of them?",
     answers: [
       { text: "It's basically my main hobby.", score: 4, trait: "judgment" },
       { text: "Often, and the jokes are good.", score: 3, trait: "judgment" },
@@ -73,7 +75,8 @@ export const questions: Question[] = [
   },
 
   {
-    question: "If someone makes fun of you or jokes about you, you get rage baited easily \u2014 but when you make fun of others, you find it hilarious. Agree?",
+    question:
+      "If someone makes fun of you or jokes about you, you get rage baited easily \u2014 but when you make fun of others, you find it hilarious. Agree?",
     answers: [
       { text: "100%. I can dish it but I can't take it.", score: 4, trait: "judgment" },
       { text: "Mostly true.", score: 3, trait: "judgment" },
@@ -85,7 +88,11 @@ export const questions: Question[] = [
   {
     question: "Are you the kind of person who always cancels plans at the last moment?",
     answers: [
-      { text: "Always. My cancellation text is basically scheduled.", score: 4, trait: "isolation" },
+      {
+        text: "Always. My cancellation text is basically scheduled.",
+        score: 4,
+        trait: "isolation",
+      },
       { text: "Very often — the plan sounded better yesterday.", score: 3, trait: "isolation" },
       { text: "Sometimes, if my social battery dies.", score: 2, trait: "isolation" },
       { text: "Rarely, and only for a real reason.", score: 1, trait: "normal" },
@@ -93,7 +100,8 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "When you see people enjoying themselves or doing something different, is your first thought that they're chumtiya or cringe?",
+    question:
+      "When you see people enjoying themselves or doing something different, is your first thought that they're chumtiya or cringe?",
     answers: [
       { text: "Immediately. The cringe detector never rests.", score: 4, trait: "judgment" },
       { text: "Usually — I judge first and ask questions never.", score: 3, trait: "judgment" },
@@ -109,11 +117,16 @@ export const questions: Question[] = [
       { text: "We're probably defining the words differently.", score: 1, trait: "overthinking" },
       { text: "I replay the argument for the next three hours.", score: 2, trait: "overthinking" },
       { text: "They didn't understand what I said.", score: 3, trait: "superiority" },
-      { text: "They're simply not equipped for this conversation.", score: 4, trait: "superiority" },
+      {
+        text: "They're simply not equipped for this conversation.",
+        score: 4,
+        trait: "superiority",
+      },
     ],
   },
   {
-    question: "Have you ever ghosted or ditched old friends because you found new friends or better options?",
+    question:
+      "Have you ever ghosted or ditched old friends because you found new friends or better options?",
     answers: [
       { text: "Yes. Upgrades are upgrades — no regrets.", score: 4, trait: "judgment" },
       { text: "More than once, if I'm honest.", score: 3, trait: "isolation" },
@@ -123,7 +136,8 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Do you usually try to make yourself the centre of attention — or do some corny shit just to get noticed?",
+    question:
+      "Do you usually try to make yourself the centre of attention — or do some corny shit just to get noticed?",
     answers: [
       { text: "Obviously. Every room needs a main character.", score: 4, trait: "main-character" },
       { text: "Often. Silence feels like bad publicity.", score: 3, trait: "main-character" },
@@ -135,7 +149,11 @@ export const questions: Question[] = [
   {
     question: "When you mess up, do you play the victim and somehow make it everyone else's fault?",
     answers: [
-      { text: "Baby, I cheated because I was depressed — this is somehow your fault.", score: 4, trait: "main-character" },
+      {
+        text: "Baby, I cheated because I was depressed — this is somehow your fault.",
+        score: 4,
+        trait: "main-character",
+      },
       { text: "Usually. Accountability ruins the storyline.", score: 3, trait: "main-character" },
       { text: "Sometimes, before I calm down and admit it.", score: 2, trait: "judgment" },
       { text: "Rarely. I try to own what I did.", score: 1, trait: "normal" },
@@ -163,7 +181,8 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Are you a Godi bhakt? Does your Sanatan Dharma only come out near mosques — 'jaldi se Jai Shree Ram bol deta hoon, inki gaand jal jayegi, hahaha'?",
+    question:
+      "Are you a Godi bhakt? Does your Sanatan Dharma only come out near mosques — 'jaldi se Jai Shree Ram bol deta hoon, inki gaand jal jayegi, hahaha'?",
     answers: [
       { text: "Yes, proudly.", score: 4, trait: "main-character" },
       { text: "Pretty much.", score: 3, trait: "main-character" },
@@ -173,7 +192,8 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "You stress about work or studies all the time, rant to friends about it, but never actually do anything to fix it. Agree?",
+    question:
+      "You stress about work or studies all the time, rant to friends about it, but never actually do anything to fix it. Agree?",
     answers: [
       { text: "Complaining is my cardio.", score: 4, trait: "complainer" },
       { text: "Mostly yes.", score: 3, trait: "complainer" },
@@ -182,7 +202,6 @@ export const questions: Question[] = [
       { text: "No, I just get things done.", score: 0, trait: "normal" },
     ],
   },
-
 ];
 
 export const MAX_SCORE = questions.length * 4;
@@ -215,7 +234,8 @@ export const traitInfo: Record<Trait, { name: string; description: string }> = {
   },
   judgment: {
     name: "Social Judgment",
-    description: "You have detailed opinions about how other people live. Unfortunately, nobody asked.",
+    description:
+      "You have detailed opinions about how other people live. Unfortunately, nobody asked.",
   },
   complainer: {
     name: "Professional Complainer",

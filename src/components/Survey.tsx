@@ -25,8 +25,7 @@ export function Survey({ onFinish }: Props) {
 
   const showHint = isMobile && step > 0 && !hintDismissed;
   const canGoBack = step > 0 && selected === null;
-  const canGoForward =
-    selected === null && step < questions.length - 1 && answers[step] != null;
+  const canGoForward = selected === null && step < questions.length - 1 && answers[step] != null;
 
   useEffect(() => {
     if (!showHint) return;

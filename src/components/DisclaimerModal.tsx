@@ -18,7 +18,10 @@ export function DisclaimerModal({ onContinue }: Props) {
       aria-labelledby="disclaimer-title"
       className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto px-4 py-6 sm:px-6 sm:py-8"
     >
-      <div className="overlay-fade absolute inset-0 bg-background/80 backdrop-blur-sm" aria-hidden="true" />
+      <div
+        className="overlay-fade absolute inset-0 bg-background/80 backdrop-blur-sm"
+        aria-hidden="true"
+      />
       <div className="modal-enter relative my-auto w-full max-w-md overflow-hidden rounded-3xl border border-border bg-card/95 p-6 shadow-2xl sm:p-10">
         <div className="flex flex-col items-center text-center">
           <span
@@ -34,9 +37,9 @@ export function DisclaimerModal({ onContinue }: Props) {
             Just a heads-up!
           </h2>
           <p className="mt-4 text-pretty text-sm leading-relaxed text-muted-foreground sm:text-lg">
-            This survey is created purely for entertainment and fun. The questions and final
-            results are not a real psychological, intelligence, or personality assessment and should
-            not be taken seriously or personally.
+            This survey is created purely for entertainment and fun. The questions and final results
+            are not a real psychological, intelligence, or personality assessment and should not be
+            taken seriously or personally.
           </p>
           <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-4 sm:text-lg">
             By continuing, you understand that this is just a fun game and that the results are

@@ -1,6 +1,7 @@
 # Update survey questions
 
 ## Goal
+
 Tighten the survey voice and add three new punchy questions while keeping the scoring fair.
 
 ## Changes

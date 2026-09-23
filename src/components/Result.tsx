@@ -6,18 +6,12 @@ type Props = {
   onRetry: () => void;
 };
 
-const CONFETTI_COLORS = [
-  "bg-accent",
-  "bg-foreground",
-  "bg-chart-2",
-  "bg-chart-4",
-  "bg-chart-5",
-];
+const CONFETTI_COLORS = ["bg-accent", "bg-foreground", "bg-chart-2", "bg-chart-4", "bg-chart-5"];
 
 const CONFETTI_PIECES = Array.from({ length: 40 }, (_, i) => ({
   left: (i * 37 + 13) % 100,
-  delay: ((i * 97) % 100) / 100 * 0.4,
-  duration: 2.2 + ((i * 53) % 100) / 100 * 1.6,
+  delay: (((i * 97) % 100) / 100) * 0.4,
+  duration: 2.2 + (((i * 53) % 100) / 100) * 1.6,
   size: 6 + ((i * 29) % 3) * 3,
   color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
   drift: ((i * 61) % 60) - 30,
@@ -133,9 +127,7 @@ export function Result({ outcome, onRetry }: Props) {
 
         {confirming && (
           <div className="mt-7 rounded-2xl border border-border bg-card p-5 animate-scale-in sm:mt-8 sm:p-6">
-            <p className="text-sm font-bold tracking-[0.15em] uppercase">
-              Lose this result?
-            </p>
+            <p className="text-sm font-bold tracking-[0.15em] uppercase">Lose this result?</p>
             <p className="mt-2 text-sm text-muted-foreground">
               Your {outcome.percentage}% verdict will be gone forever. RIP.
             </p>

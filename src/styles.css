@@ -133,8 +133,7 @@
 }
 
 @theme inline {
-  --font-sans:
-    "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "Space Grotesk", ui-monospace, monospace;
 }
 
@@ -311,8 +310,7 @@
   }
   100% {
     opacity: 0;
-    transform: translate3d(var(--drift, 0px), 110vh, 0)
-      rotate(var(--spin, 540deg));
+    transform: translate3d(var(--drift, 0px), 110vh, 0) rotate(var(--spin, 540deg));
   }
 }
 
@@ -342,4 +340,3 @@
     display: none;
   }
 }
-
