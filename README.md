@@ -1,6 +1,7 @@
 # Personality Reveal
 
 Build a simple, polished, funny personality-survey website called "CHUTIYA DETECTOR".
+HERE IS THE LINK: https://chumtiya-detector.vercel.app/
 
 IMPORTANT:
 
