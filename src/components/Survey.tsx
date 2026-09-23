@@ -135,9 +135,17 @@ export function Survey({ onFinish }: Props) {
           </button>
           {showHint && (
             <p className="hint-fade font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
-              Swipe right to go back
+              Swipe to move between questions
             </p>
           )}
+          <button
+            type="button"
+            onClick={goForward}
+            disabled={!canGoForward}
+            className="inline-flex min-h-[2.75rem] items-center gap-2 rounded-full border border-border px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 disabled:pointer-events-none disabled:opacity-0 hover:border-accent hover:text-accent"
+          >
+            Next <span aria-hidden="true">→</span>
+          </button>
         </div>
       </div>
     </section>
