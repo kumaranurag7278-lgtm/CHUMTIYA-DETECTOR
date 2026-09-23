@@ -25,6 +25,8 @@ export function Survey({ onFinish }: Props) {
 
   const showHint = isMobile && step > 0 && !hintDismissed;
   const canGoBack = step > 0 && selected === null;
+  const canGoForward =
+    selected === null && step < questions.length - 1 && answers[step] != null;
 
   useEffect(() => {
     if (!showHint) return;
@@ -43,6 +45,17 @@ export function Survey({ onFinish }: Props) {
     }, SLIDE_MS);
   };
 
+  const goForward = () => {
+    if (!canGoForward) return;
+    setHintDismissed(true);
+    setDir(1);
+    setPhase("out");
+    window.setTimeout(() => {
+      setStep(step + 1);
+      setPhase("in");
+    }, SLIDE_MS);
+  };
+
   const handleTouchStart = (e: React.TouchEvent) => {
     const t = e.touches[0];
     if (t) touchStartRef.current = { x: t.clientX, y: t.clientY };
@@ -56,8 +69,11 @@ export function Survey({ onFinish }: Props) {
     if (!t) return;
     const dx = t.clientX - start.x;
     const dy = t.clientY - start.y;
-    // Swipe right = go back to previous question
-    if (dx > 70 && Math.abs(dy) < 80) goBack();
+    // Swipe right = previous question, swipe left = next (if already answered)
+    if (Math.abs(dy) < 80) {
+      if (dx > 70) goBack();
+      else if (dx < -70) goForward();
+    }
   };
 
   const handleSelect = (index: number) => {
