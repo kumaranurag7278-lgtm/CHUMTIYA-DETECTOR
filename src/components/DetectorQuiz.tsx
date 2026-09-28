@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import type { DetectorDefinition, DetectorBand } from "@/data/detectors";
-import { playClick, playOptionSelect, playFanfare } from "@/lib/sound";
+import { playClick, playOptionSelect, playRoastSoundForScore } from "@/lib/sound";
+import { MemeSoundboard } from "./MemeSoundboard";
 import { recordEvent } from "@/lib/analytics";
 import {
   ArrowLeft,
@@ -66,7 +67,6 @@ export function DetectorQuiz({ detector, onExit }: Props) {
     if (currentStep + 1 >= totalQuestions) {
       // Completed!
       setCompleted(true);
-      playFanfare();
       recordEvent("survey_completed", {
         mode: detector.id,
         score: scorePct,
@@ -96,9 +96,10 @@ export function DetectorQuiz({ detector, onExit }: Props) {
     recordEvent("survey_started", { mode: detector.id, retry: true });
   };
 
-  // Percent animation on finish
+  // Percent animation on finish & roast sound
   useEffect(() => {
     if (!completed) return;
+    playRoastSoundForScore(scorePct);
     let start = 0;
     const end = scorePct;
     const duration = 1000;
@@ -303,6 +304,9 @@ export function DetectorQuiz({ detector, onExit }: Props) {
               "{outcomeBand.description}"
             </p>
           </div>
+
+          {/* Meme Soundboard */}
+          <MemeSoundboard />
 
           {/* Primary Action Buttons */}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { outcomeId, type Outcome } from "@/lib/scoring";
 import { CertificateModal } from "./CertificateModal";
-import { playClick, playFanfare } from "@/lib/sound";
+import { MemeSoundboard } from "./MemeSoundboard";
+import { playClick, playRoastSoundForScore } from "@/lib/sound";
 import { Award, Swords, Share2, RotateCcw } from "lucide-react";
 import { recordEvent } from "@/lib/analytics";
 
@@ -36,7 +37,7 @@ export function Result({ outcome, onRetry }: Props) {
   const [showCertificate, setShowCertificate] = useState(false);
 
   useEffect(() => {
-    playFanfare();
+    playRoastSoundForScore(outcome.percentage);
     recordEvent("result_viewed", {
       source: "result_card",
       percentage: outcome.percentage,
@@ -161,6 +162,9 @@ export function Result({ outcome, onRetry }: Props) {
             {outcome.traitDescription}
           </p>
         </div>
+
+        {/* Meme Soundboard */}
+        <MemeSoundboard />
 
         {/* Action Grid: Certificate & 1v1 Battle */}
         <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
