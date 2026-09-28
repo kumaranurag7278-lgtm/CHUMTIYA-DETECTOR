@@ -31,30 +31,25 @@ export function Result({ outcome, onRetry }: Props) {
 
   const share = async () => {
     const url = `${window.location.origin}/result/${outcomeId(outcome)}`;
-    const text = [
-      "🧪 CHUMTIYA DETECTOR",
-      "━━━━━━━━━━━━━━",
-      `Chumtiya Level: ${outcome.percentage}%`,
-      `Verdict: ${outcome.band}`,
-      `Primary Trait: ${outcome.traitName}`,
-      "━━━━━━━━━━━━━━",
-      "Think everyone around you is a chumtiya? Prove it.",
-    ].join("\n");
+    const title = `Chumtiya Level: ${outcome.percentage}% — ${outcome.band} | Chumtiya Detector`;
+
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (err: unknown) {
+        if (err instanceof Error && err.name === "AbortError") {
+          return;
+        }
+      }
+    }
 
     try {
-      if (navigator.share) {
-        await navigator.share({ title: "Chumtiya Detector", text, url });
-        return;
-      }
-      throw new Error("no-share");
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      try {
-        await navigator.clipboard.writeText(`${text}\n${url}`);
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 2000);
-      } catch {
-        /* clipboard unavailable — do nothing */
-      }
+      /* clipboard unavailable */
     }
   };
 
@@ -122,7 +117,7 @@ export function Result({ outcome, onRetry }: Props) {
             onClick={share}
             className="min-h-[3rem] w-full max-w-xs rounded-full bg-accent px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform duration-200 hover:scale-[1.03] active:scale-95 sm:w-auto"
           >
-            {copied ? "Copied!" : "Share Result"}
+            {copied ? "Link Copied!" : "Share Result"}
           </button>
           <button
             onClick={() => setConfirming(true)}

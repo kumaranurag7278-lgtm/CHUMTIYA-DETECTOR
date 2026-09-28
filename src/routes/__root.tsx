@@ -78,14 +78,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Chumtiya Detector — A 16-Question Personality Diagnosis" },
+      {
+        name: "description",
+        content:
+          "A fast, funny 16-question survey that measures exactly how convinced you are that everyone around you is a chumtiya. Not a real test.",
+      },
+      { property: "og:title", content: "Chumtiya Detector — A 16-Question Personality Diagnosis" },
+      {
+        property: "og:description",
+        content:
+          "A fast, funny 16-question survey that measures exactly how convinced you are that everyone around you is a chumtiya.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

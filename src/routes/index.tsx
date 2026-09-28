@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Landing } from "@/components/Landing";
 import { DisclaimerModal } from "@/components/DisclaimerModal";
 import { Survey } from "@/components/Survey";
 import { Result } from "@/components/Result";
-import { computeOutcome, type Outcome } from "@/lib/scoring";
+import { computeOutcome, outcomeId, type Outcome } from "@/lib/scoring";
 
 const TITLE = "Chumtiya Detector — A 16-Question Personality Diagnosis";
 const DESCRIPTION =
@@ -27,6 +27,7 @@ export const Route = createFileRoute("/")({
 type Stage = "landing" | "disclaimer" | "survey" | "result";
 
 function Index() {
+  const navigate = useNavigate();
   const [stage, setStage] = useState<Stage>("landing");
   const [leaving, setLeaving] = useState(false);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
@@ -45,8 +46,9 @@ function Index() {
   };
 
   const finish = (answers: number[]) => {
-    setOutcome(computeOutcome(answers));
-    setStage("result");
+    const calculated = computeOutcome(answers);
+    const id = outcomeId(calculated);
+    navigate({ to: "/result/$id", params: { id } });
   };
 
   const retry = () => {

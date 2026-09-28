@@ -55,6 +55,16 @@ const F: Record<string, string> = {
   "!": "00100,00100,00100,00100,00100,00000,00100",
   "?": "01110,10001,00001,00010,00100,00000,00100",
   "'": "00100,00100,01000,00000,00000,00000,00000",
+  "\"": "01010,01010,01000,00000,00000,00000,00000",
+  ",": "00000,00000,00000,00000,00100,00100,01000",
+  "(": "00010,00100,01000,01000,01000,00100,00010",
+  ")": "01000,00100,00010,00010,00010,00100,01000",
+  "/": "00001,00010,00100,00100,01000,10000,00000",
+  "&": "01100,10010,01100,01010,10001,10010,01101",
+  "+": "00000,00100,00100,11111,00100,00100,00000",
+  "|": "00100,00100,00100,00100,00100,00100,00100",
+  "*": "00000,10101,01110,11111,01110,10101,00000",
+  "#": "01010,01010,11111,01010,11111,01010,01010",
   " ": "00000,00000,00000,00000,00000,00000,00000",
 };
 
@@ -82,7 +92,11 @@ class Canvas {
   }
 }
 
-const clean = (s: string) => s.toUpperCase().replace(/\u2122/g, "").replace(/[^A-Z0-9%\-:.!?' ]/g, " ");
+const clean = (s: string) =>
+  s
+    .toUpperCase()
+    .replace(/\u2122/g, "")
+    .replace(/[^A-Z0-9%\-:.!?' ",()/&+*#|]/g, " ");
 const width = (s: string, scale: number, spacing = 1) => clean(s).length * (5 + spacing) * scale - spacing * scale;
 const fit = (s: string, max: number, maxW: number) => {
   let sc = max;
@@ -120,16 +134,66 @@ async function deflate(data: Uint8Array) {
 
 export async function renderResultPng(o: Outcome): Promise<Uint8Array> {
   const cv = new Canvas();
+  // Fill background
   cv.rect(0, 0, W, H, BG);
-  cv.rect(0, 0, W, 14, ACCENT);
-  const left = 70;
-  cv.text("CHUMTIYA DETECTOR", left, 56, 6, FG);
-  cv.text("CHUMTIYA LEVEL", left, 150, 4, MUTED);
-  cv.text(`${o.percentage}%`, left, 196, 20, ACCENT);
-  cv.text(o.band, left, 360, fit(o.band, 8, W - 2 * left), FG);
-  cv.rect(left, 440, W - 2 * left, 3, LINE);
-  cv.text("PRIMARY TRAIT", left, 470, 4, MUTED);
-  cv.text(o.traitName, left, 515, fit(o.traitName, 7, W - 2 * left), ACCENT);
+
+  // Outer border & top accent line
+  cv.rect(0, 0, W, 12, ACCENT);
+  cv.rect(28, 28, W - 56, H - 56, [32, 32, 38]);
+  cv.rect(30, 30, W - 60, H - 60, BG);
+
+  const left = 75;
+  const contentWidth = W - 2 * left;
+
+  // Header: Pixel Flask Icon (🧪)
+  const FLASK = [
+    "00111100",
+    "00011000",
+    "00011000",
+    "00111100",
+    "01100110",
+    "11000011",
+    "11011011",
+    "11111111",
+  ];
+  const flaskScale = 4;
+  FLASK.forEach((row, ry) => {
+    for (let rx = 0; rx < 8; rx++) {
+      if (row[rx] === "1") {
+        cv.rect(left + rx * flaskScale, 56 + ry * flaskScale, flaskScale, flaskScale, ACCENT);
+      }
+    }
+  });
+
+  // Header branding
+  cv.text("CHUMTIYA DETECTOR", left + 45, 58, 5, FG);
+  cv.text("PERSONALITY DIAGNOSIS", left + 620, 64, 3, MUTED);
+
+  // Top separator
+  cv.rect(left, 110, contentWidth, 2, LINE);
+
+  // Section 1: Chumtiya Level
+  cv.text("CHUMTIYA LEVEL", left, 140, 4, MUTED);
+  cv.text(`${o.percentage}%`, left, 180, 18, ACCENT);
+
+  // Visual Gauge / Progress Bar
+  const meterY = 320;
+  const meterH = 10;
+  cv.rect(left, meterY, contentWidth, meterH, [36, 36, 44]);
+  const fillW = Math.max(10, Math.min(contentWidth, Math.round((contentWidth * o.percentage) / 100)));
+  cv.rect(left, meterY, fillW, meterH, ACCENT);
+
+  // Section 2: Verdict
+  cv.text("VERDICT", left, 355, 3, MUTED);
+  cv.text(o.band, left, 380, fit(o.band, 8, contentWidth), FG);
+
+  // Section 3: Primary Trait
+  cv.rect(left, 455, contentWidth, 2, LINE);
+  cv.text("PRIMARY TRAIT", left, 475, 3, MUTED);
+  cv.text(o.traitName, left, 505, fit(o.traitName, 7, contentWidth), ACCENT);
+
+  // Footer branding
+  cv.text("THINK YOU'RE LESS OF A CHUMTIYA? PROVE IT.", left, 570, 3, MUTED);
 
   const raw = new Uint8Array((W * 3 + 1) * H);
   for (let y = 0; y < H; y++) raw.set(cv.px.subarray(y * W * 3, (y + 1) * W * 3), y * (W * 3 + 1) + 1);

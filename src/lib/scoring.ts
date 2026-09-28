@@ -31,13 +31,38 @@ function buildOutcome(percentage: number, trait: Trait): Outcome {
 /** Shareable result id, e.g. "23-isolation". */
 export const outcomeId = (o: Outcome) => `${o.percentage}-${o.trait}`;
 
+const TEST_PRESETS: Record<string, { percentage: number; trait: Trait }> = {
+  "test-result-1": { percentage: 23, trait: "isolation" },
+  "test-result-2": { percentage: 81, trait: "superiority" },
+};
+
 export function outcomeFromId(id: string): Outcome | null {
-  const m = /^(\d{1,3})-([a-z-]+)$/.exec(id);
-  if (!m) return null;
-  const pct = Number(m[1]);
-  const key = m[2] ?? "";
-  if (pct > 100 || !(key in traitInfo)) return null;
-  return buildOutcome(pct, key as Trait);
+  const cleanId = id.trim().toLowerCase();
+  const preset = TEST_PRESETS[cleanId];
+  if (preset) {
+    return buildOutcome(preset.percentage, preset.trait);
+  }
+
+  const m = /^(\d{1,3})-([a-z-]+)$/.exec(cleanId);
+  if (m) {
+    const pct = Number(m[1]);
+    const key = m[2] ?? "";
+    if (pct <= 100 && key in traitInfo) {
+      return buildOutcome(pct, key as Trait);
+    }
+  }
+
+  const numMatch = /^(\d{1,3})$/.exec(cleanId);
+  if (numMatch) {
+    const pct = Number(numMatch[1]);
+    if (pct <= 100) {
+      const trait: Trait =
+        pct > 80 ? "superiority" : pct > 40 ? "cynicism" : pct > 20 ? "isolation" : "normal";
+      return buildOutcome(pct, trait);
+    }
+  }
+
+  return null;
 }
 
 /** answerIndexes[i] is the chosen answer index for questions[i]. */
