@@ -72,7 +72,7 @@ class Canvas {
   text(s: string, x: number, y: number, scale: number, c: RGB, spacing = 1) {
     let cx = x;
     for (const ch of clean(s)) {
-      const g = F[ch] ?? F[" "];
+      const g = F[ch] ?? F[" "] ?? "";
       g.split(",").forEach((row, ry) => {
         for (let rx = 0; rx < 5; rx++)
           if (row[rx] === "1") this.rect(cx + rx * scale, y + ry * scale, scale, scale, c);
@@ -101,7 +101,7 @@ const CRC = (() => {
 })();
 function crc32(buf: Uint8Array) {
   let c = 0xffffffff;
-  for (const b of buf) c = CRC[(c ^ b) & 0xff] ^ (c >>> 8);
+  for (const b of buf) c = (CRC[(c ^ b) & 0xff] ?? 0) ^ (c >>> 8);
   return (c ^ 0xffffffff) >>> 0;
 }
 function chunk(type: string, data: Uint8Array) {
