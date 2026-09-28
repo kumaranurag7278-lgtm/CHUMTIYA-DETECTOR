@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
   head: ({ loaderData }) => {
     const origin = loaderData?.origin || "";
     const url = origin ? `${origin}/` : "/";
-    const image = origin ? `${origin}/api/og/home.png` : "/api/og/home.png";
+    const image = origin ? `${origin}/og-dashboard.png` : "/og-dashboard.png";
     return {
       meta: [
         { title: TITLE },
