@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { getFriendQuestions } from "@/data/friendQuestions";
 import { playClick, playOptionSelect, playFanfare } from "@/lib/sound";
-import { UserCheck, Share2, Download, ArrowLeft, RotateCcw } from "lucide-react";
+import { UserCheck, Share2, Download, ArrowLeft, RotateCcw, Award } from "lucide-react";
+import { FriendCertificateModal } from "./FriendCertificateModal";
 
 type Props = {
   onBack: () => void;
@@ -14,6 +15,7 @@ export function DiagnoseFriend({ onBack }: Props) {
   const [selectedIndices, setSelectedIndices] = useState<(number | null)[]>([]);
   const [finished, setFinished] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showDecreeModal, setShowDecreeModal] = useState(false);
 
   const questions = useMemo(() => getFriendQuestions(friendName), [friendName]);
 
@@ -271,7 +273,18 @@ export function DiagnoseFriend({ onBack }: Props) {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 w-full max-w-sm sm:flex-row sm:justify-center">
+        <div className="mt-8 flex flex-col gap-3 w-full max-w-md sm:flex-row sm:justify-center">
+          <button
+            onClick={() => {
+              playClick();
+              setShowDecreeModal(true);
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-accent bg-accent/15 px-6 py-3 text-xs font-bold text-accent uppercase tracking-wider transition-transform hover:scale-105 active:scale-95 shadow-sm"
+          >
+            <Award className="h-4 w-4" />
+            Official Decree / Certificate (PNG)
+          </button>
+
           <button
             onClick={shareReport}
             className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 text-xs font-bold tracking-wider text-accent-foreground uppercase transition-transform hover:scale-105 active:scale-95"
@@ -282,10 +295,10 @@ export function DiagnoseFriend({ onBack }: Props) {
 
           <button
             onClick={downloadCard}
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-xs font-bold tracking-wider uppercase hover:border-accent hover:text-accent"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-xs font-bold tracking-wider uppercase hover:border-accent hover:text-accent"
           >
             <Download className="h-4 w-4" />
-            Save Card (PNG)
+            Save Card
           </button>
         </div>
 
@@ -311,6 +324,15 @@ export function DiagnoseFriend({ onBack }: Props) {
             Home
           </button>
         </div>
+
+        {showDecreeModal && (
+          <FriendCertificateModal
+            friendName={name}
+            scorePct={scorePct}
+            archetype={archetype}
+            onClose={() => setShowDecreeModal(false)}
+          />
+        )}
       </section>
     );
   }
