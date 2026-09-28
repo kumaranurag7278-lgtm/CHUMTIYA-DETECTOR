@@ -7,60 +7,60 @@ export type FriendQuestion = {
 };
 
 export function getFriendQuestions(friendName: string): FriendQuestion[] {
-  const name = friendName.trim() || "Your friend";
+  const name = friendName.trim() || "Aapka dost";
   return [
     {
-      question: `When weekend plans are made in the group, what does ${name} do?`,
+      question: `Jab group me weekend ka plan banta hai, tab ${name} kya nautanki karta hai?`,
       answers: [
-        { text: `Cancels 10 minutes prior with "bhai pet kharab ho gaya"`, points: 3 },
-        { text: `Confirms enthusiastically, ghosts completely, replies next day at 2 PM`, points: 3 },
-        { text: `Shows up, complains about the AC, drinks everyone's beverage`, points: 2 },
-        { text: `Actually shows up on time (suspiciously rare occurrence)`, points: 0 },
+        { text: `Plan confirm karke aakhri 10 minute pe bolta hai "Bhai pet kharab ho gaya"`, points: 3 },
+        { text: `Full haan bolta hai, fir phone switch off karke agle din dopahar 2 baje reply deta hai`, points: 3 },
+        { text: `Aata hai par AC, khana aur sab cheez me nuks nikaal ke sabka mood kharab karta hai`, points: 2 },
+        { text: `Time pe pahunch jata hai bina kisi bahane ke (aaj tak kabhi nahi dekha)`, points: 0 },
       ],
     },
     {
-      question: `How does ${name} react when someone proves them wrong in a debate?`,
+      question: `Jab kisi debate ya baat me ${name} galat saabit hota hai, toh reaction kaisa hota hai?`,
       answers: [
-        { text: `"Bhai tu samjha nahi main kya bol raha tha..."`, points: 3 },
-        { text: `Sends 14 Instagram reels and a 3-hour podcast clip as "proof"`, points: 3 },
-        { text: `Gets personally offended and brings up a mistake from 2019`, points: 2 },
-        { text: `Calmly smiles, accepts it, and admits mistake (never seen before)`, points: 0 },
+        { text: `"Bhai tu samjha hi nahi main actually kya bol raha tha..."`, points: 3 },
+        { text: `14 Instagram reels aur 3 ghante ka podcast bhejke prove karne ki koshish karta hai`, points: 3 },
+        { text: `Ego pe le leta hai aur 2019 ki koi purani baat beech me ghaseet leta hai`, points: 2 },
+        { text: `Shanti se apni galti accept kar leta hai (aisa chamatkaar kabhi nahi hua)`, points: 0 },
       ],
     },
     {
-      question: `What is ${name}'s personal financial philosophy?`,
+      question: `Sach batana, kya ${name} saala phekta bohot zyada hai?`,
       answers: [
-        { text: `Spends ₹4,000 on random Zara impulse buy, cries about ₹40 auto fare`, points: 3 },
-        { text: `Borrows ₹500 for "emergency petrol", experiences sudden amnesia for 6 months`, points: 3 },
-        { text: `"Crypto and F&O is guaranteed 10x easy money bro, trust me"`, points: 2 },
-        { text: `Splits the bill instantly to the exact paisa`, points: 1 },
+        { text: `Instagram pe 10 Bolero aur Scorpio ki pic laga kar background me Haryanvi gaane bajata hai`, points: 3 },
+        { text: `Har doosre din bolta hai "Bhai apne upar tak link hain, neta-police sab jaante hain"`, points: 3 },
+        { text: `Kisi aur ki car ya bike ke aage khade hoke 'Hustle & Grind' ka caption chipkata hai`, points: 2 },
+        { text: `Nahi bhai, bilkul grounded aur seedha banda hai (jhooth bolne pe paap lagega)`, points: 0 },
       ],
     },
     {
-      question: `What does ${name}'s Instagram story feed usually look like?`,
+      question: `Kya ${name} selfish hai aur aapke paise ka khaa kar ulta aapko hi ginata hai?`,
       answers: [
-        { text: `Cryptic heartbreak shayaris with dark emo music even though single`, points: 3 },
-        { text: `47 stories a day, 40 of which are aesthetic cafe coffee cups`, points: 2 },
-        { text: `Gym mirror selfies with caption "GRIND NEVER STOPS 🐺"`, points: 2 },
-        { text: `Ghost mode: 0 posts, only stalks mutuals and sends reels at 3 AM`, points: 1 },
+        { text: `Hamesha aapke paise se party karega, par ₹20 ke chai ka hisaab 6 mahine tak yaad dilayega`, points: 3 },
+        { text: `Google Pay scan karte time uska 'Bank server down' ya OTP gayab ho jata hai`, points: 3 },
+        { text: `"Bhai abhi tu de de, sham ko pakka transfer karta hu" bolke lifetime sanyaas le leta hai`, points: 2 },
+        { text: `Hamesha apna hisaab barabar rakhta hai aur bina bole split karta hai`, points: 0 },
       ],
     },
     {
-      question: `If ${name} gets stuck in traffic:`,
+      question: `Traffic me ya kisi public jagah pe ${name} ka kaisa rawaiya rehta hai?`,
       answers: [
-        { text: `Tells the cab driver "shortcut le lo bhai" and gets stuck for 2 more hours`, points: 3 },
-        { text: `Honks aggressively at the red light timer while it is still on 45`, points: 3 },
-        { text: `Starts giving an unsolicited lecture on urban infrastructure`, points: 2 },
-        { text: `Silently puts on headphones and accepts fate`, points: 0 },
+        { text: `Red light pe 45 second bacha ho tab bhi continuously paaglo ki tarah horn bajata hai`, points: 3 },
+        { text: `Cab wale ko bolta hai "Bhai shortcut le lo", aur 2 ghante extra jam me fasa deta hai`, points: 3 },
+        { text: `Traffic me aate hi desh ke system aur road infrastructure pe gyaan baantna shuru kar deta hai`, points: 2 },
+        { text: `Headphones laga ke shaant baitha rehta hai bina kisi ko pareshan kiye`, points: 0 },
       ],
     },
     {
-      question: `If you confront ${name} with this diagnosis right now:`,
+      question: `Kya ${name} khud ko sabse bada 30-markhan aur baaki sabko chumtiya kehta firta hai?`,
       answers: [
-        { text: `"Maine kab kiya aisa?! Tu hi sabse bada chumtiya hai"`, points: 3 },
-        { text: `Will laugh like a villain and forward it to 5 other mutual friends`, points: 2 },
-        { text: `Will take a screenshot and post it as a badge of honor`, points: 2 },
-        { text: `Will act maturely and introspect on personal flaws (zero percent chance)`, points: 0 },
+        { text: `Har sentence ke baad bolta hai "Bhai sab ke sab chumtiya hain, bas main hi akalmand hu"`, points: 3 },
+        { text: `Agar aap sach bol do toh bolega "Maine kab kiya aisa?! Tu hi sabse bada chumtiya hai"`, points: 3 },
+        { text: `Ye report dekh kar sharminda hone ke bajaye 5 aur mutual dosto ko forward karega hasne ke liye`, points: 2 },
+        { text: `Nahi, sabki respect karta hai aur bohot humble hai (100% safed jhooth)`, points: 0 },
       ],
     },
   ];

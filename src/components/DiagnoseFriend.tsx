@@ -40,22 +40,40 @@ export function DiagnoseFriend({ onBack }: Props) {
   const scorePct = Math.min(100, Math.max(15, Math.round((pointsTotal / 18) * 100)));
 
   const archetype = useMemo(() => {
-    if (scorePct >= 85) return { title: "National Level Menace", desc: "A hazard to normal human society. Keeps everyone on edge for sport." };
-    if (scorePct >= 70) return { title: "Chronic Excuse Specialist", desc: "Can formulate 8 excuses per second without blinking once." };
-    if (scorePct >= 50) return { title: "Group Chat Instigator", desc: "Drops spicy drama into the group chat and disappears for 12 hours." };
-    return { title: "Deceptively Innocent", desc: "Acts innocent in public, but you and I know the dark truth." };
+    if (scorePct >= 85) {
+      return {
+        title: "National Level Phekuchand",
+        desc: "Bolero ke aage photo laga kar system hang karne wala. Phekne me Olympic gold medalist.",
+      };
+    }
+    if (scorePct >= 70) {
+      return {
+        title: "Muftkhor & Hisaab King",
+        desc: "Aapke paise pe maze karega, par ₹20 ke chai ke hisaab pe dosti todne pe utar aayega.",
+      };
+    }
+    if (scorePct >= 50) {
+      return {
+        title: "Bol Bachchan Specialist",
+        desc: "Badi-badi baatein karega jaise sab iske contact me hain, par Google Pay ke time server down ho jata hai.",
+      };
+    }
+    return {
+      title: "Chhupa Rustam",
+      desc: "Duniya ke saamne shareef banta hai, par asliyat sirf aapko pata hai.",
+    };
   }, [scorePct]);
 
-  const name = friendName.trim() || "Friend";
+  const name = friendName.trim() || "Dost";
 
   const shareReport = async () => {
     playClick();
-    const shareText = `Bro 😂 I just diagnosed ${name} on Chumtiya Detector and their score came out to ${scorePct}% (${archetype.title})!\nCheck this out: ${window.location.origin}`;
+    const shareText = `Bro 😂 maine abhi abhi ${name} ka Chumtiya Detector test kiya aur score aaya ${scorePct}% (${archetype.title})!\nDekh apna official report: ${window.location.origin}`;
 
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({
-          title: `${name}'s Diagnosis`,
+          title: `${name} ka Chumtiya Diagnosis`,
           text: shareText,
           url: window.location.origin,
         });
@@ -95,7 +113,7 @@ export function DiagnoseFriend({ onBack }: Props) {
     ctx.fillStyle = "#ff6a30";
     ctx.font = "bold 26px 'Space Grotesk', sans-serif";
     ctx.letterSpacing = "6px";
-    ctx.fillText("● THIRD-PARTY DIAGNOSIS DOSSIER", W / 2, 130);
+    ctx.fillText("● CONFIDENTIAL FRIEND REPORT", W / 2, 130);
 
     ctx.fillStyle = "#f5f5f7";
     ctx.font = "900 56px 'Space Grotesk', sans-serif";
@@ -104,7 +122,7 @@ export function DiagnoseFriend({ onBack }: Props) {
 
     ctx.fillStyle = "#a1a1aa";
     ctx.font = "28px 'Space Grotesk', sans-serif";
-    ctx.fillText("SUBJECT EVALUATION REPORT", W / 2, 260);
+    ctx.fillText("OFFICIAL DOST EVALUATION", W / 2, 260);
 
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 52px 'Space Grotesk', sans-serif";
@@ -123,21 +141,21 @@ export function DiagnoseFriend({ onBack }: Props) {
     ctx.strokeStyle = "#ff6a30";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.roundRect(100, 640, W - 200, 180, 20);
+    ctx.roundRect(80, 640, W - 160, 180, 20);
     ctx.fill();
     ctx.stroke();
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = "900 38px 'Space Grotesk', sans-serif";
+    ctx.font = "900 36px 'Space Grotesk', sans-serif";
     ctx.fillText(`“${archetype.title.toUpperCase()}”`, W / 2, 710);
 
     ctx.fillStyle = "#d4d4d8";
-    ctx.font = "italic 24px 'Space Grotesk', sans-serif";
+    ctx.font = "italic 22px 'Space Grotesk', sans-serif";
     ctx.fillText(`"${archetype.desc}"`, W / 2, 765);
 
     ctx.fillStyle = "#71717a";
     ctx.font = "20px 'Space Grotesk', sans-serif";
-    ctx.fillText("Submitted confidentially by a concerned friend • chumtiyadetector.com", W / 2, 950);
+    ctx.fillText("Submitted confidentially by a frustrated friend • chumtiyadetector.com", W / 2, 950);
 
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/png");
@@ -161,16 +179,16 @@ export function DiagnoseFriend({ onBack }: Props) {
         </div>
 
         <h2 className="mt-5 text-balance text-3xl font-black tracking-tight sm:text-4xl">
-          Diagnose a Friend
+          Dost Ko Diagnose Karo
         </h2>
         <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-          Got a friend whose questionable decisions keep you up at night? Answer 6 quick questions to generate their official confidential dossier.
+          Kya aapka dost bhi ajeeb harkatein karke aapka dimaag kharab karta hai? 6 sawaalo ke jawab do aur uska official confidential dossier nikaalo.
         </p>
 
         <form onSubmit={handleStart} className="mt-8 w-full max-w-sm">
           <div className="text-left">
             <label className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-              Friend's Name / Nickname
+              Dost Ka Naam / Nickname
             </label>
             <input
               type="text"
@@ -178,7 +196,7 @@ export function DiagnoseFriend({ onBack }: Props) {
               maxLength={30}
               value={friendName}
               onChange={(e) => setFriendName(e.target.value)}
-              placeholder="e.g. Rahul, Priya, Ankit"
+              placeholder="e.g. Rahul, Priya, Bunty"
               className="mt-2 w-full rounded-2xl border border-input bg-card px-5 py-3.5 text-lg font-bold text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               autoFocus
             />
@@ -201,10 +219,10 @@ export function DiagnoseFriend({ onBack }: Props) {
     return (
       <section className="mx-auto flex min-h-[100svh] max-w-xl flex-col items-center justify-center px-4 py-12 text-center animate-fade-in">
         <p className="font-mono text-xs font-bold tracking-[0.3em] text-accent uppercase">
-          ● Dossier Generated
+          ● Dossier Ready
         </p>
         <h2 className="mt-2 text-balance text-2xl font-black tracking-tight sm:text-3xl">
-          {name}'s Diagnosis Report
+          {name} Ki Official Report
         </h2>
 
         <div className="mt-6 w-full rounded-3xl border-2 border-accent/60 bg-gradient-to-b from-card to-background p-6 shadow-2xl sm:p-8">
@@ -252,14 +270,14 @@ export function DiagnoseFriend({ onBack }: Props) {
             }}
             className="inline-flex items-center gap-1.5 font-bold text-muted-foreground hover:text-foreground"
           >
-            <RotateCcw className="h-3.5 w-3.5" /> Diagnose Another Friend
+            <RotateCcw className="h-3.5 w-3.5" /> Doosre Dost Ko Diagnose Karo
           </button>
           <span className="text-muted-foreground">•</span>
           <button
             onClick={onBack}
             className="font-bold text-muted-foreground hover:text-foreground"
           >
-            Back to Home
+            Home
           </button>
         </div>
       </section>
