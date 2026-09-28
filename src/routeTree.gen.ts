@@ -10,13 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as ResultIdRouteImport } from './routes/result.$id'
 import { Route as VsOpponentIdRouteImport } from './routes/vs.$opponentId'
+import { Route as ApiAdminLoginRouteImport } from './routes/api/admin/login'
+import { Route as ApiAdminLogoutRouteImport } from './routes/api/admin/logout'
+import { Route as ApiAdminStatsRouteImport } from './routes/api/admin/stats'
+import { Route as ApiAnalyticsTrackRouteImport } from './routes/api/analytics/track'
 import { Route as ApiOgIdRouteImport } from './routes/api/og/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: '/admin/analytics',
+  path: '/admin/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResultIdRoute = ResultIdRouteImport.update({
@@ -29,6 +39,26 @@ const VsOpponentIdRoute = VsOpponentIdRouteImport.update({
   path: '/vs/$opponentId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminLoginRoute = ApiAdminLoginRouteImport.update({
+  id: '/api/admin/login',
+  path: '/api/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminLogoutRoute = ApiAdminLogoutRouteImport.update({
+  id: '/api/admin/logout',
+  path: '/api/admin/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminStatsRoute = ApiAdminStatsRouteImport.update({
+  id: '/api/admin/stats',
+  path: '/api/admin/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAnalyticsTrackRoute = ApiAnalyticsTrackRouteImport.update({
+  id: '/api/analytics/track',
+  path: '/api/analytics/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOgIdRoute = ApiOgIdRouteImport.update({
   id: '/api/og/$id',
   path: '/api/og/$id',
@@ -37,35 +67,83 @@ const ApiOgIdRoute = ApiOgIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
   '/result/$id': typeof ResultIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/stats': typeof ApiAdminStatsRoute
+  '/api/analytics/track': typeof ApiAnalyticsTrackRoute
   '/api/og/$id': typeof ApiOgIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
   '/result/$id': typeof ResultIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/stats': typeof ApiAdminStatsRoute
+  '/api/analytics/track': typeof ApiAnalyticsTrackRoute
   '/api/og/$id': typeof ApiOgIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
   '/result/$id': typeof ResultIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/admin/logout': typeof ApiAdminLogoutRoute
+  '/api/admin/stats': typeof ApiAdminStatsRoute
+  '/api/analytics/track': typeof ApiAnalyticsTrackRoute
   '/api/og/$id': typeof ApiOgIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/result/$id' | '/vs/$opponentId' | '/api/og/$id'
+  fullPaths:
+    | '/'
+    | '/admin/analytics'
+    | '/result/$id'
+    | '/vs/$opponentId'
+    | '/api/admin/login'
+    | '/api/admin/logout'
+    | '/api/admin/stats'
+    | '/api/analytics/track'
+    | '/api/og/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/result/$id' | '/vs/$opponentId' | '/api/og/$id'
-  id: '__root__' | '/' | '/result/$id' | '/vs/$opponentId' | '/api/og/$id'
+  to:
+    | '/'
+    | '/admin/analytics'
+    | '/result/$id'
+    | '/vs/$opponentId'
+    | '/api/admin/login'
+    | '/api/admin/logout'
+    | '/api/admin/stats'
+    | '/api/analytics/track'
+    | '/api/og/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/analytics'
+    | '/result/$id'
+    | '/vs/$opponentId'
+    | '/api/admin/login'
+    | '/api/admin/logout'
+    | '/api/admin/stats'
+    | '/api/analytics/track'
+    | '/api/og/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   ResultIdRoute: typeof ResultIdRoute
   VsOpponentIdRoute: typeof VsOpponentIdRoute
+  ApiAdminLoginRoute: typeof ApiAdminLoginRoute
+  ApiAdminLogoutRoute: typeof ApiAdminLogoutRoute
+  ApiAdminStatsRoute: typeof ApiAdminStatsRoute
+  ApiAnalyticsTrackRoute: typeof ApiAnalyticsTrackRoute
   ApiOgIdRoute: typeof ApiOgIdRoute
 }
 
@@ -76,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/result/$id': {
@@ -92,6 +177,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VsOpponentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/login': {
+      id: '/api/admin/login'
+      path: '/api/admin/login'
+      fullPath: '/api/admin/login'
+      preLoaderRoute: typeof ApiAdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/logout': {
+      id: '/api/admin/logout'
+      path: '/api/admin/logout'
+      fullPath: '/api/admin/logout'
+      preLoaderRoute: typeof ApiAdminLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/stats': {
+      id: '/api/admin/stats'
+      path: '/api/admin/stats'
+      fullPath: '/api/admin/stats'
+      preLoaderRoute: typeof ApiAdminStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/analytics/track': {
+      id: '/api/analytics/track'
+      path: '/api/analytics/track'
+      fullPath: '/api/analytics/track'
+      preLoaderRoute: typeof ApiAnalyticsTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/og/$id': {
       id: '/api/og/$id'
       path: '/api/og/$id'
@@ -104,8 +217,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminAnalyticsRoute: AdminAnalyticsRoute,
   ResultIdRoute: ResultIdRoute,
   VsOpponentIdRoute: VsOpponentIdRoute,
+  ApiAdminLoginRoute: ApiAdminLoginRoute,
+  ApiAdminLogoutRoute: ApiAdminLogoutRoute,
+  ApiAdminStatsRoute: ApiAdminStatsRoute,
+  ApiAnalyticsTrackRoute: ApiAnalyticsTrackRoute,
   ApiOgIdRoute: ApiOgIdRoute,
 }
 export const routeTree = rootRouteImport

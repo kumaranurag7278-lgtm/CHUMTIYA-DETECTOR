@@ -3,6 +3,7 @@ import { outcomeId, type Outcome } from "@/lib/scoring";
 import { CertificateModal } from "./CertificateModal";
 import { playClick, playFanfare } from "@/lib/sound";
 import { Award, Swords, Share2, RotateCcw } from "lucide-react";
+import { recordEvent } from "@/lib/analytics";
 
 type Props = {
   outcome: Outcome;
@@ -36,7 +37,12 @@ export function Result({ outcome, onRetry }: Props) {
 
   useEffect(() => {
     playFanfare();
-  }, []);
+    recordEvent("result_viewed", {
+      source: "result_card",
+      percentage: outcome.percentage,
+      band: outcome.band,
+    });
+  }, [outcome.percentage, outcome.band]);
 
   const share = async () => {
     playClick();
@@ -45,6 +51,7 @@ export function Result({ outcome, onRetry }: Props) {
 
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
+        recordEvent("share_clicked", { channel: "native", type: "result" });
         await navigator.share({ title, url });
         return;
       } catch (err: unknown) {
@@ -56,6 +63,7 @@ export function Result({ outcome, onRetry }: Props) {
 
     try {
       await navigator.clipboard.writeText(url);
+      recordEvent("share_link_copied", { source: "result_url" });
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -70,6 +78,7 @@ export function Result({ outcome, onRetry }: Props) {
 
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
+        recordEvent("share_clicked", { channel: "native", type: "battle" });
         await navigator.share({
           title: "1v1 Chumtiya Battle Challenge",
           text: shareText,
@@ -85,6 +94,7 @@ export function Result({ outcome, onRetry }: Props) {
 
     try {
       await navigator.clipboard.writeText(battleUrl);
+      recordEvent("share_link_copied", { source: "battle_url" });
       setBattleCopied(true);
       window.setTimeout(() => setBattleCopied(false), 2200);
     } catch {
@@ -157,6 +167,7 @@ export function Result({ outcome, onRetry }: Props) {
           <button
             onClick={() => {
               playClick();
+              recordEvent("share_clicked", { channel: "certificate", type: "official" });
               setShowCertificate(true);
             }}
             className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card/70 px-5 py-3.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:border-accent hover:text-accent hover:scale-[1.02] active:scale-95"

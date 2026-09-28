@@ -1,11 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Landing } from "@/components/Landing";
 import { DisclaimerModal } from "@/components/DisclaimerModal";
 import { Survey } from "@/components/Survey";
 import { Result } from "@/components/Result";
 import { computeOutcome, outcomeId, type Outcome } from "@/lib/scoring";
 import { getRequestOrigin } from "@/lib/origin.functions";
+import { recordEvent } from "@/lib/analytics";
 
 const TITLE = "Chumtiya Detector — A 16-Question Personality Diagnosis";
 const DESCRIPTION =
@@ -57,6 +58,10 @@ function Index() {
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [runId, setRunId] = useState(0);
 
+  useEffect(() => {
+    recordEvent("page_view", { path: "/" });
+  }, []);
+
   const start = () => {
     setLeaving(true);
     window.setTimeout(() => {
@@ -66,16 +71,23 @@ function Index() {
   };
 
   const proceedToSurvey = () => {
+    recordEvent("survey_started", { mode: "self" });
     setStage("survey");
   };
 
   const finish = (answers: number[]) => {
     const calculated = computeOutcome(answers);
+    recordEvent("survey_completed", {
+      mode: "self",
+      score: calculated.percentage,
+      band: calculated.band,
+    });
     const id = outcomeId(calculated);
     navigate({ to: "/result/$id", params: { id } });
   };
 
   const retry = () => {
+    recordEvent("survey_started", { mode: "self", retry: true });
     setOutcome(null);
     setRunId((n) => n + 1);
     setStage("survey");

@@ -5,6 +5,7 @@ import { getRequestOrigin } from "@/lib/origin.functions";
 import { Survey } from "@/components/Survey";
 import { playClick, playFanfare } from "@/lib/sound";
 import { Swords, Trophy, Share2, RotateCcw } from "lucide-react";
+import { recordEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/vs/$opponentId")({
   loader: async ({ params }) => {
@@ -63,6 +64,7 @@ function VsPage() {
 
   const startQuiz = () => {
     playClick();
+    recordEvent("survey_started", { mode: "battle" });
     setPhase("quiz");
   };
 
@@ -71,6 +73,8 @@ function VsPage() {
     setMyOutcome(outcome);
     setPhase("verdict");
     playFanfare();
+    recordEvent("survey_completed", { mode: "battle", score: outcome.percentage, band: outcome.band });
+    recordEvent("result_viewed", { source: "battle_verdict", percentage: outcome.percentage });
   };
 
   const diff = myOutcome ? Math.abs(myOutcome.percentage - opponent.percentage) : 0;
@@ -88,6 +92,7 @@ function VsPage() {
 
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
+        recordEvent("share_clicked", { channel: "native", type: "battle_result" });
         await navigator.share({
           title: "Chumtiya Battle Result",
           text: shareText,
@@ -101,6 +106,7 @@ function VsPage() {
 
     try {
       await navigator.clipboard.writeText(shareText);
+      recordEvent("share_link_copied", { source: "battle_result_text" });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

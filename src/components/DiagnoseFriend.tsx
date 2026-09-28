@@ -3,6 +3,7 @@ import { getFriendQuestions } from "@/data/friendQuestions";
 import { playClick, playOptionSelect, playFanfare } from "@/lib/sound";
 import { UserCheck, Share2, Download, ArrowLeft, RotateCcw, Award } from "lucide-react";
 import { FriendCertificateModal } from "./FriendCertificateModal";
+import { recordEvent } from "@/lib/analytics";
 
 type Props = {
   onBack: () => void;
@@ -23,6 +24,7 @@ export function DiagnoseFriend({ onBack }: Props) {
     e.preventDefault();
     if (!friendName.trim()) return;
     playClick();
+    recordEvent("survey_started", { mode: "friend" });
     setStarted(true);
   };
 
@@ -35,6 +37,8 @@ export function DiagnoseFriend({ onBack }: Props) {
     if (step + 1 >= questions.length) {
       setFinished(true);
       playFanfare();
+      recordEvent("survey_completed", { mode: "friend", score: scorePct, band: archetype.title });
+      recordEvent("result_viewed", { source: "diagnose_friend", percentage: scorePct });
     } else {
       setStep(step + 1);
     }
@@ -95,6 +99,7 @@ export function DiagnoseFriend({ onBack }: Props) {
 
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
+        recordEvent("share_clicked", { channel: "native", type: "friend_decree" });
         await navigator.share({
           title: `${name} ka Chumtiya Diagnosis`,
           text: shareText,
@@ -108,6 +113,7 @@ export function DiagnoseFriend({ onBack }: Props) {
 
     try {
       await navigator.clipboard.writeText(shareText);
+      recordEvent("share_link_copied", { source: "friend_decree_text" });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -117,6 +123,7 @@ export function DiagnoseFriend({ onBack }: Props) {
 
   const downloadCard = () => {
     playClick();
+    recordEvent("share_clicked", { channel: "certificate", type: "friend_decree_card" });
     const W = 1080;
     const H = 1080;
     const canvas = document.createElement("canvas");
@@ -277,6 +284,7 @@ export function DiagnoseFriend({ onBack }: Props) {
           <button
             onClick={() => {
               playClick();
+              recordEvent("share_clicked", { channel: "certificate", type: "friend_decree_modal" });
               setShowDecreeModal(true);
             }}
             className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-accent bg-accent/15 px-6 py-3 text-xs font-bold text-accent uppercase tracking-wider transition-transform hover:scale-105 active:scale-95 shadow-sm"
