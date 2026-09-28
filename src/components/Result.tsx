@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Outcome } from "@/lib/scoring";
+import { outcomeId, type Outcome } from "@/lib/scoring";
 
 type Props = {
   outcome: Outcome;
@@ -30,6 +30,7 @@ export function Result({ outcome, onRetry }: Props) {
   const [confirming, setConfirming] = useState(false);
 
   const share = async () => {
+    const url = `${window.location.origin}/result/${outcomeId(outcome)}`;
     const text = [
       "🧪 CHUMTIYA DETECTOR",
       "━━━━━━━━━━━━━━",
@@ -42,13 +43,13 @@ export function Result({ outcome, onRetry }: Props) {
 
     try {
       if (navigator.share) {
-        await navigator.share({ title: "Chumtiya Detector", text, url: window.location.origin });
+        await navigator.share({ title: "Chumtiya Detector", text, url });
         return;
       }
       throw new Error("no-share");
     } catch {
       try {
-        await navigator.clipboard.writeText(`${text}\n${window.location.origin}`);
+        await navigator.clipboard.writeText(`${text}\n${url}`);
         setCopied(true);
         window.setTimeout(() => setCopied(false), 2000);
       } catch {
