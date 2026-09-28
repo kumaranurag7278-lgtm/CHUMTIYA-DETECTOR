@@ -103,13 +103,13 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Someone disagrees with you. Deep down, what's your first explanation?",
+    question: "If someone is arguing or disagreeing with you, what's the first thought that comes to your mind?",
     answers: [
-      { text: "They might know something I don't.", score: 0, trait: "normal" },
-      { text: "We're probably defining the words differently.", score: 1, trait: "overthinking" },
+      { text: "Are yeh toh chumtiya hi hai.", score: 4, trait: "judgment" },
+      { text: "Are kahin main hi toh chumtiya nahi?", score: 1, trait: "normal" },
       { text: "I replay the argument for the next three hours.", score: 2, trait: "overthinking" },
-      { text: "They didn't understand what I said.", score: 3, trait: "superiority" },
-      { text: "They're simply not equipped for this conversation.", score: 4, trait: "superiority" },
+      { text: "I don't care what you say — I'm right.", score: 3, trait: "superiority" },
+      { text: "Bruh, misunderstanding hogayi hogi.", score: 0, trait: "normal" },
     ],
   },
   {
@@ -163,7 +163,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    question: "Are you a Godi bhakt? Does your Sanatan Dharma only come out near mosques — 'jaldi se Jai Shree Ram bol deta hoon, inki gaand jal jayegi, hahaha'?",
+    question: "Are you an andhbhakt — a godi bhakt?",
     answers: [
       { text: "Yes, proudly.", score: 4, trait: "main-character" },
       { text: "Pretty much.", score: 3, trait: "main-character" },
