@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { outcomeId, type Outcome } from "@/lib/scoring";
 import { CertificateModal } from "./CertificateModal";
-import { StoryCardModal } from "./StoryCardModal";
 import { playClick, playFanfare } from "@/lib/sound";
-import { Award, Smartphone, Swords, Share2, RotateCcw } from "lucide-react";
+import { Award, Swords, Share2, RotateCcw } from "lucide-react";
 
 type Props = {
   outcome: Outcome;
@@ -34,7 +33,6 @@ export function Result({ outcome, onRetry }: Props) {
   const [battleCopied, setBattleCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
-  const [showStoryCard, setShowStoryCard] = useState(false);
 
   useEffect(() => {
     playFanfare();
@@ -154,33 +152,22 @@ export function Result({ outcome, onRetry }: Props) {
           </p>
         </div>
 
-        {/* Viral Action Grid: Certificate, Story Card, 1v1 Battle */}
-        <div className="mt-8 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+        {/* Action Grid: Certificate & 1v1 Battle */}
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <button
             onClick={() => {
               playClick();
               setShowCertificate(true);
             }}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card/70 px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:border-accent hover:text-accent hover:scale-[1.02] active:scale-95"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card/70 px-5 py-3.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:border-accent hover:text-accent hover:scale-[1.02] active:scale-95"
           >
             <Award className="h-4 w-4 text-accent" />
-            Certificate
-          </button>
-
-          <button
-            onClick={() => {
-              playClick();
-              setShowStoryCard(true);
-            }}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card/70 px-4 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:border-accent hover:text-accent hover:scale-[1.02] active:scale-95"
-          >
-            <Smartphone className="h-4 w-4 text-accent" />
-            Story Card (9:16)
+            Official Certificate
           </button>
 
           <button
             onClick={copyBattleLink}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-accent/60 bg-accent/10 px-4 py-3 text-xs font-bold text-accent uppercase tracking-wider transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] active:scale-95"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-accent/60 bg-accent/10 px-5 py-3.5 text-xs font-bold text-accent uppercase tracking-wider transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] active:scale-95"
           >
             <Swords className="h-4 w-4" />
             {battleCopied ? "Battle Link Copied!" : "1v1 Roast Friend"}
@@ -242,9 +229,6 @@ export function Result({ outcome, onRetry }: Props) {
 
       {showCertificate && (
         <CertificateModal outcome={outcome} onClose={() => setShowCertificate(false)} />
-      )}
-      {showStoryCard && (
-        <StoryCardModal outcome={outcome} onClose={() => setShowStoryCard(false)} />
       )}
     </section>
   );

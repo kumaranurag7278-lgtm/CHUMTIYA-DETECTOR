@@ -187,12 +187,13 @@ export function DiagnoseFriend({ onBack }: Props) {
   // Step 1: Friend Name Input
   if (!started) {
     return (
-      <section className="mx-auto flex min-h-[100svh] max-w-xl flex-col items-center justify-center px-4 py-12 text-center animate-fade-in">
+      <section className="relative mx-auto flex min-h-[100svh] max-w-xl flex-col items-center justify-center px-4 py-12 text-center animate-fade-in">
+        {/* Prominent Floating Top-Left Back Button */}
         <button
           onClick={onBack}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-bold uppercase hover:bg-muted"
+          className="fixed top-5 left-5 z-40 inline-flex items-center gap-2 rounded-full border border-border bg-card/85 px-4 py-2 text-xs font-bold uppercase tracking-wider text-muted-foreground backdrop-blur-md transition-all hover:border-accent hover:text-accent hover:scale-105 active:scale-95 shadow-sm"
         >
-          <ArrowLeft className="h-4 w-4" /> Back to Home
+          <ArrowLeft className="h-4 w-4" /> Back to Dashboard
         </button>
 
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-accent/40 bg-accent/10 text-accent shadow-lg shadow-accent/20">
@@ -223,13 +224,22 @@ export function DiagnoseFriend({ onBack }: Props) {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={!friendName.trim()}
-            className="mt-5 w-full rounded-full bg-accent px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform hover:scale-105 active:scale-95 disabled:opacity-50"
-          >
-            Start 7-Question Scan
-          </button>
+          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
+            <button
+              type="button"
+              onClick={onBack}
+              className="w-full sm:w-1/3 rounded-full border border-border px-5 py-3.5 text-xs font-bold tracking-wider uppercase transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!friendName.trim()}
+              className="w-full sm:w-2/3 rounded-full bg-accent px-6 py-3.5 text-xs font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform hover:scale-105 active:scale-95 disabled:opacity-50"
+            >
+              Start 7Q Scan →
+            </button>
+          </div>
         </form>
       </section>
     );
