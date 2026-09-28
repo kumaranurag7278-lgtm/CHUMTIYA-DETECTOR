@@ -96,7 +96,7 @@ export function CertificateModal({ outcome, onClose }: Props) {
       ctx.fillStyle = "#0f172a";
       ctx.font = "bold 20px 'Times New Roman', Times, serif";
       ctx.letterSpacing = "4px";
-      ctx.fillText("THE SATIRICAL HACKATHON LEAGUE", W / 2, 170);
+      ctx.fillText("CHUMTIYA HACKATHON CONTEST", W / 2, 170);
 
       ctx.fillStyle = "#64748b";
       ctx.font = "italic 13px 'Times New Roman', serif";
@@ -253,7 +253,7 @@ export function CertificateModal({ outcome, onClose }: Props) {
       ctx.fillText("Dr. Reality Check", 310, 870);
       ctx.font = "12px 'Times New Roman', serif";
       ctx.fillStyle = "#64748b";
-      ctx.fillText("Chief Evaluation Lead, SHL", 310, 888);
+      ctx.fillText("Chief Evaluation Lead, CHC", 310, 888);
 
       // Right Signature
       ctx.fillStyle = "#0f172a";
@@ -341,7 +341,7 @@ export function CertificateModal({ outcome, onClose }: Props) {
           <div className="absolute inset-2 border-2 border-[#c59b27] pointer-events-none rounded-sm" />
 
           <p className="font-serif text-[10px] font-bold tracking-[0.2em] text-[#64748b] uppercase">
-            The Satirical Hackathon League
+            Chumtiya Hackathon Contest
           </p>
           <p className="text-[8px] italic text-[#94a3b8]">
             Department of Social Irony & Common Sense Benchmarking • Est. 2026
@@ -369,7 +369,7 @@ export function CertificateModal({ outcome, onClose }: Props) {
 
           <div className="mx-auto my-3 max-w-md rounded-lg border border-[#c59b27] bg-white p-2.5 shadow-sm">
             <span className="font-mono text-[9px] font-bold tracking-widest text-[#64748b] uppercase">
-              Official Chumtiyapa Quotient
+              Official Chumtiya Quotient
             </span>
             <p className="font-serif text-xl font-black text-[#dc2626] sm:text-2xl">
               {outcome.percentage}% — {outcome.band.toUpperCase()}
@@ -383,7 +383,7 @@ export function CertificateModal({ outcome, onClose }: Props) {
           <div className="mt-5 flex items-center justify-between border-t border-[#cbd5e1] pt-3 text-[9px] text-[#64748b]">
             <div className="text-left">
               <span className="font-bold block text-[#0f172a]">Dr. Reality Check</span>
-              Evaluation Lead, SHL
+              Evaluation Lead, CHC
             </div>
             <div className="rounded-full border border-[#c59b27] bg-[#fef9c3] px-2 py-0.5 text-[8px] font-bold text-[#b45309]">
               ★ SATIRICAL SEAL ★
