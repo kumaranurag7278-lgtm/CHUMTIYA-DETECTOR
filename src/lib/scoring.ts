@@ -35,8 +35,9 @@ export function outcomeFromId(id: string): Outcome | null {
   const m = /^(\d{1,3})-([a-z-]+)$/.exec(id);
   if (!m) return null;
   const pct = Number(m[1]);
-  if (pct > 100 || !(m[2] in traitInfo)) return null;
-  return buildOutcome(pct, m[2] as Trait);
+  const key = m[2] ?? "";
+  if (pct > 100 || !(key in traitInfo)) return null;
+  return buildOutcome(pct, key as Trait);
 }
 
 /** answerIndexes[i] is the chosen answer index for questions[i]. */
