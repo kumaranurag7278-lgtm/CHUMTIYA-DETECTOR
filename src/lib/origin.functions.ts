@@ -9,7 +9,7 @@ export const getRequestOrigin = createServerFn({ method: "GET" }).handler(() => 
   const forwardedProto = req.headers.get("x-forwarded-proto");
   const hostHeader = req.headers.get("host");
 
-  const effectiveHost = forwardedHost || hostHeader;
+  const effectiveHost = forwardedHost ? forwardedHost.split(",")[0]?.trim() : hostHeader;
 
   if (effectiveHost && !effectiveHost.startsWith("localhost") && !effectiveHost.startsWith("127.0.0.1")) {
     const proto = forwardedProto || "https";

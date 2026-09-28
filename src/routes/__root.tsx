@@ -91,7 +91,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "A fast, funny 16-question survey that measures exactly how convinced you are that everyone around you is a chumtiya.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/api/og/home.png" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "/api/og/home.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

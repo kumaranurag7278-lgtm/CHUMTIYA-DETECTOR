@@ -5,22 +5,44 @@ import { DisclaimerModal } from "@/components/DisclaimerModal";
 import { Survey } from "@/components/Survey";
 import { Result } from "@/components/Result";
 import { computeOutcome, outcomeId, type Outcome } from "@/lib/scoring";
+import { getRequestOrigin } from "@/lib/origin.functions";
 
 const TITLE = "Chumtiya Detector — A 16-Question Personality Diagnosis";
 const DESCRIPTION =
-  "A fast, funny 16-question survey that measures exactly how convinced you are that everyone around you is a chumtiya. Not a real test.";
+  "Let's find out what's actually wrong with you. A fast, funny 16-question survey that measures exactly how convinced you are that everyone around you is a chumtiya. Not a real test.";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  loader: async () => {
+    const origin = await getRequestOrigin();
+    return { origin };
+  },
+  head: ({ loaderData }) => {
+    const origin = loaderData?.origin || "";
+    const url = origin ? `${origin}/` : "/";
+    const image = origin ? `${origin}/api/og/home.png` : "/api/og/home.png";
+    return {
+      meta: [
+        { title: TITLE },
+        { name: "description", content: DESCRIPTION },
+        { property: "og:title", content: TITLE },
+        { property: "og:description", content: DESCRIPTION },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { property: "og:image:secure_url", content: image },
+        { property: "og:image:type", content: "image/png" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:image:alt", content: TITLE },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: TITLE },
+        { name: "twitter:description", content: DESCRIPTION },
+        { name: "twitter:image", content: image },
+        { name: "twitter:image:alt", content: TITLE },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: Index,
 });
 
