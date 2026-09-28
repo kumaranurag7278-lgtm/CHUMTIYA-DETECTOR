@@ -11,7 +11,7 @@ export function DiagnoseFriend({ onBack }: Props) {
   const [friendName, setFriendName] = useState("");
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
-  const [pointsTotal, setPointsTotal] = useState(0);
+  const [selectedIndices, setSelectedIndices] = useState<(number | null)[]>([]);
   const [finished, setFinished] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -24,10 +24,11 @@ export function DiagnoseFriend({ onBack }: Props) {
     setStarted(true);
   };
 
-  const handleAnswer = (pts: number) => {
+  const handleAnswer = (optionIndex: number) => {
     playOptionSelect();
-    const nextTotal = pointsTotal + pts;
-    setPointsTotal(nextTotal);
+    const next = [...selectedIndices];
+    next[step] = optionIndex;
+    setSelectedIndices(next);
 
     if (step + 1 >= questions.length) {
       setFinished(true);
@@ -37,7 +38,27 @@ export function DiagnoseFriend({ onBack }: Props) {
     }
   };
 
-  const scorePct = Math.min(100, Math.max(15, Math.round((pointsTotal / 18) * 100)));
+  const goBack = () => {
+    if (step <= 0) return;
+    playClick();
+    setStep(step - 1);
+  };
+
+  const goForward = () => {
+    if (step >= questions.length - 1 || selectedIndices[step] == null) return;
+    playClick();
+    setStep(step + 1);
+  };
+
+  const pointsTotal = useMemo(() => {
+    return selectedIndices.reduce<number>((acc, ansIdx, qIdx) => {
+      if (ansIdx == null) return acc;
+      return acc + (questions[qIdx]?.answers[ansIdx]?.points ?? 0);
+    }, 0);
+  }, [selectedIndices, questions]);
+
+  // 7 questions * 3 max points = 21 max points
+  const scorePct = Math.min(100, Math.max(15, Math.round((pointsTotal / 21) * 100)));
 
   const archetype = useMemo(() => {
     if (scorePct >= 85) {
@@ -182,7 +203,7 @@ export function DiagnoseFriend({ onBack }: Props) {
           Dost Ko Diagnose Karo
         </h2>
         <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-          Kya aapka dost bhi ajeeb harkatein karke aapka dimaag kharab karta hai? 6 sawaalo ke jawab do aur uska official confidential dossier nikaalo.
+          Kya aapka dost bhi ajeeb harkatein karke aapka dimaag kharab karta hai? 7 sawaalo ke jawab do aur uska official confidential dossier nikaalo.
         </p>
 
         <form onSubmit={handleStart} className="mt-8 w-full max-w-sm">
@@ -207,7 +228,7 @@ export function DiagnoseFriend({ onBack }: Props) {
             disabled={!friendName.trim()}
             className="mt-5 w-full rounded-full bg-accent px-8 py-3.5 text-sm font-bold tracking-[0.2em] text-accent-foreground uppercase transition-transform hover:scale-105 active:scale-95 disabled:opacity-50"
           >
-            Start 6-Question Scan
+            Start 7-Question Scan
           </button>
         </form>
       </section>
@@ -263,7 +284,7 @@ export function DiagnoseFriend({ onBack }: Props) {
             onClick={() => {
               playClick();
               setStep(0);
-              setPointsTotal(0);
+              setSelectedIndices([]);
               setFinished(false);
               setFriendName("");
               setStarted(false);
@@ -287,6 +308,10 @@ export function DiagnoseFriend({ onBack }: Props) {
   // Step 2: Friend Questions Flow
   const currentQ = questions[step];
   if (!currentQ) return null;
+
+  const currentSelection = selectedIndices[step];
+  const canGoBack = step > 0;
+  const canGoForward = step < questions.length - 1 && currentSelection != null;
 
   return (
     <section className="mx-auto flex min-h-[100svh] max-w-2xl flex-col justify-center px-4 py-8 animate-fade-in sm:px-6">
@@ -312,15 +337,44 @@ export function DiagnoseFriend({ onBack }: Props) {
       </h3>
 
       <div className="mt-6 flex flex-col gap-3 sm:mt-8">
-        {currentQ.answers.map((ans, i) => (
+        {currentQ.answers.map((ans, i) => {
+          const isSelected = currentSelection === i;
+          return (
+            <button
+              key={i}
+              onClick={() => handleAnswer(i)}
+              className={`flex min-h-[3rem] w-full items-center rounded-2xl border px-5 py-3.5 text-left text-base transition-all duration-150 active:scale-[0.99] ${
+                isSelected
+                  ? "border-accent bg-accent text-accent-foreground font-semibold shadow-md shadow-accent/20"
+                  : "border-border bg-card text-foreground hover:border-accent hover:bg-secondary"
+              }`}
+            >
+              {ans.text}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Navigation Buttons: Back and Next */}
+      <div className="mt-8 flex items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={goBack}
+          disabled={!canGoBack}
+          className="inline-flex min-h-[2.5rem] items-center gap-1.5 rounded-full border border-border px-5 py-2 font-mono text-xs tracking-wider uppercase transition-colors disabled:opacity-0 disabled:pointer-events-none hover:border-accent hover:text-accent"
+        >
+          ← Back
+        </button>
+
+        {canGoForward && (
           <button
-            key={i}
-            onClick={() => handleAnswer(ans.points)}
-            className="flex min-h-[3rem] w-full items-center rounded-2xl border border-border bg-card px-5 py-3.5 text-left text-base text-foreground transition-all duration-150 hover:border-accent hover:bg-secondary active:scale-[0.99]"
+            type="button"
+            onClick={goForward}
+            className="inline-flex min-h-[2.5rem] items-center gap-1.5 rounded-full border border-border px-5 py-2 font-mono text-xs tracking-wider uppercase transition-colors hover:border-accent hover:text-accent"
           >
-            {ans.text}
+            Next →
           </button>
-        ))}
+        )}
       </div>
     </section>
   );

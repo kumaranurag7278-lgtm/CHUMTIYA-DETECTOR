@@ -47,7 +47,7 @@ export function Landing({ onStart, onDiagnoseFriend, leaving }: Props) {
           className="inline-flex min-h-[3.25rem] w-full max-w-xs items-center justify-center gap-2 rounded-full border border-border bg-card/80 px-7 py-4 text-xs font-bold tracking-[0.15em] uppercase transition-all duration-200 hover:border-accent hover:text-accent hover:scale-[1.02] active:scale-[0.98] sm:w-auto"
         >
           <UserCheck className="h-4 w-4 text-accent" />
-          Diagnose a Friend (6Q)
+          Diagnose a Friend (7Q)
         </button>
       </div>
 

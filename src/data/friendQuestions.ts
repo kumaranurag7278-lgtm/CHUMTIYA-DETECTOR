@@ -46,12 +46,21 @@ export function getFriendQuestions(friendName: string): FriendQuestion[] {
       ],
     },
     {
-      question: `Traffic me ya kisi public jagah pe ${name} ka kaisa rawaiya rehta hai?`,
+      question: `Kya ${name} public area me jaanwaro jaisa vyavhaar karta hai?`,
       answers: [
-        { text: `Red light pe 45 second bacha ho tab bhi continuously paaglo ki tarah horn bajata hai`, points: 3 },
-        { text: `Cab wale ko bolta hai "Bhai shortcut le lo", aur 2 ghante extra jam me fasa deta hai`, points: 3 },
-        { text: `Traffic me aate hi desh ke system aur road infrastructure pe gyaan baantna shuru kar deta hai`, points: 2 },
-        { text: `Headphones laga ke shaant baitha rehta hai bina kisi ko pareshan kiye`, points: 0 },
+        { text: `Restaurant ya public me achanak zor-zor se gaaliyan bolta hai taaki sab use dekhein`, points: 3 },
+        { text: `Waiter ya delivery wale par faltu ka rob jhaadta hai "Tujhe pata hai main kaun hu?"`, points: 3 },
+        { text: `Public me aisi aisi cringe harkatein karta hai ki aapko uske saath chalne me sharam aati hai`, points: 3 },
+        { text: `Civilized aur tameezdaar insaan ki tarah behave karta hai`, points: 0 },
+      ],
+    },
+    {
+      question: `Kya ${name} ladkiyon ke saamne zabardasti nonchalant aur ultra-cool banne ki acting karta hai?`,
+      answers: [
+        { text: `Ladki dekhte hi awaz bhari karke "I don't give a f**k" wala mysterious look deta hai`, points: 3 },
+        { text: `Ladkiyon ke saamne cool banne ke chakkar me apne hi dosto ki beizzati karne lagta hai`, points: 3 },
+        { text: `Achanak se phone nikaal ke fake serious business call pe baat karne ka natak karta hai`, points: 2 },
+        { text: `Bilkul natural aur normal rehta hai bina kisi sasti acting ke`, points: 0 },
       ],
     },
     {
