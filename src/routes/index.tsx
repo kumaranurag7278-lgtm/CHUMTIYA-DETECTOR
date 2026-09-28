@@ -46,7 +46,9 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Stage = "landing" | "disclaimer" | "survey" | "result";
+import { DiagnoseFriend } from "@/components/DiagnoseFriend";
+
+type Stage = "landing" | "disclaimer" | "survey" | "result" | "friend";
 
 function Index() {
   const navigate = useNavigate();
@@ -81,10 +83,17 @@ function Index() {
 
   return (
     <main className="min-h-[100svh] bg-background text-foreground">
-      {stage === "landing" && <Landing onStart={start} leaving={leaving} />}
+      {stage === "landing" && (
+        <Landing
+          onStart={start}
+          onDiagnoseFriend={() => setStage("friend")}
+          leaving={leaving}
+        />
+      )}
       {stage === "disclaimer" && <DisclaimerModal onContinue={proceedToSurvey} />}
       {stage === "survey" && <Survey key={runId} onFinish={finish} />}
       {stage === "result" && outcome && <Result outcome={outcome} onRetry={retry} />}
+      {stage === "friend" && <DiagnoseFriend onBack={() => setStage("landing")} />}
     </main>
   );
 }

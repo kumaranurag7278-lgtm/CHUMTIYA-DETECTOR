@@ -129,11 +129,14 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+import { SoundToggle } from "@/components/SoundToggle";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SoundToggle />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Analytics />

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultIdRouteImport } from './routes/result.$id'
+import { Route as VsOpponentIdRouteImport } from './routes/vs.$opponentId'
 import { Route as ApiOgIdRouteImport } from './routes/api/og/$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const ResultIdRoute = ResultIdRouteImport.update({
   path: '/result/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VsOpponentIdRoute = VsOpponentIdRouteImport.update({
+  id: '/vs/$opponentId',
+  path: '/vs/$opponentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOgIdRoute = ApiOgIdRouteImport.update({
   id: '/api/og/$id',
   path: '/api/og/$id',
@@ -32,30 +38,34 @@ const ApiOgIdRoute = ApiOgIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/result/$id': typeof ResultIdRoute
+  '/vs/$opponentId': typeof VsOpponentIdRoute
   '/api/og/$id': typeof ApiOgIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/result/$id': typeof ResultIdRoute
+  '/vs/$opponentId': typeof VsOpponentIdRoute
   '/api/og/$id': typeof ApiOgIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/result/$id': typeof ResultIdRoute
+  '/vs/$opponentId': typeof VsOpponentIdRoute
   '/api/og/$id': typeof ApiOgIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/result/$id' | '/api/og/$id'
+  fullPaths: '/' | '/result/$id' | '/vs/$opponentId' | '/api/og/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/result/$id' | '/api/og/$id'
-  id: '__root__' | '/' | '/result/$id' | '/api/og/$id'
+  to: '/' | '/result/$id' | '/vs/$opponentId' | '/api/og/$id'
+  id: '__root__' | '/' | '/result/$id' | '/vs/$opponentId' | '/api/og/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ResultIdRoute: typeof ResultIdRoute
+  VsOpponentIdRoute: typeof VsOpponentIdRoute
   ApiOgIdRoute: typeof ApiOgIdRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vs/$opponentId': {
+      id: '/vs/$opponentId'
+      path: '/vs/$opponentId'
+      fullPath: '/vs/$opponentId'
+      preLoaderRoute: typeof VsOpponentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/og/$id': {
       id: '/api/og/$id'
       path: '/api/og/$id'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ResultIdRoute: ResultIdRoute,
+  VsOpponentIdRoute: VsOpponentIdRoute,
   ApiOgIdRoute: ApiOgIdRoute,
 }
 export const routeTree = rootRouteImport

@@ -3,6 +3,7 @@ import { questions } from "@/data/questions";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ProgressBar } from "./ProgressBar";
 import { QuestionCard } from "./QuestionCard";
+import { playClick, playOptionSelect } from "@/lib/sound";
 
 type Props = {
   onFinish: (answers: number[]) => void;
@@ -36,6 +37,7 @@ export function Survey({ onFinish }: Props) {
 
   const goBack = () => {
     if (!canGoBack) return;
+    playClick();
     setHintDismissed(true);
     setDir(-1);
     setPhase("out");
@@ -47,6 +49,7 @@ export function Survey({ onFinish }: Props) {
 
   const goForward = () => {
     if (!canGoForward) return;
+    playClick();
     setHintDismissed(true);
     setDir(1);
     setPhase("out");
@@ -78,6 +81,7 @@ export function Survey({ onFinish }: Props) {
 
   const handleSelect = (index: number) => {
     if (selected !== null) return;
+    playOptionSelect();
     setDir(1);
     setSelected(index);
     const next = [...answers];
