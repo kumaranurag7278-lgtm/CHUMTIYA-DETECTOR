@@ -80,6 +80,16 @@ Whether you're taking the self-diagnostic test, putting a friend on trial throug
 - Server-side rendered Open Graph meta tags and Twitter preview cards.
 - Beautiful, high-converting link previews when shared on WhatsApp, Telegram, Discord, and Twitter/X.
 
+### 8. 🎮 The Detector Arcade (Specialized Roast Tests)
+- 🚩 **Red Flag Detector** (`/test/red-flag`): 10 questions on dry texting, Cister counts, victim cards, and situationship rizz.
+- 🐍 **Toxic Friend Detector** (`/test/toxic-friend`): 10 questions analyzing bill-splitting disappearing acts, secret leaking, and aasteen ka saanp energy.
+- 🦄 **Delulu Detector** (`/test/delulu`): 10 questions detecting eye-contact delusions, 11:11 angel number obsession, and "I can fix him/her" fantasies.
+- Generates dedicated **1080x1080 high-res PNG Report Cards** for instant social sharing.
+
+### 9. 🔒 Private Owner Analytics Dashboard (`/admin/analytics`)
+- Server-side authenticated with HMAC-SHA256 encrypted session cookies.
+- Real-time Vercel Web Analytics integration, 5-stage conversion funnels, and trend charts.
+
 ---
 
 ## 🛠️ Tech Stack

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as ResultIdRouteImport } from './routes/result.$id'
+import { Route as TestTestIdRouteImport } from './routes/test.$testId'
 import { Route as VsOpponentIdRouteImport } from './routes/vs.$opponentId'
 import { Route as ApiAdminLoginRouteImport } from './routes/api/admin/login'
 import { Route as ApiAdminLogoutRouteImport } from './routes/api/admin/logout'
@@ -32,6 +33,11 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
 const ResultIdRoute = ResultIdRouteImport.update({
   id: '/result/$id',
   path: '/result/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestTestIdRoute = TestTestIdRouteImport.update({
+  id: '/test/$testId',
+  path: '/test/$testId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VsOpponentIdRoute = VsOpponentIdRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/result/$id': typeof ResultIdRoute
+  '/test/$testId': typeof TestTestIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
   '/api/admin/login': typeof ApiAdminLoginRoute
   '/api/admin/logout': typeof ApiAdminLogoutRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/result/$id': typeof ResultIdRoute
+  '/test/$testId': typeof TestTestIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
   '/api/admin/login': typeof ApiAdminLoginRoute
   '/api/admin/logout': typeof ApiAdminLogoutRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/result/$id': typeof ResultIdRoute
+  '/test/$testId': typeof TestTestIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
   '/api/admin/login': typeof ApiAdminLoginRoute
   '/api/admin/logout': typeof ApiAdminLogoutRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/analytics'
     | '/result/$id'
+    | '/test/$testId'
     | '/vs/$opponentId'
     | '/api/admin/login'
     | '/api/admin/logout'
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/analytics'
     | '/result/$id'
+    | '/test/$testId'
     | '/vs/$opponentId'
     | '/api/admin/login'
     | '/api/admin/logout'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/analytics'
     | '/result/$id'
+    | '/test/$testId'
     | '/vs/$opponentId'
     | '/api/admin/login'
     | '/api/admin/logout'
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   ResultIdRoute: typeof ResultIdRoute
+  TestTestIdRoute: typeof TestTestIdRoute
   VsOpponentIdRoute: typeof VsOpponentIdRoute
   ApiAdminLoginRoute: typeof ApiAdminLoginRoute
   ApiAdminLogoutRoute: typeof ApiAdminLogoutRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/result/$id'
       fullPath: '/result/$id'
       preLoaderRoute: typeof ResultIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test/$testId': {
+      id: '/test/$testId'
+      path: '/test/$testId'
+      fullPath: '/test/$testId'
+      preLoaderRoute: typeof TestTestIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/vs/$opponentId': {
@@ -219,6 +239,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   ResultIdRoute: ResultIdRoute,
+  TestTestIdRoute: TestTestIdRoute,
   VsOpponentIdRoute: VsOpponentIdRoute,
   ApiAdminLoginRoute: ApiAdminLoginRoute,
   ApiAdminLogoutRoute: ApiAdminLogoutRoute,
