@@ -165,11 +165,11 @@ export const questions: Question[] = [
   {
     question: "Are you an andhbhakt — a godi bhakt?",
     answers: [
-      { text: "Yes, proudly.", score: 4, trait: "main-character" },
-      { text: "Pretty much.", score: 3, trait: "main-character" },
-      { text: "I lean that way.", score: 2, trait: "judgment" },
-      { text: "Not really.", score: 1, trait: "normal" },
-      { text: "I don't even know what that means.", score: 0, trait: "normal" },
+      { text: "Yes. Godi party gayi toh mera religion khatre mein aa jayega.", score: 4, trait: "main-character" },
+      { text: "It's worse, but Congress is worse than them.", score: 3, trait: "main-character" },
+      { text: "Well, I am neutral bruh.", score: 2, trait: "judgment" },
+      { text: "Naah man, I think it's time for a change bruh.", score: 1, trait: "normal" },
+      { text: "Godi bhakt should be banned from this world.", score: 0, trait: "normal" },
     ],
   },
   {
