@@ -1,632 +1,188 @@
-# Personality Reveal
+<div align="center">
 
-Build a simple, polished, funny personality-survey website called "CHUTIYA DETECTOR".
-HERE IS THE LINK: https://chumtiya-detector.vercel.app/
+# 🎯 CHUMTIYA DETECTOR
 
-IMPORTANT:
+**The Ultimate High-Precision Psychological Parody & Dost Diagnostic Engine**
 
-This is a small fun project, NOT a real psychological test. Keep the implementation simple. Do not add login, signup, database, backend, leaderboard, profiles, authentication, admin panel, payment system, or unnecessary features.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-chumtiya--detector.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://chumtiya-detector.vercel.app/)
+[![React 19](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react)](https://react.dev/)
+[![TanStack Start](https://img.shields.io/badge/TanStack-Start_SSR-ff4154?style=for-the-badge&logo=tanstack)](https://tanstack.com/start)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-CSS_v4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-## CORE USER FLOW
+<br />
 
-The entire website should have only 3 stages:
+<p align="center">
+  <img src="./public/og-dashboard.png" alt="Chumtiya Detector Dashboard" width="800px" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5);" />
+</p>
 
-1. Landing screen
+### *"Let's find out what's actually wrong with you (or your friends)."*
 
-2. Survey — one question per screen
-
-3. Final result screen
-
-The experience should feel like a smooth full-screen interactive quiz.
-
----
-
-# 1. LANDING SCREEN
-
-Create a minimal, visually striking landing page.
-
-Main heading:
-
-"CHUTIYA DETECTOR"
-
-Subtitle:
-
-"Let's find out what's actually wrong with you."
-
-Primary button:
-
-"DETECT CHUTIYA"
-
-When the user clicks the button, the landing screen should transition smoothly into the first survey question.
-
-Do not show the questions on the landing page.
+[🚀 **Launch Diagnostic Engine**](https://chumtiya-detector.vercel.app/) • [👥 **Diagnose a Friend**](https://chumtiya-detector.vercel.app/friend) • [📜 **Hackathon Certificates**](https://chumtiya-detector.vercel.app/)
 
 ---
 
-# 2. SURVEY
+</div>
 
-The survey contains around 10 questions.
+## 📌 Overview
 
-IMPORTANT UX RULE:
+**Chumtiya Detector** is an irreverent, razor-sharp psychological parody web app built to scientifically identify intellectual superiority complexes, chronic cynicism, social delusions, and certified chumtiyagiri.
 
-Show ONLY ONE QUESTION AT A TIME.
-
-Do NOT put all questions on one page.
-
-Each question should occupy almost the entire viewport and feel like its own screen.
-
-Layout:
-
-- Question number / progress at the top
-
-- Large question in the center
-
-- 4–5 answer buttons underneath
-
-- Clean spacing
-
-- Minimal distractions
-
-Example:
-
-03 / 10
-
-"Do you think going to parties or concerts is mostly a waste of time?"
-
-[ Definitely ]
-
-[ Usually ]
-
-[ Sometimes ]
-
-[ Not really ]
-
-[ Absolutely not ]
-
-When the user selects an answer:
-
-1. Store the answer in JavaScript state.
-
-2. Do NOT require a separate "Next" button.
-
-3. Automatically animate the current question out.
-
-4. Slide the next question into view.
-
-5. Continue until all questions are answered.
-
-The transition should feel like:
-
-Current question → slides left/out
-
-Next question → slides in from the right
-
-Use smooth CSS transitions/animations.
-
-The animation should be quick and satisfying, around 400–600ms.
-
-The user should never see two questions at the same time.
-
-Include a small progress indicator such as:
-
-01 / 10
-
-02 / 10
-
-03 / 10
-
-You can also use a subtle progress bar.
+Whether you're taking the self-diagnostic test, putting a friend on trial through the **Diagnose a Friend** Hinglish quiz, or issuing a downloadable **Chumtiya Hackathon Contest Certificate**, this platform delivers brutal humor wrapped in a slick, dark-mode terminal aesthetic.
 
 ---
 
-# 3. QUESTIONS
+## ✨ Features
 
-The questions should NOT be generic "are you lazy?" personality-test questions.
+### 1. 🧠 Core 16-Question Diagnostic Engine
+- Smooth screen-by-screen progression with keyboard shortcuts and tactile option selectors.
+- Dynamic scoring algorithm evaluating superiority complexes, social intolerance, and cynicism.
+- **6 Precision Classification Tiers**:
+  - `0% - 20%`: Surprisingly Normal
+  - `21% - 40%`: Slightly Sus
+  - `41% - 60%`: Certified Chumtiya
+  - `61% - 80%`: Advanced Chumtiya
+  - `81% - 95%`: Premium Chumtiya
+  - `96% - 100%`: Final Boss Chumtiya
+- Dynamic psychological traits (e.g. *Intellectual Superiority Complex*, *People Are Annoying™*, *Main Character Syndrome*).
 
-The entire joke of the website is that it detects whether someone has an exaggerated tendency to think that other people are stupid, annoying, pointless, or beneath them.
+### 2. 👥 Diagnose a Friend (Hinglish Roast Edition)
+- Custom survey calibrated specifically for Indian friend circles and college room-mates.
+- Enter your friend's name and analyze real scenarios:
+  - *Kya Instagram par 10 Bolero ki photo daal ke Haryanvi gaane lagata hai?*
+  - *Sala aapke paise ka khaa kar aapko hi ginata hai?*
+  - *Public area me bina kisi sharm ke janwaro jaisa vyavahar karta hai?*
+  - *Ladkiyo ke samne fake nonchalant banne ki koshish me cartoon lagta hai?*
+- Dedicated back navigation at every step so you never lose control.
 
-Questions should explore:
+### 3. 📜 Official Chumtiya Hackathon Contest Certificate
+- High-resolution **1400 × 980** Canvas 2D generated certificates.
+- Designed to replicate authentic, high-stakes national hackathon credentials with:
+  - Official Golden Badge & Guilloché Borders
+  - Unique Hash Verification Serial ID
+  - Dynamic Candidate Classification & Primary Trait Endorsement
+  - One-click instant high-quality PNG download.
 
-- intellectual superiority
+### 4. 📢 Official Public Decree Certificate for Friends
+- Specially issued public proclamation signed by the sender.
+- Certifies that the recipient has been legally tried, diagnosed, and classified before the public council.
 
-- cynicism
+### 5. ⚔️ 1v1 Dost vs Dost Roast Battle
+- Challenge your friends via dynamic URL links (`/vs/$opponentId`).
+- Compare diagnostic scores side-by-side to crown the true champion.
 
-- social judgment
+### 6. 🔊 Synthesized Web Audio Sound Engine
+- Zero external audio files — procedural 8-bit sound effects generated on-the-fly using the Web Audio API.
+- Global floating sound toggle with persistent mute preferences.
 
-- thinking other people are stupid
-
-- dislike of mainstream behavior
-
-- social isolation
-
-- overthinking
-
-- self-awareness
-
-- intolerance toward other people's interests
-
-- thinking "everyone is an idiot except me"
-
-Use questions such as:
-
-1.
-
-"Do you think going to parties or concerts is mostly a waste of time?"
-
-2.
-
-"Do you feel that most people in your country are chutiya?"
-
-3.
-
-"Do you have fewer friends because you think most people are stupid or annoying?"
-
-4.
-
-"When someone enjoys something you consider pointless, how do you usually react?"
-
-5.
-
-"How often do you think you're smarter than most people around you?"
-
-6.
-
-"Would you rather spend a Friday night alone than go out with a group?"
-
-7.
-
-"Do you think people who blindly follow trends are basically NPCs?"
-
-8.
-
-"When someone strongly disagrees with you, what's your first assumption?"
-
-9.
-
-"Do you frequently look at other people's decisions and think, 'Why the fuck would you do that?'"
-
-10.
-
-"Do you ever genuinely feel like everyone around you is an idiot except you?"
-
-Rewrite/improve the wording where necessary so the questions feel natural and entertaining.
-
-The questions should feel increasingly revealing as the survey progresses.
-
-Do NOT make every question obviously point toward the same answer.
+### 7. 🖼️ SSR Open Graph & Social Cards
+- Server-side rendered Open Graph meta tags and Twitter preview cards.
+- Beautiful, high-converting link previews when shared on WhatsApp, Telegram, Discord, and Twitter/X.
 
 ---
 
-# 4. ANSWER SCORING
+## 🛠️ Tech Stack
 
-Each answer should contribute a hidden numerical score.
-
-Higher score = stronger "chutiya" tendency.
-
-Do not show the scoring system to the user.
-
-For example:
-
-Answer values can range from 0–4.
-
-0 = low chutiya tendency
-
-1 = mild
-
-2 = neutral
-
-3 = high
-
-4 = very high
-
-Calculate the total score after the final question.
-
-Convert it into a percentage:
-
-percentage = (totalScore / maximumPossibleScore) * 100
-
-Round the final percentage to an integer.
-
-Do NOT randomly generate the result.
-
-The result must actually depend on the user's answers.
+- **Framework**: [TanStack Start](https://tanstack.com/start) with Nitro SSR
+- **UI Library**: [React 19](https://react.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Graphics**: HTML5 2D Canvas (High-DPI rendering)
+- **Sound**: Web Audio API (Sine / Square wave oscillator synthesis)
+- **Hosting & Analytics**: [Vercel](https://vercel.com/) + `@vercel/analytics`
 
 ---
 
-# 5. RESULT CLASSIFICATION
+## 🚀 Getting Started
 
-Create several result ranges.
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18.0.0 or higher)
+- `npm` or `pnpm` or `bun`
 
-Example:
+### Installation
 
-0–20:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/kumaranurag7278-lgtm/CHUMTIYA-DETECTOR.git
+   cd CHUMTIYA-DETECTOR
+   ```
 
-"Surprisingly Normal"
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-21–40:
+3. **Start local development server**:
+   ```bash
+   npm run dev
+   ```
 
-"Slightly Sus"
+4. Open your browser and navigate to `http://localhost:3000`.
 
-41–60:
+### Building for Production
 
-"Certified Chutiya"
-
-61–80:
-
-"Advanced Chutiya"
-
-81–95:
-
-"Premium Chutiya"
-
-96–100:
-
-"Final Boss Chutiya"
-
-You can adjust the exact ranges if needed to make the results feel balanced.
-
-The result page should prominently display:
-
-"YOUR CHUTIYA LEVEL"
-
-Then:
-
-"73%"
-
-Then:
-
-"Advanced Chutiya"
-
-Then a short personalized explanation.
-
----
-
-# 6. PERSONALIZED RESULT TRAIT
-
-This is an important part of the final result.
-
-Based on the user's answers, determine a PRIMARY TRAIT.
-
-Possible traits:
-
-- Intellectual Superiority Complex
-
-- Chronic Cynicism
-
-- Social Judgment
-
-- Main Character Syndrome
-
-- Professional Overthinker
-
-- Anti-Mainstream Syndrome
-
-- People Are Annoying™
-
-- Surprisingly Normal
-
-The trait should be determined from the user's answers rather than randomly selected.
-
-For example, if the user repeatedly gives answers indicating they think they're smarter than others:
-
-PRIMARY TRAIT:
-
-"Intellectual Superiority Complex"
-
-Description:
-
-"You don't necessarily hate people. You just seem to have reached the statistically impressive conclusion that you're surrounded by idiots."
-
-If the user scores highly on judging other people's lifestyles:
-
-PRIMARY TRAIT:
-
-"Social Judgment"
-
-Description:
-
-"You have opinions about how other people live their lives. Unfortunately, nobody asked."
-
-If the user scores highly on isolation/avoiding people:
-
-PRIMARY TRAIT:
-
-"People Are Annoying™"
-
-Description:
-
-"You could probably get along with people. You just seem to have decided that most of them aren't worth the trouble."
-
-If the user scores low:
-
-PRIMARY TRAIT:
-
-"Surprisingly Normal"
-
-Description:
-
-"Against all odds, you appear capable of accepting that other people can enjoy things you don't."
-
-Keep descriptions short, funny, and slightly insulting.
-
-Do NOT make them genuinely abusive or hateful.
-
----
-
-# 7. RESULT SCREEN DESIGN
-
-The result screen should feel more dramatic than the survey.
-
-Example:
-
-YOUR CHUTIYA LEVEL
-
-73%
-
-ADVANCED CHUTIYA
-
-PRIMARY TRAIT
-
-Intellectual Superiority Complex
-
-"You don't necessarily hate people. You just seem to have reached the statistically impressive conclusion that you're surrounded by idiots."
-
-Then optionally a small button:
-
-"TRY AGAIN"
-
-The retry button should reset the survey state and return the user to question 1.
-
-No sharing system is required.
-
----
-
-# 8. VISUAL DESIGN
-
-Make the website look modern and intentional rather than like a college HTML assignment.
-
-Design direction:
-
-- Dark background
-
-- High contrast typography
-
-- Minimal interface
-
-- Large bold typography
-
-- Slightly absurd / irreverent aesthetic
-
-- Smooth animations
-
-- Rounded answer buttons
-
-- Subtle hover effects
-
-- Good spacing
-
-- Responsive on desktop and mobile
-
-Do NOT overload it with:
-
-- gradients everywhere
-
-- excessive cards
-
-- unnecessary icons
-
-- random illustrations
-
-- huge amounts of text
-
-- complicated navigation
-
-The joke should come from the content and presentation.
-
-Use a strong modern sans-serif font.
-
-The landing page should feel dramatic.
-
-The survey should feel clean.
-
-The result page should feel slightly ridiculous.
-
----
-
-# 9. ANIMATIONS
-
-Animations are important.
-
-Landing → Survey:
-
-- smooth fade/slide transition
-
-Question transition:
-
-- selected answer briefly highlights
-
-- current question slides left
-
-- next question slides in from right
-
-- progress indicator updates smoothly
-
-Result:
-
-- percentage can animate from 0 → final score
-
-- result classification can fade/scale into view
-
-Keep animations fast and smooth.
-
-Do not use excessive bouncing or distracting animations.
-
----
-
-# 10. RESPONSIVENESS
-
-The website must work properly on:
-
-- Desktop
-
-- Laptop
-
-- Tablet
-
-- Mobile
-
-On mobile:
-
-- Questions should fit comfortably
-
-- Answer buttons should be easy to tap
-
-- Text should not overflow
-
-- Animations should remain smooth
-
-- The main content should stay vertically centered
-
----
-
-# 11. TECHNICAL REQUIREMENTS
-
-Keep the architecture simple.
-
-Prefer:
-
-HTML
-
-CSS
-
-JavaScript
-
-If using React, keep it lightweight and component-based.
-
-Suggested components if using React:
-
-App
-
-Landing
-
-Question
-
-Survey
-
-ProgressBar
-
-Result
-
-Keep all survey questions and scoring data in a simple JavaScript data structure.
-
-Example conceptual structure:
-
-questions = [
-
-  {
-
-    question: "...",
-
-    answers: [
-
-      { text: "...", score: 0 },
-
-      { text: "...", score: 1 },
-
-      { text: "...", score: 2 },
-
-      { text: "...", score: 3 },
-
-      { text: "...", score: 4 }
-
-    ]
-
-  }
-
-]
-
-Do not create a backend.
-
-Do not use a database.
-
-Do not store personal information.
-
-No external API is required.
-
----
-
-# 12. IMPORTANT SCOPE LIMIT
-
-This is intentionally a SMALL project.
-
-Do NOT add:
-
-- Login
-
-- Signup
-
-- Database
-
-- User accounts
-
-- Leaderboards
-
-- Social feeds
-
-- Comments
-
-- AI chatbot
-
-- Admin dashboard
-
-- Payment
-
-- Analytics dashboard
-
-- Complex backend
-
-- Authentication
-
-- Email collection
-
-The only meaningful interaction should be:
-
-START → ANSWER QUESTIONS → GET RESULT → RETRY
-
-Focus heavily on making those three stages polished.
-
----
-
-# 13. CODE QUALITY
-
-Write clean, readable code.
-
-Keep survey data separate from UI logic where practical.
-
-Use semantic HTML where applicable.
-
-Avoid unnecessary dependencies.
-
-Make the project easy for a beginner/intermediate developer to understand and modify.
-
-Add comments only where they actually help.
-
-Most importantly:
-
-DO NOT overengineer this project.
-
-The final website should feel like a polished 2–5 minute internet experience that someone would send to a friend saying:
-
-"Bro take this test 💀"
-
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```bash
+npm run build
 ```
+
+---
+
+## 📁 Project Architecture
+
+```
+CHUMTIYA-DETECTOR/
+├── public/
+│   ├── favicon.png
+│   ├── og-dashboard.png      # Social card & hero asset
+│   └── robots.txt
+├── src/
+│   ├── components/
+│   │   ├── ChumtiyaCertificate.tsx     # Hackathon credential canvas renderer
+│   │   ├── FriendDecreeCertificate.tsx # Friend declaration decree renderer
+│   │   ├── SoundToggle.tsx            # Floating audio control
+│   │   └── ui/                        # Reusable accessible UI primitives
+│   ├── data/
+│   │   ├── questions.ts               # Core diagnostic dataset & scoring tiers
+│   │   └── friendQuestions.ts         # Hinglish friend roast dataset
+│   ├── lib/
+│   │   ├── sound.ts                   # Web Audio API sound synthesis
+│   │   └── utils.ts                   # Tailwind utility helpers
+│   ├── routes/
+│   │   ├── __root.tsx                 # Root SSR layout & analytics
+│   │   ├── index.tsx                  # Home landing & main test engine
+│   │   ├── friend.tsx                 # Diagnose a Friend interactive workflow
+│   │   └── vs.$opponentId.tsx         # 1v1 Dost Roast Battle mode
+│   ├── styles.css                     # Global styles & Tailwind entry
+│   └── router.tsx                     # TanStack Router configuration
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions, roasting suggestions, and funny question ideas are always welcome! Feel free to:
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingQuestion`)
+3. Commit your Changes (`git commit -m 'feat: add brutal new roast question'`)
+4. Push to the Branch (`git push origin feature/AmazingQuestion`)
+5. Open a Pull Request
+
+---
+
+## ⚖️ Disclaimer
+
+*Chumtiya Detector is purely a satirical entertainment project built for fun and laughs among friends. It is not affiliated with any actual psychological organization, medical institution, or hackathon.*
+
+---
+
+## 👤 Author
+
+Crafted with ❤️ and sarcasm by **[kumaranurag7278-lgtm](https://github.com/kumaranurag7278-lgtm)**
+
+- GitHub: [@kumaranurag7278-lgtm](https://github.com/kumaranurag7278-lgtm)
+- Live Project: [chumtiya-detector.vercel.app](https://chumtiya-detector.vercel.app/)
