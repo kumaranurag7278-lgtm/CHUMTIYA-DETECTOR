@@ -18,7 +18,26 @@ export type Outcome = {
   band: string;
   traitName: string;
   traitDescription: string;
+  trait: Trait;
 };
+
+function buildOutcome(percentage: number, trait: Trait): Outcome {
+  const band =
+    bands.find((b) => percentage >= b.min && percentage <= b.max)?.label ?? "Surprisingly Normal";
+  const info = traitInfo[trait];
+  return { percentage, band, traitName: info.name, traitDescription: info.description, trait };
+}
+
+/** Shareable result id, e.g. "23-isolation". */
+export const outcomeId = (o: Outcome) => `${o.percentage}-${o.trait}`;
+
+export function outcomeFromId(id: string): Outcome | null {
+  const m = /^(\d{1,3})-([a-z-]+)$/.exec(id);
+  if (!m) return null;
+  const pct = Number(m[1]);
+  if (pct > 100 || !(m[2] in traitInfo)) return null;
+  return buildOutcome(pct, m[2] as Trait);
+}
 
 /** answerIndexes[i] is the chosen answer index for questions[i]. */
 export function computeOutcome(answerIndexes: number[]): Outcome {
@@ -35,9 +54,6 @@ export function computeOutcome(answerIndexes: number[]): Outcome {
   });
 
   const percentage = Math.round((total / MAX_SCORE) * 100);
-  const band =
-    bands.find((b) => percentage >= b.min && percentage <= b.max)?.label ?? "Surprisingly Normal";
-
   let trait: Trait = "normal";
   if (percentage > 20) {
     let best = 0;
@@ -50,6 +66,5 @@ export function computeOutcome(answerIndexes: number[]): Outcome {
     }
   }
 
-  const info = traitInfo[trait];
-  return { percentage, band, traitName: info.name, traitDescription: info.description };
+  return buildOutcome(percentage, trait);
 }
