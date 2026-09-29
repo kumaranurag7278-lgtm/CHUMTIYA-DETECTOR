@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import type { DetectorDefinition, DetectorBand } from "@/data/detectors";
 import { playClick, playOptionSelect, playRoastSoundForScore } from "@/lib/sound";
 import { MemeSoundboard } from "./MemeSoundboard";
+import { DatingPitchCard } from "./DatingPitchCard";
 import { recordEvent } from "@/lib/analytics";
 import {
   ArrowLeft,
@@ -330,6 +331,11 @@ export function DetectorQuiz({ detector, onExit }: Props) {
               Download PNG Card
             </button>
           </div>
+
+          {/* Subtle Dating / Move On Pitch (No auto redirect, compact & to the side) */}
+          {(detector.id === "red_flag" || detector.id === "delulu" || detector.id === "toxic_friend") && (
+            <DatingPitchCard className="mt-6" />
+          )}
 
           {/* Secondary Controls: Retest & Arcade */}
           <div className="mt-5 flex items-center justify-center gap-4 text-xs font-mono">

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { outcomeId, type Outcome } from "@/lib/scoring";
 import { CertificateModal } from "./CertificateModal";
 import { MemeSoundboard } from "./MemeSoundboard";
+import { DatingPitchCard } from "./DatingPitchCard";
 import { playClick, playRoastSoundForScore } from "@/lib/sound";
 import { Award, Swords, Share2, RotateCcw } from "lucide-react";
 import { recordEvent } from "@/lib/analytics";
@@ -209,6 +210,9 @@ export function Result({ outcome, onRetry }: Props) {
             Try Again
           </button>
         </div>
+
+        {/* Subtle Dating / Move On Pitch (Compact, to the side, no auto redirect) */}
+        <DatingPitchCard className="mt-6" />
 
         {confirming && (
           <div className="mt-7 rounded-2xl border border-border bg-card p-5 animate-scale-in sm:mt-8 sm:p-6">
