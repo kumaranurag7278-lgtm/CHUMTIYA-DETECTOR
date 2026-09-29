@@ -194,7 +194,12 @@ async function loadFromVercelBlob(): Promise<StorageSchema | null> {
 
   try {
     if (cachedBlobUrl) {
-      const res = await fetch(cachedBlobUrl, { cache: "no-store" });
+      const res = await fetch(cachedBlobUrl, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      });
       if (res.ok) {
         const data = await res.json();
         if (data && data.allTime && data.daily) return data;
@@ -214,7 +219,12 @@ async function loadFromVercelBlob(): Promise<StorageSchema | null> {
       const blob = listJson?.blobs?.find((b: { pathname?: string }) => b.pathname === "chumtiya_analytics_v2.json");
       if (blob?.url) {
         cachedBlobUrl = blob.url;
-        const res = await fetch(blob.url, { cache: "no-store" });
+        const res = await fetch(blob.url, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
+        });
         if (res.ok) {
           const data = await res.json();
           if (data && data.allTime && data.daily) return data;
@@ -239,6 +249,7 @@ async function saveToVercelBlob(store: StorageSchema): Promise<boolean> {
         authorization: `Bearer ${token}`,
         "x-api-version": "7",
         "content-type": "application/json",
+        "x-access": "private",
       },
       body: JSON.stringify(store),
     });
