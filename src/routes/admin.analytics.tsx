@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { checkAdminAuthAndGetStats } from "@/lib/admin.functions";
-import type { AnalyticsDashboardStats, TrendDataPoint } from "@/lib/analytics-types";
+import type { AnalyticsDashboardStats, TrendDataPoint, QuestionSuggestion } from "@/lib/analytics-types";
 import {
   Shield,
   ShieldAlert,
@@ -20,6 +20,9 @@ import {
   LogOut,
   ExternalLink,
   Check,
+  Lightbulb,
+  Copy,
+  CheckCheck,
 } from "lucide-react";
 import {
   AreaChart,
@@ -55,6 +58,14 @@ function AdminAnalyticsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [timeRange, setTimeRange] = useState<"24h" | "7d" | "30d">("7d");
   const [metricFilter, setMetricFilter] = useState<"all" | "traffic" | "surveys" | "shares">("all");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopySuggestion = (sug: QuestionSuggestion) => {
+    const formatted = `Category: ${sug.category}\nQuestion: ${sug.question}${sug.options ? `\nOptions:\n${sug.options}` : ""}\nAuthor: ${sug.authorName}${sug.authorHandle ? ` (${sug.authorHandle})` : ""}`;
+    navigator.clipboard.writeText(formatted);
+    setCopiedId(sug.id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -659,6 +670,119 @@ function AdminAnalyticsPage() {
               })}
             </div>
           </div>
+        </section>
+
+        {/* SECTION 4.5: COMMUNITY QUESTIONS & SUGGESTIONS INBOX */}
+        <section className="rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-md">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <Lightbulb className="h-5 w-5 text-accent animate-pulse" />
+                <h3 className="font-mono text-sm font-bold tracking-widest uppercase">
+                  Community Sawaal & Suggestions Inbox
+                </h3>
+                <span className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 font-mono text-[11px] font-bold text-accent">
+                  {(stats.suggestions || []).length} submissions
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Questions, roast ideas, and funny situations submitted live by site visitors.
+              </p>
+            </div>
+          </div>
+
+          {!stats.suggestions || stats.suggestions.length === 0 ? (
+            <div className="mt-6 rounded-xl border border-dashed border-border/70 p-8 text-center">
+              <Lightbulb className="mx-auto h-8 w-8 text-muted-foreground/40" />
+              <p className="mt-2 text-sm font-semibold text-muted-foreground">
+                Abhi tak koi sawaal submit nahi hua.
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground/70">
+                Website par floating "Sawaal Suggest Karo" button se users jaise hi submit karenge, live yahan dikhenge!
+              </p>
+            </div>
+          ) : (
+            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+              {stats.suggestions.map((sug) => {
+                const diffMin = Math.max(1, Math.round((Date.now() - sug.createdAt) / 60000));
+                const timeLabel =
+                  diffMin < 60
+                    ? `${diffMin}m ago`
+                    : diffMin < 1440
+                    ? `${Math.round(diffMin / 60)}h ago`
+                    : new Date(sug.createdAt).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                      });
+                const isCopied = copiedId === sug.id;
+
+                return (
+                  <div
+                    key={sug.id}
+                    className="flex flex-col justify-between rounded-xl border border-border/80 bg-background/50 p-4 transition hover:border-accent/50"
+                  >
+                    <div>
+                      {/* Category & Time */}
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="rounded-md border border-accent/30 bg-accent/10 px-2 py-0.5 font-mono font-medium text-accent">
+                          {sug.category}
+                        </span>
+                        <span className="font-mono text-muted-foreground">{timeLabel}</span>
+                      </div>
+
+                      {/* Question */}
+                      <h4 className="mt-3 text-sm font-bold leading-snug text-foreground">
+                        "{sug.question}"
+                      </h4>
+
+                      {/* Options if provided */}
+                      {sug.options && (
+                        <div className="mt-2.5 rounded-lg border border-border/50 bg-card/40 p-2.5 text-xs text-muted-foreground">
+                          <p className="font-mono text-[10px] tracking-wider uppercase text-muted-foreground/80 mb-1">
+                            Suggested Options:
+                          </p>
+                          <p className="whitespace-pre-line text-foreground/90 font-sans">
+                            {sug.options}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Author credit & 1-Click Copy */}
+                    <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+                      <div className="text-xs">
+                        <span className="text-muted-foreground text-[11px]">By: </span>
+                        <strong className="text-foreground font-semibold">{sug.authorName}</strong>
+                        {sug.authorHandle && (
+                          <span className="ml-1 font-mono text-[11px] text-accent">
+                            {sug.authorHandle.startsWith("@") ? sug.authorHandle : `@${sug.authorHandle}`}
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => handleCopySuggestion(sug)}
+                        title="Copy question and options"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1 text-[11px] font-semibold text-foreground transition hover:border-accent hover:bg-accent/10 hover:text-accent active:scale-95"
+                      >
+                        {isCopied ? (
+                          <>
+                            <CheckCheck className="h-3 w-3 text-emerald-400" />
+                            <span className="text-emerald-400">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-3 w-3 text-muted-foreground" />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* SECTION 5: PRIVACY & SYSTEM CONFIGURATION */}

@@ -55,6 +55,16 @@ export interface RecentEventItem {
   timestamp: number;
 }
 
+export interface QuestionSuggestion {
+  id: string;
+  category: string;
+  question: string;
+  options?: string;
+  authorName: string;
+  authorHandle?: string;
+  createdAt: number;
+}
+
 export interface AnalyticsDashboardStats {
   traffic: {
     visitors: MetricTimeframe;
@@ -85,5 +95,6 @@ export interface AnalyticsDashboardStats {
     surveyModes: ModeBreakdown[];
     recentEvents: RecentEventItem[];
   };
+  suggestions: QuestionSuggestion[];
   lastUpdated: number;
 }

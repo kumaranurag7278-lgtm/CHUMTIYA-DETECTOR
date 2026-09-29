@@ -126,6 +126,7 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 import { SoundToggle } from "@/components/SoundToggle";
+import { SuggestQuestionModal } from "@/components/SuggestQuestionModal";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -133,6 +134,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SoundToggle />
+      <SuggestQuestionModal />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Analytics />

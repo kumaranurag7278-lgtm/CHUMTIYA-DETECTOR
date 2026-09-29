@@ -6,6 +6,7 @@ import type {
   ChannelBreakdown,
   FunnelStage,
   ModeBreakdown,
+  QuestionSuggestion,
   RecentEventItem,
   TrendDataPoint,
 } from "./analytics-types";
@@ -47,6 +48,7 @@ interface StorageSchema {
   modes: Record<string, number>;
   recentEvents: RecentEventItem[];
   seenVisitors: string[];
+  suggestions: QuestionSuggestion[];
   currentDayStr: string;
 }
 
@@ -108,6 +110,7 @@ function createInitialStore(): StorageSchema {
     modes: {},
     recentEvents: [],
     seenVisitors: [],
+    suggestions: [],
     currentDayStr: today,
   };
 }
@@ -117,6 +120,9 @@ let memoryStore: StorageSchema | null = null;
 function loadStore(): StorageSchema {
   if (memoryStore) {
     checkDayRollover(memoryStore);
+    if (!Array.isArray(memoryStore.suggestions)) {
+      memoryStore.suggestions = [];
+    }
     return memoryStore;
   }
 
@@ -127,6 +133,9 @@ function loadStore(): StorageSchema {
       if (parsed && parsed.allTime && parsed.daily) {
         if (!Array.isArray(parsed.seenVisitors)) {
           parsed.seenVisitors = [];
+        }
+        if (!Array.isArray(parsed.suggestions)) {
+          parsed.suggestions = [];
         }
         memoryStore = parsed;
         checkDayRollover(memoryStore!);
@@ -195,6 +204,9 @@ async function loadStoreAsync(): Promise<StorageSchema> {
           const parsed = typeof json.result === "string" ? JSON.parse(json.result) : json.result;
           if (parsed && parsed.allTime && parsed.daily) {
             checkDayRollover(parsed);
+            if (!Array.isArray(parsed.suggestions)) {
+              parsed.suggestions = [];
+            }
             memoryStore = parsed;
             return parsed;
           }
@@ -212,6 +224,9 @@ async function loadStoreAsync(): Promise<StorageSchema> {
       const json = await res.json();
       if (json?.data && json.data.allTime && json.data.daily) {
         checkDayRollover(json.data);
+        if (!Array.isArray(json.data.suggestions)) {
+          json.data.suggestions = [];
+        }
         memoryStore = json.data;
         return json.data;
       }
@@ -375,6 +390,50 @@ export async function recordAnalyticsEvent(
   }
 
   await saveStoreAsync(store);
+}
+
+export async function saveQuestionSuggestion(data: {
+  category: string;
+  question: string;
+  options?: string;
+  authorName: string;
+  authorHandle?: string;
+}): Promise<{ ok: boolean; id: string }> {
+  const store = await loadStoreAsync();
+  if (!Array.isArray(store.suggestions)) {
+    store.suggestions = [];
+  }
+
+  const cleanAuthor = data.authorName.trim() || "Anonymous Contributor";
+  const newSuggestion: QuestionSuggestion = {
+    id: `sug-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    category: data.category.trim() || "General",
+    question: data.question.trim(),
+    options: data.options?.trim() || undefined,
+    authorName: cleanAuthor,
+    authorHandle: data.authorHandle?.trim() || undefined,
+    createdAt: Date.now(),
+  };
+
+  store.suggestions.unshift(newSuggestion);
+  // Keep up to 200 suggestions in store
+  if (store.suggestions.length > 200) {
+    store.suggestions = store.suggestions.slice(0, 200);
+  }
+
+  // Prepend to recent events stream so owner immediately sees it
+  store.recentEvents.unshift({
+    id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    event: "page_view",
+    details: `💡 New Question by ${cleanAuthor}: "${newSuggestion.question.slice(0, 28)}..."`,
+    timestamp: Date.now(),
+  });
+  if (store.recentEvents.length > 20) {
+    store.recentEvents = store.recentEvents.slice(0, 20);
+  }
+
+  await saveStoreAsync(store);
+  return { ok: true, id: newSuggestion.id };
 }
 
 // Optionally fetch official Vercel Analytics direct stats if credentials exist in env
@@ -692,6 +751,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
       surveyModes,
       recentEvents: store.recentEvents,
     },
+    suggestions: store.suggestions || [],
     lastUpdated: Date.now(),
   };
 }
