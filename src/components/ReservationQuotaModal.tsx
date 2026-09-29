@@ -3,7 +3,7 @@ import { X, Landmark, Heart, Sparkles, AlertCircle, CheckCircle2, UserX, Send } 
 import { playClick, playFanfare, playOptionSelect } from "@/lib/sound";
 
 interface ReservationQuotaModalProps {
-  currentScore: number;
+  baseScore: number;
   onApplyQuota: (newScore: number, quotaName: string, delta: number) => void;
   onClose: () => void;
 }
@@ -16,7 +16,7 @@ type Verdict = {
   type: "success" | "reject" | "warning";
 };
 
-export function ReservationQuotaModal({ currentScore, onApplyQuota, onClose }: ReservationQuotaModalProps) {
+export function ReservationQuotaModal({ baseScore, onApplyQuota, onClose }: ReservationQuotaModalProps) {
   const [selected, setSelected] = useState<"general" | "women" | "unemployed" | "admin" | null>(null);
   const [loveMsg, setLoveMsg] = useState("");
   const [verdict, setVerdict] = useState<Verdict | null>(null);
@@ -112,7 +112,7 @@ export function ReservationQuotaModal({ currentScore, onApplyQuota, onClose }: R
   const handleConfirmApply = () => {
     playClick();
     if (verdict) {
-      const newScore = Math.max(0, Math.min(100, currentScore + verdict.delta));
+      const newScore = Math.max(0, Math.min(100, baseScore + verdict.delta));
       const quotaName =
         selected === "general"
           ? "General Quota"
@@ -296,11 +296,11 @@ export function ReservationQuotaModal({ currentScore, onApplyQuota, onClose }: R
               {/* Score impact display */}
               <div className="mt-5 rounded-xl border border-border/80 bg-background/50 p-3 text-xs font-mono">
                 <span>Original Score: </span>
-                <strong className="text-foreground">{currentScore}%</strong>
+                <strong className="text-foreground">{baseScore}%</strong>
                 <span className="mx-2">➔</span>
                 <span>Adjusted Score: </span>
                 <strong className="text-accent text-sm">
-                  {Math.max(0, Math.min(100, currentScore + verdict.delta))}%
+                  {Math.max(0, Math.min(100, baseScore + verdict.delta))}%
                 </strong>
               </div>
 

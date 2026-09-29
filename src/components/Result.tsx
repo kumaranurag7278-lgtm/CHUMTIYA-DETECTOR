@@ -36,9 +36,29 @@ export function Result({ outcome, onRetry }: Props) {
   const [battleCopied, setBattleCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
-  const [showReservation, setShowReservation] = useState(false);
-  const [quotaApplied, setQuotaApplied] = useState<{ name: string; delta: number } | null>(null);
-  const [adjustedScore, setAdjustedScore] = useState<number | null>(null);
+  const resultKey = outcomeId(outcome);
+  const [quotaApplied, setQuotaApplied] = useState<{ name: string; delta: number } | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const saved = localStorage.getItem(`quota_${resultKey}`);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [adjustedScore, setAdjustedScore] = useState<number | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const saved = localStorage.getItem(`quota_${resultKey}`);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return Math.max(0, Math.min(100, outcome.percentage + parsed.delta));
+      }
+    } catch {
+      /* ignore */
+    }
+    return null;
+  });
 
   useEffect(() => {
     playRoastSoundForScore(outcome.percentage);
@@ -108,7 +128,7 @@ export function Result({ outcome, onRetry }: Props) {
   };
 
   useEffect(() => {
-    const target = outcome.percentage;
+    const target = adjustedScore !== null ? adjustedScore : outcome.percentage;
     if (target === 0) return;
     const duration = 1000;
     const start = performance.now();
@@ -122,7 +142,7 @@ export function Result({ outcome, onRetry }: Props) {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [outcome.percentage]);
+  }, [outcome.percentage, adjustedScore]);
 
   return (
     <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 py-12 text-center sm:px-6 sm:py-16">
@@ -195,22 +215,32 @@ export function Result({ outcome, onRetry }: Props) {
           </button>
         </div>
 
-        {/* Sarkari Reservation Quota Counter Button */}
+        {/* Sarkari Reservation Quota Counter (Strictly 1-Time Application) */}
         <div className="mt-3">
-          <button
-            onClick={() => {
-              playClick();
-              setShowReservation(true);
-            }}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-5 py-3 text-xs font-bold text-amber-400 uppercase tracking-wider transition-all duration-200 hover:bg-amber-500/20 hover:scale-[1.01] active:scale-95 shadow-sm"
-          >
-            <Landmark className="h-4 w-4" />
-            <span>
-              {quotaApplied
-                ? `Quota Applied (${quotaApplied.name}) — Badalna Hai?`
-                : "Reservation Chaiye? Idhar Aao (Quota Counter 🏛️)"}
-            </span>
-          </button>
+          {quotaApplied ? (
+            <div className="w-full rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3.5 text-xs text-center shadow-sm animate-in zoom-in-95 duration-200">
+              <div className="flex items-center justify-center gap-1.5 font-bold text-amber-400">
+                <Landmark className="h-4 w-4" />
+                <span>
+                  Quota Claimed: {quotaApplied.name} ({quotaApplied.delta > 0 ? `+${quotaApplied.delta}%` : `${quotaApplied.delta}%`})
+                </span>
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Sarkari Niyam: Ek vyakti ko poore jeevan me sirf ek baar quota milta hai! Double dipping strictly prohibited. 🏛️
+              </p>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                playClick();
+                setShowReservation(true);
+              }}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-5 py-3 text-xs font-bold text-amber-400 uppercase tracking-wider transition-all duration-200 hover:bg-amber-500/20 hover:scale-[1.01] active:scale-95 shadow-sm"
+            >
+              <Landmark className="h-4 w-4" />
+              <span>Reservation Chaiye? Idhar Aao (Quota Counter 🏛️)</span>
+            </button>
+          )}
         </div>
 
         {/* Primary Share & Retry buttons */}
@@ -273,12 +303,18 @@ export function Result({ outcome, onRetry }: Props) {
         <CertificateModal outcome={outcome} onClose={() => setShowCertificate(false)} />
       )}
 
-      {showReservation && (
+      {showReservation && !quotaApplied && (
         <ReservationQuotaModal
-          currentScore={adjustedScore ?? outcome.percentage}
+          baseScore={outcome.percentage}
           onApplyQuota={(newScore, quotaName, delta) => {
             setAdjustedScore(newScore);
-            setQuotaApplied({ name: quotaName, delta });
+            const data = { name: quotaName, delta };
+            setQuotaApplied(data);
+            try {
+              localStorage.setItem(`quota_${resultKey}`, JSON.stringify(data));
+            } catch {
+              /* ignore */
+            }
             setShown(newScore);
           }}
           onClose={() => setShowReservation(false)}
