@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { outcomeId, type Outcome } from "@/lib/scoring";
 import { CertificateModal } from "./CertificateModal";
 import { DatingPitchCard } from "./DatingPitchCard";
+import { ReservationQuotaModal } from "./ReservationQuotaModal";
 import { playClick, playRoastSoundForScore } from "@/lib/sound";
-import { Award, Swords, Share2, RotateCcw } from "lucide-react";
+import { Award, Swords, Share2, RotateCcw, Landmark } from "lucide-react";
 import { recordEvent } from "@/lib/analytics";
 
 type Props = {
@@ -35,6 +36,9 @@ export function Result({ outcome, onRetry }: Props) {
   const [battleCopied, setBattleCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
+  const [showReservation, setShowReservation] = useState(false);
+  const [quotaApplied, setQuotaApplied] = useState<{ name: string; delta: number } | null>(null);
+  const [adjustedScore, setAdjustedScore] = useState<number | null>(null);
 
   useEffect(() => {
     playRoastSoundForScore(outcome.percentage);
@@ -147,6 +151,11 @@ export function Result({ outcome, onRetry }: Props) {
         <p className="mt-3 text-[clamp(4rem,24vw,12rem)] leading-[0.85] font-black tracking-tighter text-accent tabular-nums sm:mt-4">
           {shown}%
         </p>
+        {quotaApplied && (
+          <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-3.5 py-1 text-xs font-mono font-bold text-amber-400 animate-in zoom-in-95 duration-200">
+            <span>🏛️ {quotaApplied.name}: {quotaApplied.delta > 0 ? `+${quotaApplied.delta}%` : `${quotaApplied.delta}%`}</span>
+          </div>
+        )}
         <h2 className="result-pop mt-3 text-balance text-[clamp(1.35rem,6.5vw,3rem)] leading-tight font-black tracking-tight uppercase sm:mt-4">
           {outcome.band}
         </h2>
@@ -183,6 +192,24 @@ export function Result({ outcome, onRetry }: Props) {
           >
             <Swords className="h-4 w-4" />
             {battleCopied ? "Battle Link Copied!" : "1v1 Roast Friend"}
+          </button>
+        </div>
+
+        {/* Sarkari Reservation Quota Counter Button */}
+        <div className="mt-3">
+          <button
+            onClick={() => {
+              playClick();
+              setShowReservation(true);
+            }}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-5 py-3 text-xs font-bold text-amber-400 uppercase tracking-wider transition-all duration-200 hover:bg-amber-500/20 hover:scale-[1.01] active:scale-95 shadow-sm"
+          >
+            <Landmark className="h-4 w-4" />
+            <span>
+              {quotaApplied
+                ? `Quota Applied (${quotaApplied.name}) — Badalna Hai?`
+                : "Reservation Chaiye? Idhar Aao (Quota Counter 🏛️)"}
+            </span>
           </button>
         </div>
 
@@ -244,6 +271,18 @@ export function Result({ outcome, onRetry }: Props) {
 
       {showCertificate && (
         <CertificateModal outcome={outcome} onClose={() => setShowCertificate(false)} />
+      )}
+
+      {showReservation && (
+        <ReservationQuotaModal
+          currentScore={adjustedScore ?? outcome.percentage}
+          onApplyQuota={(newScore, quotaName, delta) => {
+            setAdjustedScore(newScore);
+            setQuotaApplied({ name: quotaName, delta });
+            setShown(newScore);
+          }}
+          onClose={() => setShowReservation(false)}
+        />
       )}
     </section>
   );
