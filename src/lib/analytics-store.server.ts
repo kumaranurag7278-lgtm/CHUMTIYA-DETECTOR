@@ -177,6 +177,8 @@ function saveStore(store: StorageSchema) {
   }
 }
 
+const CLOUD_SYNC_URL = "https://api.restful-api.dev/objects/ff808181a09d98f701a0eba2aaf73bd9";
+
 async function loadStoreAsync(): Promise<StorageSchema> {
   const kvUrl = process.env["KV_REST_API_URL"] || process.env["UPSTASH_REDIS_REST_URL"];
   const kvToken = process.env["KV_REST_API_TOKEN"] || process.env["UPSTASH_REDIS_REST_TOKEN"];
@@ -199,8 +201,23 @@ async function loadStoreAsync(): Promise<StorageSchema> {
         }
       }
     } catch {
-      /* fallback to local store */
+      /* fallback */
     }
+  }
+
+  // 100% Free Central Cloud Store (0 setup, 0 credit card, syncs all Vercel lambdas)
+  try {
+    const res = await fetch(CLOUD_SYNC_URL, { cache: "no-store" });
+    if (res.ok) {
+      const json = await res.json();
+      if (json?.data && json.data.allTime && json.data.daily) {
+        checkDayRollover(json.data);
+        memoryStore = json.data;
+        return json.data;
+      }
+    }
+  } catch {
+    /* fallback to local */
   }
 
   return loadStore();
@@ -222,9 +239,21 @@ async function saveStoreAsync(store: StorageSchema): Promise<void> {
         },
         body: JSON.stringify(JSON.stringify(store)),
       });
+      return;
     } catch {
       /* non-blocking */
     }
+  }
+
+  // 100% Free Central Cloud Store update
+  try {
+    await fetch(CLOUD_SYNC_URL, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "chumtiya_analytics", data: store }),
+    });
+  } catch {
+    /* non-blocking */
   }
 }
 
