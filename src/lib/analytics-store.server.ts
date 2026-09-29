@@ -186,9 +186,90 @@ function saveStore(store: StorageSchema) {
   }
 }
 
-const CLOUD_SYNC_URL = "https://api.restful-api.dev/objects/ff808181a09d98f701a0eba2aaf73bd9";
+let cachedBlobUrl: string | null = null;
+
+async function loadFromVercelBlob(): Promise<StorageSchema | null> {
+  const token = process.env["BLOB_READ_WRITE_TOKEN"];
+  if (!token) return null;
+
+  try {
+    if (cachedBlobUrl) {
+      const res = await fetch(cachedBlobUrl, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.allTime && data.daily) return data;
+      }
+    }
+
+    const listRes = await fetch("https://blob.vercel-storage.com?prefix=chumtiya_analytics_v2.json", {
+      headers: {
+        authorization: `Bearer ${token}`,
+        "x-api-version": "7",
+      },
+      cache: "no-store",
+    });
+
+    if (listRes.ok) {
+      const listJson = await listRes.json();
+      const blob = listJson?.blobs?.find((b: { pathname?: string }) => b.pathname === "chumtiya_analytics_v2.json");
+      if (blob?.url) {
+        cachedBlobUrl = blob.url;
+        const res = await fetch(blob.url, { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.allTime && data.daily) return data;
+        }
+      }
+    }
+  } catch {
+    /* fallback */
+  }
+
+  return null;
+}
+
+async function saveToVercelBlob(store: StorageSchema): Promise<boolean> {
+  const token = process.env["BLOB_READ_WRITE_TOKEN"];
+  if (!token) return false;
+
+  try {
+    const res = await fetch("https://blob.vercel-storage.com/chumtiya_analytics_v2.json?addRandomSuffix=false", {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "x-api-version": "7",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(store),
+    });
+
+    if (res.ok) {
+      const json = await res.json().catch(() => null);
+      if (json?.url) {
+        cachedBlobUrl = json.url;
+      }
+      return true;
+    }
+  } catch {
+    /* non-blocking */
+  }
+
+  return false;
+}
 
 async function loadStoreAsync(): Promise<StorageSchema> {
+  // 1. Check official Vercel Blob (instant sync across all serverless lambdas)
+  const blobData = await loadFromVercelBlob();
+  if (blobData) {
+    checkDayRollover(blobData);
+    if (!Array.isArray(blobData.suggestions)) {
+      blobData.suggestions = [];
+    }
+    memoryStore = blobData;
+    return blobData;
+  }
+
+  // 2. Check KV / Upstash if configured
   const kvUrl = process.env["KV_REST_API_URL"] || process.env["UPSTASH_REDIS_REST_URL"];
   const kvToken = process.env["KV_REST_API_TOKEN"] || process.env["UPSTASH_REDIS_REST_TOKEN"];
 
@@ -217,30 +298,16 @@ async function loadStoreAsync(): Promise<StorageSchema> {
     }
   }
 
-  // 100% Free Central Cloud Store (0 setup, 0 credit card, syncs all Vercel lambdas)
-  try {
-    const res = await fetch(CLOUD_SYNC_URL, { cache: "no-store" });
-    if (res.ok) {
-      const json = await res.json();
-      if (json?.data && json.data.allTime && json.data.daily) {
-        checkDayRollover(json.data);
-        if (!Array.isArray(json.data.suggestions)) {
-          json.data.suggestions = [];
-        }
-        memoryStore = json.data;
-        return json.data;
-      }
-    }
-  } catch {
-    /* fallback to local */
-  }
-
   return loadStore();
 }
 
 async function saveStoreAsync(store: StorageSchema): Promise<void> {
   saveStore(store);
 
+  // 1. Sync to Vercel Blob (shared persistent cloud across all lambdas)
+  await saveToVercelBlob(store);
+
+  // 2. Sync to KV if present
   const kvUrl = process.env["KV_REST_API_URL"] || process.env["UPSTASH_REDIS_REST_URL"];
   const kvToken = process.env["KV_REST_API_TOKEN"] || process.env["UPSTASH_REDIS_REST_TOKEN"];
 
@@ -254,21 +321,9 @@ async function saveStoreAsync(store: StorageSchema): Promise<void> {
         },
         body: JSON.stringify(JSON.stringify(store)),
       });
-      return;
     } catch {
       /* non-blocking */
     }
-  }
-
-  // 100% Free Central Cloud Store update
-  try {
-    await fetch(CLOUD_SYNC_URL, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "chumtiya_analytics", data: store }),
-    });
-  } catch {
-    /* non-blocking */
   }
 }
 
