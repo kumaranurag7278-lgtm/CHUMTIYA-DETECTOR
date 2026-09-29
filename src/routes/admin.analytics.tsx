@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { checkAdminAuthAndGetStats } from "@/lib/admin.functions";
 import type { AnalyticsDashboardStats, TrendDataPoint, QuestionSuggestion } from "@/lib/analytics-types";
 import {
@@ -23,10 +23,16 @@ import {
   Lightbulb,
   Copy,
   CheckCheck,
+  Clock,
+  Flame,
+  Zap,
+  BarChart3,
 } from "lucide-react";
 import {
   AreaChart,
   Area,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
@@ -47,6 +53,70 @@ export const Route = createFileRoute("/admin/analytics")({
   component: AdminAnalyticsPage,
 });
 
+function formatHour12(label: string): string {
+  const h = parseInt(label.split(":")[0] || "0", 10);
+  if (h === 0) return "12 AM";
+  if (h < 12) return `${h} AM`;
+  if (h === 12) return "12 PM";
+  return `${h - 12} PM`;
+}
+
+interface HourlyTooltipPayload {
+  name?: string;
+  value?: number;
+  color?: string;
+  dataKey?: string;
+  payload?: TrendDataPoint;
+}
+
+function CustomHourlyTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: HourlyTooltipPayload[];
+  label?: string;
+}) {
+  if (!active || !payload || !payload.length) return null;
+  const data = payload[0]?.payload;
+  const hour12 = label ? formatHour12(label) : "";
+
+  return (
+    <div className="rounded-xl border border-border bg-[#0d0d0d]/95 p-3.5 shadow-2xl backdrop-blur-md text-xs font-mono">
+      <div className="flex items-center justify-between gap-4 border-b border-border/60 pb-2">
+        <span className="font-bold text-foreground">Time Slot:</span>
+        <span className="text-accent font-bold">
+          {label} ({hour12})
+        </span>
+      </div>
+      <div className="mt-2.5 space-y-1.5">
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-1.5 text-cyan-400">
+            <span className="h-2 w-2 rounded-full bg-cyan-400" />
+            Unique Visitors:
+          </span>
+          <strong className="text-foreground tabular-nums">{data?.visitors ?? 0}</strong>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-1.5 text-blue-400">
+            <span className="h-2 w-2 rounded-full bg-blue-400" />
+            Page Views:
+          </span>
+          <strong className="text-foreground tabular-nums">{data?.pageViews ?? 0}</strong>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-1.5 text-amber-400">
+            <span className="h-2 w-2 rounded-full bg-amber-400" />
+            Surveys Started:
+          </span>
+          <strong className="text-foreground tabular-nums">{data?.surveysStarted ?? 0}</strong>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AdminAnalyticsPage() {
   const loaderData = Route.useLoaderData();
   const [authenticated, setAuthenticated] = useState(loaderData.authenticated);
@@ -58,6 +128,8 @@ function AdminAnalyticsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [timeRange, setTimeRange] = useState<"24h" | "7d" | "30d">("7d");
   const [metricFilter, setMetricFilter] = useState<"all" | "traffic" | "surveys" | "shares">("all");
+  const [hourlyMetric, setHourlyMetric] = useState<"both" | "visitors" | "pageViews">("both");
+  const [hourlyChartType, setHourlyChartType] = useState<"bar" | "area">("bar");
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopySuggestion = (sug: QuestionSuggestion) => {
@@ -221,6 +293,39 @@ function AdminAnalyticsPage() {
       : timeRange === "7d"
       ? stats.trends.daily7Days
       : stats.trends.daily30Days;
+
+  // Hourly Data calculation (Section 4 - Kitne Ghante Me Kitne Log Aaye)
+  const hourlyData = stats.trends.hourly || [];
+  const currentHour = new Date().getHours();
+  const currentHourStr = `${String(currentHour).padStart(2, "0")}:00`;
+
+  const peakHour = useMemo(() => {
+    let max = 0;
+    let peakLabel = "N/A";
+    for (const pt of hourlyData) {
+      if (pt.visitors > max) {
+        max = pt.visitors;
+        peakLabel = pt.label;
+      }
+    }
+    return { label: peakLabel, count: max };
+  }, [hourlyData]);
+
+  const currentHourStats = hourlyData[currentHour] || {
+    visitors: 0,
+    pageViews: 0,
+    surveysStarted: 0,
+    surveysCompleted: 0,
+    shares: 0,
+  };
+
+  const todayHourlyTotalVisitors = useMemo(() => {
+    return hourlyData.reduce((acc, curr) => acc + (curr.visitors || 0), 0);
+  }, [hourlyData]);
+
+  const todayHourlyTotalPageViews = useMemo(() => {
+    return hourlyData.reduce((acc, curr) => acc + (curr.pageViews || 0), 0);
+  }, [hourlyData]);
 
   return (
     <main className="min-h-[100svh] bg-background px-4 py-8 text-foreground sm:px-8 sm:py-12">
@@ -571,6 +676,228 @@ function AdminAnalyticsPage() {
                 )}
               </AreaChart>
             </ResponsiveContainer>
+          </div>
+        </section>
+
+        {/* SECTION 3.5: HOURLY VISITOR DISTRIBUTION — Kitne Ghante Me Kitne Log Aaye */}
+        <section className="rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-md">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-cyan-400" />
+                <h3 className="font-mono text-xs font-bold tracking-widest uppercase">
+                  Hourly Visitor Distribution (Today)
+                </h3>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Kitne ghante me kitne log aaye — real-time hourly traffic breakdown for today.
+              </p>
+            </div>
+
+            {/* Chart Controls */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Metric toggle */}
+              {(["both", "visitors", "pageViews"] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => setHourlyMetric(m)}
+                  className={`rounded-lg border px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase transition-all ${
+                    hourlyMetric === m
+                      ? "border-accent bg-accent/20 text-accent"
+                      : "border-border bg-background text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                  }`}
+                >
+                  {m === "both" ? "All" : m === "visitors" ? "Visitors" : "Page Views"}
+                </button>
+              ))}
+              {/* Chart type toggle */}
+              <div className="ml-1 flex items-center rounded-lg border border-border overflow-hidden">
+                <button
+                  onClick={() => setHourlyChartType("bar")}
+                  className={`px-2.5 py-1.5 text-[10px] font-bold uppercase transition-all ${
+                    hourlyChartType === "bar"
+                      ? "bg-accent/20 text-accent"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <BarChart3 className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={() => setHourlyChartType("area")}
+                  className={`px-2.5 py-1.5 text-[10px] font-bold uppercase transition-all ${
+                    hourlyChartType === "area"
+                      ? "bg-accent/20 text-accent"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Activity className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Mini Stat Cards */}
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {/* Current Hour */}
+            <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/5 p-4">
+              <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-cyan-400 uppercase">
+                <Zap className="h-3.5 w-3.5" />
+                Current Hour ({formatHour12(currentHourStr)})
+              </div>
+              <div className="mt-2 flex items-baseline gap-3">
+                <span className="text-2xl font-black tabular-nums text-foreground">
+                  {currentHourStats.visitors}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  visitors · {currentHourStats.pageViews} views
+                </span>
+              </div>
+            </div>
+
+            {/* Peak Hour */}
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
+              <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-amber-400 uppercase">
+                <Flame className="h-3.5 w-3.5" />
+                Peak Hour
+              </div>
+              <div className="mt-2 flex items-baseline gap-3">
+                <span className="text-2xl font-black tabular-nums text-foreground">
+                  {peakHour.label !== "N/A" ? formatHour12(peakHour.label) : "N/A"}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {peakHour.count} visitors
+                </span>
+              </div>
+            </div>
+
+            {/* Total Today */}
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4">
+              <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-emerald-400 uppercase">
+                <Users className="h-3.5 w-3.5" />
+                Total Today
+              </div>
+              <div className="mt-2 flex items-baseline gap-3">
+                <span className="text-2xl font-black tabular-nums text-foreground">
+                  {todayHourlyTotalVisitors}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  visitors · {todayHourlyTotalPageViews} views
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hourly Chart */}
+          <div className="mt-6 h-72 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              {hourlyChartType === "bar" ? (
+                <BarChart data={hourlyData} barCategoryGap="12%">
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                  <XAxis
+                    dataKey="label"
+                    tickFormatter={formatHour12}
+                    tick={{ fill: "#888", fontSize: 10 }}
+                    axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+                    tickLine={false}
+                    interval={1}
+                  />
+                  <YAxis
+                    tick={{ fill: "#888", fontSize: 10 }}
+                    axisLine={false}
+                    tickLine={false}
+                    allowDecimals={false}
+                  />
+                  <Tooltip content={<CustomHourlyTooltip />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                  {(hourlyMetric === "both" || hourlyMetric === "visitors") && (
+                    <Bar
+                      dataKey="visitors"
+                      name="Visitors"
+                      fill="#06b6d4"
+                      radius={[4, 4, 0, 0]}
+                      opacity={0.85}
+                    />
+                  )}
+                  {(hourlyMetric === "both" || hourlyMetric === "pageViews") && (
+                    <Bar
+                      dataKey="pageViews"
+                      name="Page Views"
+                      fill="#3b82f6"
+                      radius={[4, 4, 0, 0]}
+                      opacity={0.7}
+                    />
+                  )}
+                </BarChart>
+              ) : (
+                <AreaChart data={hourlyData}>
+                  <defs>
+                    <linearGradient id="hourlyVisGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="hourlyPvGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                  <XAxis
+                    dataKey="label"
+                    tickFormatter={formatHour12}
+                    tick={{ fill: "#888", fontSize: 10 }}
+                    axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+                    tickLine={false}
+                    interval={1}
+                  />
+                  <YAxis
+                    tick={{ fill: "#888", fontSize: 10 }}
+                    axisLine={false}
+                    tickLine={false}
+                    allowDecimals={false}
+                  />
+                  <Tooltip content={<CustomHourlyTooltip />} />
+                  {(hourlyMetric === "both" || hourlyMetric === "visitors") && (
+                    <Area
+                      type="monotone"
+                      dataKey="visitors"
+                      name="Visitors"
+                      stroke="#06b6d4"
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#hourlyVisGrad)"
+                    />
+                  )}
+                  {(hourlyMetric === "both" || hourlyMetric === "pageViews") && (
+                    <Area
+                      type="monotone"
+                      dataKey="pageViews"
+                      name="Page Views"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#hourlyPvGrad)"
+                    />
+                  )}
+                </AreaChart>
+              )}
+            </ResponsiveContainer>
+          </div>
+
+          {/* Legend */}
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-4 text-[10px] text-muted-foreground">
+            {(hourlyMetric === "both" || hourlyMetric === "visitors") && (
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-cyan-400" />
+                Unique Visitors
+              </span>
+            )}
+            {(hourlyMetric === "both" || hourlyMetric === "pageViews") && (
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-blue-500" />
+                Page Views
+              </span>
+            )}
+            <span className="text-muted-foreground/50">|</span>
+            <span>Data resets daily at midnight UTC</span>
           </div>
         </section>
 

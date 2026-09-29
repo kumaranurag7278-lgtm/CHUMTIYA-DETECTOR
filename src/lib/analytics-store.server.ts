@@ -755,7 +755,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
       shares: 0,
     };
     hourly.push({
-      label: `${h}:00`,
+      label: `${String(h).padStart(2, "0")}:00`,
       visitors: data.visitors,
       pageViews: data.pageViews,
       surveysStarted: data.surveysStarted,
