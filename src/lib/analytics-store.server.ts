@@ -243,7 +243,7 @@ async function saveToVercelBlob(store: StorageSchema): Promise<boolean> {
   if (!token) return false;
 
   try {
-    const res = await fetch("https://blob.vercel-storage.com/chumtiya_analytics_v2.json?addRandomSuffix=false", {
+    let res = await fetch("https://blob.vercel-storage.com/chumtiya_analytics_v2.json?addRandomSuffix=false", {
       method: "PUT",
       headers: {
         authorization: `Bearer ${token}`,
@@ -253,6 +253,20 @@ async function saveToVercelBlob(store: StorageSchema): Promise<boolean> {
       },
       body: JSON.stringify(store),
     });
+
+    if (!res.ok) {
+      // If store was created as public, retry with x-access: public
+      res = await fetch("https://blob.vercel-storage.com/chumtiya_analytics_v2.json?addRandomSuffix=false", {
+        method: "PUT",
+        headers: {
+          authorization: `Bearer ${token}`,
+          "x-api-version": "7",
+          "content-type": "application/json",
+          "x-access": "public",
+        },
+        body: JSON.stringify(store),
+      });
+    }
 
     if (res.ok) {
       const json = await res.json().catch(() => null);
