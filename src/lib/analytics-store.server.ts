@@ -314,22 +314,40 @@ async function loadStoreAsync(): Promise<StorageSchema> {
 
   if (kvUrl && kvToken) {
     try {
+      let rawResult: unknown = null;
       const res = await fetch(`${kvUrl}/get/chumtiya_analytics_v2`, {
         headers: { Authorization: `Bearer ${kvToken}` },
         cache: "no-store",
       });
       if (res.ok) {
-        const json = await res.json();
-        if (json?.result) {
-          const parsed = typeof json.result === "string" ? JSON.parse(json.result) : json.result;
-          if (parsed && parsed.allTime && parsed.daily) {
-            checkDayRollover(parsed);
-            if (!Array.isArray(parsed.suggestions)) {
-              parsed.suggestions = [];
-            }
-            memoryStore = parsed;
-            return parsed;
+        const json = await res.json().catch(() => null);
+        rawResult = json?.result;
+      }
+
+      if (!rawResult) {
+        const postRes = await fetch(kvUrl, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${kvToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(["GET", "chumtiya_analytics_v2"]),
+        });
+        if (postRes.ok) {
+          const postJson = await postRes.json().catch(() => null);
+          rawResult = postJson?.result;
+        }
+      }
+
+      if (rawResult) {
+        const parsed = typeof rawResult === "string" ? JSON.parse(rawResult) : rawResult;
+        if (parsed && parsed.allTime && parsed.daily) {
+          checkDayRollover(parsed);
+          if (!Array.isArray(parsed.suggestions)) {
+            parsed.suggestions = [];
           }
+          memoryStore = parsed;
+          return parsed;
         }
       }
     } catch {
@@ -346,20 +364,34 @@ async function saveStoreAsync(store: StorageSchema): Promise<void> {
   // 1. Sync to Vercel Blob (shared persistent cloud across all lambdas)
   await saveToVercelBlob(store);
 
-  // 2. Sync to KV if present
+  // 2. Sync to KV (Upstash Redis) if present
   const kvUrl = process.env["KV_REST_API_URL"] || process.env["UPSTASH_REDIS_REST_URL"];
   const kvToken = process.env["KV_REST_API_TOKEN"] || process.env["UPSTASH_REDIS_REST_TOKEN"];
 
   if (kvUrl && kvToken) {
     try {
-      await fetch(`${kvUrl}/set/chumtiya_analytics_v2`, {
+      const storeStr = JSON.stringify(store);
+      // Try official Upstash array format first: ["SET", "key", "value"]
+      let res = await fetch(kvUrl, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${kvToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(JSON.stringify(store)),
+        body: JSON.stringify(["SET", "chumtiya_analytics_v2", storeStr]),
       });
+
+      if (!res.ok) {
+        // Fallback to /set REST endpoint
+        await fetch(`${kvUrl}/set/chumtiya_analytics_v2`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${kvToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(storeStr),
+        });
+      }
     } catch {
       /* non-blocking */
     }
