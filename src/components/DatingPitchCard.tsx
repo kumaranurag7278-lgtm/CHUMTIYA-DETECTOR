@@ -1,6 +1,9 @@
 import { ExternalLink } from "lucide-react";
 import { recordEvent } from "@/lib/analytics";
 
+// Feature flag: set to true once CueLinks / Bumble / Tinder account is approved!
+export const SHOW_DATING_PITCH = false;
+
 // Default destination until you paste your CueLinks / Bumble / Tinder affiliate link here!
 export const DATING_AFFILIATE_LINK = "https://bumble.com";
 
@@ -9,6 +12,8 @@ interface Props {
 }
 
 export function DatingPitchCard({ className = "" }: Props) {
+  if (!SHOW_DATING_PITCH) return null;
+
   const handleClick = () => {
     recordEvent("share_clicked", {
       channel: "dating_affiliate",
