@@ -29,6 +29,7 @@ interface StorageSchema {
       surveysCompleted: number;
       resultsViewed: number;
       shares: number;
+      shareCopies: number;
     }
   >;
   hourlyToday: Record<
@@ -39,17 +40,19 @@ interface StorageSchema {
       surveysStarted: number;
       surveysCompleted: number;
       shares: number;
+      shareCopies: number;
     }
   >;
   channels: Record<string, number>;
   modes: Record<string, number>;
   recentEvents: RecentEventItem[];
+  seenVisitors: string[];
   currentDayStr: string;
 }
 
 const CACHE_FILE = path.join(
   process.env["TMPDIR"] || process.env["TEMP"] || "/tmp",
-  "chumtiya_analytics_v1.json"
+  "chumtiya_analytics_live_v2.json"
 );
 
 function getTodayStr(): string {
@@ -57,114 +60,54 @@ function getTodayStr(): string {
   return d.toISOString().split("T")[0]!;
 }
 
-// Generate realistic baseline analytics so owner sees comprehensive metrics immediately
+// 100% Real Live Analytics Store - starts at clean 0, no mock/fake baseline
 function createInitialStore(): StorageSchema {
   const today = getTodayStr();
   const daily: StorageSchema["daily"] = {};
 
-  // Seed last 30 days
   const now = new Date();
   for (let i = 29; i >= 0; i--) {
     const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
     const dateStr = d.toISOString().split("T")[0]!;
-    // Natural variance
-    const factor = 1 + Math.sin(i / 3) * 0.25;
-    const baseVisitors = Math.round(180 * factor);
-    const pageViews = Math.round(baseVisitors * 2.8);
-    const surveysStarted = Math.round(baseVisitors * 0.78);
-    const surveysCompleted = Math.round(surveysStarted * 0.84);
-    const resultsViewed = Math.round(surveysCompleted * 0.98);
-    const shares = Math.round(resultsViewed * 0.42);
-
     daily[dateStr] = {
-      visitors: baseVisitors,
-      pageViews,
-      surveysStarted,
-      surveysCompleted,
-      resultsViewed,
-      shares,
+      visitors: 0,
+      pageViews: 0,
+      surveysStarted: 0,
+      surveysCompleted: 0,
+      resultsViewed: 0,
+      shares: 0,
+      shareCopies: 0,
     };
   }
 
-  // Hourly for today
   const hourlyToday: StorageSchema["hourlyToday"] = {};
-  const currentHour = now.getHours();
   for (let h = 0; h < 24; h++) {
-    if (h <= currentHour) {
-      hourlyToday[h] = {
-        visitors: Math.max(2, Math.round(12 + Math.cos(h / 3) * 8)),
-        pageViews: Math.max(5, Math.round(35 + Math.cos(h / 3) * 20)),
-        surveysStarted: Math.max(1, Math.round(9 + Math.cos(h / 3) * 5)),
-        surveysCompleted: Math.max(1, Math.round(7 + Math.cos(h / 3) * 4)),
-        shares: Math.max(0, Math.round(3 + Math.cos(h / 3) * 2)),
-      };
-    } else {
-      hourlyToday[h] = {
-        visitors: 0,
-        pageViews: 0,
-        surveysStarted: 0,
-        surveysCompleted: 0,
-        shares: 0,
-      };
-    }
+    hourlyToday[h] = {
+      visitors: 0,
+      pageViews: 0,
+      surveysStarted: 0,
+      surveysCompleted: 0,
+      shares: 0,
+      shareCopies: 0,
+    };
   }
 
   return {
     allTime: {
-      visitors: 6840,
-      pageViews: 19150,
-      surveysStarted: 5320,
-      surveysCompleted: 4480,
-      resultsViewed: 4390,
-      shareClicks: 1870,
-      shareLinkCopies: 1240,
+      visitors: 0,
+      pageViews: 0,
+      surveysStarted: 0,
+      surveysCompleted: 0,
+      resultsViewed: 0,
+      shareClicks: 0,
+      shareLinkCopies: 0,
     },
     daily,
     hourlyToday,
-    channels: {
-      whatsapp: 980,
-      battle_invite: 640,
-      certificate_download: 510,
-      direct_link: 490,
-      twitter_x: 320,
-      telegram: 170,
-    },
-    modes: {
-      core_survey_self: 3940,
-      diagnose_friend: 1380,
-    },
-    recentEvents: [
-      {
-        id: "ev-1",
-        event: "share_clicked",
-        details: "Certificate Download (1400x980 PNG)",
-        timestamp: Date.now() - 1000 * 60 * 3,
-      },
-      {
-        id: "ev-2",
-        event: "survey_completed",
-        details: "Score: 78% (Advanced Chumtiya)",
-        timestamp: Date.now() - 1000 * 60 * 7,
-      },
-      {
-        id: "ev-3",
-        event: "result_viewed",
-        details: "Mode: Diagnose a Friend",
-        timestamp: Date.now() - 1000 * 60 * 12,
-      },
-      {
-        id: "ev-4",
-        event: "survey_started",
-        details: "Core 16-Question Diagnostic",
-        timestamp: Date.now() - 1000 * 60 * 15,
-      },
-      {
-        id: "ev-5",
-        event: "share_link_copied",
-        details: "1v1 Roast Friend Battle Link",
-        timestamp: Date.now() - 1000 * 60 * 22,
-      },
-    ],
+    channels: {},
+    modes: {},
+    recentEvents: [],
+    seenVisitors: [],
     currentDayStr: today,
   };
 }
@@ -182,6 +125,9 @@ function loadStore(): StorageSchema {
       const raw = fs.readFileSync(CACHE_FILE, "utf-8");
       const parsed = JSON.parse(raw);
       if (parsed && parsed.allTime && parsed.daily) {
+        if (!Array.isArray(parsed.seenVisitors)) {
+          parsed.seenVisitors = [];
+        }
         memoryStore = parsed;
         checkDayRollover(memoryStore!);
         return memoryStore!;
@@ -207,6 +153,7 @@ function checkDayRollover(store: StorageSchema) {
       surveysCompleted: 0,
       resultsViewed: 0,
       shares: 0,
+      shareCopies: 0,
     };
     store.hourlyToday = {};
     for (let h = 0; h < 24; h++) {
@@ -216,6 +163,7 @@ function checkDayRollover(store: StorageSchema) {
         surveysStarted: 0,
         surveysCompleted: 0,
         shares: 0,
+        shareCopies: 0,
       };
     }
   }
@@ -262,17 +210,31 @@ export function recordAnalyticsEvent(
   const h = store.hourlyToday[currentHour]!;
   let detailDesc = "";
 
+  const visitorId = typeof metadata?.["visitorId"] === "string" ? metadata["visitorId"] : null;
+  const isNew = Boolean(metadata?.["isNewVisitor"]);
+
+  // Accurate unique visitor tracking
+  if (visitorId && visitorId !== "anon") {
+    if (!store.seenVisitors.includes(visitorId)) {
+      store.seenVisitors.push(visitorId);
+      if (store.seenVisitors.length > 5000) {
+        store.seenVisitors.shift();
+      }
+      store.allTime.visitors += 1;
+      d.visitors += 1;
+      h.visitors += 1;
+    }
+  } else if (isNew) {
+    store.allTime.visitors += 1;
+    d.visitors += 1;
+    h.visitors += 1;
+  }
+
   switch (event) {
     case "page_view":
       store.allTime.pageViews += 1;
       d.pageViews += 1;
       h.pageViews += 1;
-      // Heuristic: estimate 1 visitor per 2.6 pageviews if not separated
-      if (Math.random() < 0.38) {
-        store.allTime.visitors += 1;
-        d.visitors += 1;
-        h.visitors += 1;
-      }
       detailDesc = typeof metadata?.["path"] === "string" ? metadata["path"] : "App View";
       break;
 
@@ -282,7 +244,7 @@ export function recordAnalyticsEvent(
       h.surveysStarted += 1;
       const mode = (metadata?.["mode"] as string) || "self";
       store.modes[mode] = (store.modes[mode] || 0) + 1;
-      detailDesc = mode === "friend" ? "Mode: Diagnose a Friend" : "Mode: Self Diagnostic";
+      detailDesc = `Started: ${formatModeName(mode)}`;
       break;
 
     case "survey_completed":
@@ -291,13 +253,13 @@ export function recordAnalyticsEvent(
       h.surveysCompleted += 1;
       const score = metadata?.["score"];
       const band = metadata?.["band"];
-      detailDesc = score ? `Score: ${score}% (${band || "Completed"})` : "Survey Finished";
+      detailDesc = score !== undefined ? `Score: ${score}% (${band || "Completed"})` : "Survey Finished";
       break;
 
     case "result_viewed":
       store.allTime.resultsViewed += 1;
       d.resultsViewed += 1;
-      detailDesc = typeof metadata?.["source"] === "string" ? `Source: ${metadata["source"]}` : "Result Card Mounted";
+      detailDesc = typeof metadata?.["source"] === "string" ? `Verdict: ${metadata["source"]}` : "Result Card Mounted";
       break;
 
     case "share_clicked":
@@ -306,20 +268,20 @@ export function recordAnalyticsEvent(
       h.shares += 1;
       const ch = (metadata?.["channel"] as string) || "native";
       store.channels[ch] = (store.channels[ch] || 0) + 1;
-      detailDesc = `Channel: ${ch}`;
+      detailDesc = `Share: ${formatChannelName(ch)}`;
       break;
 
     case "share_link_copied":
       store.allTime.shareLinkCopies += 1;
-      d.shares += 1;
-      h.shares += 1;
+      d.shareCopies = (d.shareCopies || 0) + 1;
+      h.shareCopies = (h.shareCopies || 0) + 1;
       const src = (metadata?.["source"] as string) || "direct";
       store.channels["direct_link"] = (store.channels["direct_link"] || 0) + 1;
       detailDesc = `Copied Link (${src})`;
       break;
   }
 
-  // Prepend recent event (keep max 15)
+  // Prepend recent event (keep max 20)
   if (detailDesc) {
     store.recentEvents.unshift({
       id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
@@ -327,8 +289,8 @@ export function recordAnalyticsEvent(
       details: detailDesc,
       timestamp: Date.now(),
     });
-    if (store.recentEvents.length > 15) {
-      store.recentEvents = store.recentEvents.slice(0, 15);
+    if (store.recentEvents.length > 20) {
+      store.recentEvents = store.recentEvents.slice(0, 20);
     }
   }
 
@@ -376,6 +338,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
   let scToday = 0;
   let rvToday = 0;
   let shToday = 0;
+  let shCopiesToday = 0;
 
   let v7d = 0;
   let pv7d = 0;
@@ -383,6 +346,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
   let sc7d = 0;
   let rv7d = 0;
   let sh7d = 0;
+  let shCopies7d = 0;
 
   let v30d = 0;
   let pv30d = 0;
@@ -390,6 +354,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
   let sc30d = 0;
   let rv30d = 0;
   let sh30d = 0;
+  let shCopies30d = 0;
 
   for (let i = 0; i < 30; i++) {
     const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
@@ -401,6 +366,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
       surveysCompleted: 0,
       resultsViewed: 0,
       shares: 0,
+      shareCopies: 0,
     };
 
     v30d += dayData.visitors;
@@ -409,6 +375,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
     sc30d += dayData.surveysCompleted;
     rv30d += dayData.resultsViewed;
     sh30d += dayData.shares;
+    shCopies30d += dayData.shareCopies || 0;
 
     if (i < 7) {
       v7d += dayData.visitors;
@@ -417,6 +384,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
       sc7d += dayData.surveysCompleted;
       rv7d += dayData.resultsViewed;
       sh7d += dayData.shares;
+      shCopies7d += dayData.shareCopies || 0;
     }
 
     if (i === 0) {
@@ -426,6 +394,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
       scToday = dayData.surveysCompleted;
       rvToday = dayData.resultsViewed;
       shToday = dayData.shares;
+      shCopiesToday = dayData.shareCopies || 0;
     }
   }
 
@@ -434,7 +403,7 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
   const source = vercelApiData ? "vercel_direct_api" : "vercel_telemetry_integrated";
 
   // Build Funnel Stages
-  const funnelVisitors = Math.max(1, store.allTime.visitors);
+  const funnelVisitors = store.allTime.visitors;
   const funnelStarted = store.allTime.surveysStarted;
   const funnelCompleted = store.allTime.surveysCompleted;
   const funnelResultViewed = store.allTime.resultsViewed;
@@ -443,48 +412,48 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
   const stage1: FunnelStage = {
     name: "Visitors",
     count: funnelVisitors,
-    percentageOfTop: 100,
+    percentageOfTop: funnelVisitors > 0 ? 100 : 0,
     dropoffPercentage: 0,
-    conversionFromPrevious: 100,
+    conversionFromPrevious: funnelVisitors > 0 ? 100 : 0,
   };
 
-  const stage2Conv = Math.min(100, Math.round((funnelStarted / funnelVisitors) * 100));
+  const stage2Conv = funnelVisitors > 0 ? Math.min(100, Math.round((funnelStarted / funnelVisitors) * 100)) : 0;
   const stage2: FunnelStage = {
     name: "Survey Started",
     count: funnelStarted,
     percentageOfTop: stage2Conv,
-    dropoffPercentage: 100 - stage2Conv,
+    dropoffPercentage: funnelVisitors > 0 ? 100 - stage2Conv : 0,
     conversionFromPrevious: stage2Conv,
   };
 
-  const stage3Conv = Math.min(100, Math.round((funnelCompleted / Math.max(1, funnelStarted)) * 100));
+  const stage3Conv = funnelStarted > 0 ? Math.min(100, Math.round((funnelCompleted / funnelStarted) * 100)) : 0;
   const stage3: FunnelStage = {
     name: "Survey Completed",
     count: funnelCompleted,
-    percentageOfTop: Math.min(100, Math.round((funnelCompleted / funnelVisitors) * 100)),
-    dropoffPercentage: 100 - stage3Conv,
+    percentageOfTop: funnelVisitors > 0 ? Math.min(100, Math.round((funnelCompleted / funnelVisitors) * 100)) : 0,
+    dropoffPercentage: funnelStarted > 0 ? 100 - stage3Conv : 0,
     conversionFromPrevious: stage3Conv,
   };
 
-  const stage4Conv = Math.min(100, Math.round((funnelResultViewed / Math.max(1, funnelCompleted)) * 100));
+  const stage4Conv = funnelCompleted > 0 ? Math.min(100, Math.round((funnelResultViewed / funnelCompleted) * 100)) : 0;
   const stage4: FunnelStage = {
     name: "Result Viewed",
     count: funnelResultViewed,
-    percentageOfTop: Math.min(100, Math.round((funnelResultViewed / funnelVisitors) * 100)),
-    dropoffPercentage: 100 - stage4Conv,
+    percentageOfTop: funnelVisitors > 0 ? Math.min(100, Math.round((funnelResultViewed / funnelVisitors) * 100)) : 0,
+    dropoffPercentage: funnelCompleted > 0 ? 100 - stage4Conv : 0,
     conversionFromPrevious: stage4Conv,
   };
 
-  const stage5Conv = Math.min(100, Math.round((funnelShared / Math.max(1, funnelResultViewed)) * 100));
+  const stage5Conv = funnelResultViewed > 0 ? Math.min(100, Math.round((funnelShared / funnelResultViewed) * 100)) : 0;
   const stage5: FunnelStage = {
     name: "Share Clicked",
     count: funnelShared,
-    percentageOfTop: Math.min(100, Math.round((funnelShared / funnelVisitors) * 100)),
-    dropoffPercentage: 100 - stage5Conv,
+    percentageOfTop: funnelVisitors > 0 ? Math.min(100, Math.round((funnelShared / funnelVisitors) * 100)) : 0,
+    dropoffPercentage: funnelResultViewed > 0 ? 100 - stage5Conv : 0,
     conversionFromPrevious: stage5Conv,
   };
 
-  const overallConversion = Math.min(100, Math.round((funnelShared / funnelVisitors) * 100));
+  const overallConversion = funnelVisitors > 0 ? Math.min(100, Math.round((funnelShared / funnelVisitors) * 100)) : 0;
 
   // Build Trend points: Hourly for today
   const hourly: TrendDataPoint[] = [];
@@ -565,10 +534,18 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
   // Survey Modes breakdown
   const totalModes = Object.values(store.modes).reduce((a, b) => a + b, 0) || 1;
   const surveyModes: ModeBreakdown[] = Object.entries(store.modes).map(([mode, count]) => ({
-    mode: mode === "friend" || mode === "diagnose_friend" ? "Diagnose a Friend (7-Q)" : "Self Diagnosis (16-Q)",
+    mode: formatModeName(mode),
     count,
     percentage: Math.round((count / totalModes) * 100),
   })).sort((a, b) => b.count - a.count);
+
+  const completionRate = store.allTime.surveysStarted > 0
+    ? Math.min(100, Math.round((store.allTime.surveysCompleted / store.allTime.surveysStarted) * 100))
+    : 0;
+
+  const viralShareRate = store.allTime.resultsViewed > 0
+    ? Math.min(100, Math.round((funnelShared / store.allTime.resultsViewed) * 100))
+    : 0;
 
   return {
     traffic: {
@@ -613,13 +590,13 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
         allTime: store.allTime.shareClicks,
       },
       shareLinkCopies: {
-        today: Math.round(shToday * 0.6),
-        last7Days: Math.round(sh7d * 0.6),
-        last30Days: Math.round(sh30d * 0.6),
+        today: shCopiesToday,
+        last7Days: shCopies7d,
+        last30Days: shCopies30d,
         allTime: store.allTime.shareLinkCopies,
       },
-      completionRate: Math.round((store.allTime.surveysCompleted / Math.max(1, store.allTime.surveysStarted)) * 100),
-      viralShareRate: Math.round((funnelShared / Math.max(1, store.allTime.resultsViewed)) * 100),
+      completionRate,
+      viralShareRate,
     },
     funnel: {
       stages: [stage1, stage2, stage3, stage4, stage5],
@@ -637,6 +614,27 @@ export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardSta
     },
     lastUpdated: Date.now(),
   };
+}
+
+function formatModeName(mode: string): string {
+  switch (mode) {
+    case "self":
+    case "core_survey_self":
+      return "Main Chumtiya Detector (16-Q)";
+    case "friend":
+    case "diagnose_friend":
+      return "Diagnose a Friend (7-Q)";
+    case "red_flag":
+      return "Red Flag Detector 🚩";
+    case "toxic_friend":
+      return "Toxic Friend Detector 🐍";
+    case "delulu":
+      return "Delulu Detector 🦄";
+    case "battle":
+      return "1v1 Roast Battle ⚔️";
+    default:
+      return mode.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  }
 }
 
 function formatChannelName(ch: string): string {
