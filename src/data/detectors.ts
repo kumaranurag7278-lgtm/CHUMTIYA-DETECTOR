@@ -471,3 +471,199 @@ export const DETECTORS: Record<string, DetectorDefinition> = {
     ],
   },
 };
+
+export function getDetectorQuestions(detectorId: string, targetName?: string): DetectorQuestion[] {
+  if (detectorId === "red-flag") {
+    const name = targetName?.trim() || "Saamne wala";
+    return [
+      {
+        question: `Jab ${name} online hoke bhi 4 ghante baad reply deta/deti hai, uska reason kya hota hai?`,
+        answers: [
+          { text: "Baby busy thi/thaa samjha karo na...", score: 0 },
+          { text: "Phone silent pe tha aur achanak neend aa gayi thi.", score: 1 },
+          { text: "Arey notification off tha aur main bas reels dekh raha tha.", score: 2 },
+          { text: `Jaanbujh kar late reply karta hai taaki lage ki ${name} ki life bohot exciting hai aur upper hand bana rahe.`, score: 3 },
+        ],
+      },
+      {
+        question: `${name} ka/ki woh 'Best Friend' jiske baare me bola jaata hai: 'Chill bro, he/she is like a sibling to me'?`,
+        answers: [
+          { text: "Normal friendship hai, proper boundaries maintained hain.", score: 0 },
+          { text: "Har photo me dono ek dusre pe chadh ke pose dete hain.", score: 1 },
+          { text: "Raat ke 2 baje 'as a friend' 1 ghante ki deep life talks chal rahi hoti hain.", score: 2 },
+          { text: "Past me dono ka scene tha, par ab claim karte hain ki 'Hum dono bohot mature ho chuke hain.'", score: 3 },
+        ],
+      },
+      {
+        question: `${name} ke circle me aisi kitni 'CISTER' ya 'BROTHER' jaisi close dostiyaan hain?`,
+        answers: [
+          { text: "1 (ek genuine childhood friend hai).", score: 0 },
+          { text: "2 (college ki batchmates hain).", score: 1 },
+          { text: "3 (har hafte naya 'sibling' introduce hota hai).", score: 2 },
+          { text: `GURU RANDWA PRO MAX HAI... itne 'behen/bhai' hain ki poora parivaar register ho jaye!`, score: 3 },
+        ],
+      },
+      {
+        question: `Ladaai ya argument ke baad ${name} ka primary reaction kya hota hai?`,
+        answers: [
+          { text: "Shant hokar baat karta hai aur matter sort karta hai.", score: 0 },
+          { text: "2 din ke liye silent treatment aur one-word replies 'k', 'hmm'.", score: 1 },
+          { text: "'Acha theek hai meri hi galti hai na, khush ho jao ab!' (Passive aggressive taunt).", score: 2 },
+          { text: "Baat itni ghuma deta hai ki 15 minute baad aap khud ro rahe hote ho aur sorry bol rahe hote ho.", score: 3 },
+        ],
+      },
+      {
+        question: `Jab past relationships ki baat nikalti hai, toh ${name} apne exes ko kaise describe karta/karti hai?`,
+        answers: [
+          { text: "'Vibe match nahi hui, we mutually parted ways.'", score: 0 },
+          { text: "'Mera past mat poocho, bohot dard aur darkness hai.'", score: 1 },
+          { text: "'Mere saare ex pagal/toxic the, bas main akela bechara saint tha.'", score: 2 },
+          { text: "'Actually officially breakup nahi hua, hum pichle 9 mahine se break pe hain.'", score: 3 },
+        ],
+      },
+      {
+        question: `Commitment aur rishte ko official naam dene par ${name} ki kya philosophy hai?`,
+        answers: [
+          { text: "Clear clarity aur honesty.", score: 0 },
+          { text: "'I really love the vibe, par main abhi labels me believe nahi karta.'", score: 1 },
+          { text: "'Hum relationship me nahi hain, par agar tu kisi aur se baat karega toh mujhe gussa aayega.'", score: 2 },
+          { text: "6 mahine se date kar rahe ho, par dosto ke saamne bolta hai: 'She/He is just a homie.'", score: 3 },
+        ],
+      },
+      {
+        question: `${name} ke saath milne ka plan banane ka track record kaisa hai?`,
+        answers: [
+          { text: "Plan time pe set hota hai aur timely milte hain.", score: 0 },
+          { text: "Aakhri 10 minute pe bolta hai: 'Yaar sudden headache ho gaya/mummy ne mana kar diya.'", score: 1 },
+          { text: `Sirf tab milta hai jab ${name} ka apna kaam phasa ho ya koi aur dost free na ho.`, score: 2 },
+          { text: "Poora hafta dry text karega, fir achanak Saturday raat 11:45 PM: 'Wyd? Gedi pe chalein?'", score: 3 },
+        ],
+      },
+      {
+        question: `${name} ki Instagram following list me kya dekhne ko milta hai?`,
+        answers: [
+          { text: "Normal dost, meme pages aur college batchmates.", score: 0 },
+          { text: "Iska poora following list 'behen/bhai jaisi dosto' se hi bhara pada hai.", score: 1 },
+          { text: "Close Friends story list alag-alag categories me divide karke rakhi hai.", score: 2 },
+          { text: "Post like karega doosro ki, par tumhari story 23 ghante 59 minute baad dekhega.", score: 3 },
+        ],
+      },
+      {
+        question: `Aap dono ke saath ki photos aur stories pe ${name} ka kya scene hota hai?`,
+        answers: [
+          { text: "Normal tag karta hai aur bina kisi natak ke stories daalta hai.", score: 0 },
+          { text: "Sirf coffee mug aur aesthetic sneakers ki story jisme tumhara haath 2mm dikhe.", score: 1 },
+          { text: "Tum usko tag karo toh repost karne me maut aati hai.", score: 2 },
+          { text: "Publicly single banne ke liye bio me 'Focusing on my grind 📈' laga ke rakha hai.", score: 3 },
+        ],
+      },
+      {
+        question: `Jab aap apni genuine feeling ya insecurity express karte ho, tab ${name} kya bolta/bolti hai?`,
+        answers: [
+          { text: "Dhyan se sunta hai aur solution nikaalta hai.", score: 0 },
+          { text: "'Tu hamesha overreact karta/karti hai, itni si baat pe scene mat bana.'", score: 1 },
+          { text: "Apni purani trauma story shuru kar deta hai taaki focus uske upar shift ho jaye.", score: 2 },
+          { text: "'Lagta hai tujhe mujhpe trust hi nahi hai, humara rishta hi waste hai.'", score: 3 },
+        ],
+      },
+    ];
+  }
+
+  if (detectorId === "toxic-friend") {
+    const name = targetName?.trim() || "Aapka dost";
+    return [
+      {
+        question: `Jab aapne ${name} ko apna koi saman ya cheez di ho, aur aap usse apna hi saman waapas maangne jao:`,
+        answers: [
+          { text: "'Arey I am sorry lautana bhool gaya tha, le and thank you yaar!'", score: 0 },
+          { text: "'Umm wait shaam tak deta hu... abhi kisi aur ko de di woh cheez maine.'", score: 1 },
+          { text: "'Abe jaa na le kar!' (Muh phula leta hai aur uske baad baat nahi karta).", score: 2 },
+          { text: `Aapka hi saman lene par aapko hi neecha dikhata hai: 'Itni sasti cheez ke liye ro raha hai, le apna kachra.'`, score: 3 },
+        ],
+      },
+      {
+        question: `Jaise hi group me koi ladki ya crush aati hai, ${name} ka behavior kaisa ho jaata hai?`,
+        answers: [
+          { text: "Normal rehta hai, aapko support karta hai aur proper wingman banta hai.", score: 0 },
+          { text: "Achanak awaaz deep karke gentleman banne ki acting karta hai.", score: 1 },
+          { text: "Cool banne ke chakkar me sabke saamne aapka mazak udata hai: 'Bhai tu naha ke toh aaya hai na?'", score: 2 },
+          { text: `Aapka secret crush janne ke baad usi ke DMs me slide karke aapki hi burai shuru kar deta hai.`, score: 3 },
+        ],
+      },
+      {
+        question: `${name} ke saath bahar khane jao toh bill splitting me ${name} kya nautanki karta hai?`,
+        answers: [
+          { text: "Dono bhai apna apna bill barabar divide/split kar lete hain.", score: 0 },
+          { text: `${name} ko jab tak 3 baar maango na, tab tak paise nahi deta.`, score: 1 },
+          { text: "Kabhi paise nahi deta aur maangne par muh banane lagta hai.", score: 2 },
+          { text: "Once in a blue moon jaise-taise ₹50 dega, aur fir 50 logo ke saamne baith ke ginwayega: 'Maine khilaya tha.'", score: 3 },
+        ],
+      },
+      {
+        question: `Jab aapki koi badi achievement hoti hai (job lag gayi, exam nikal gaya, ya promotion mila), tab ${name} ka asli reaction:`,
+        answers: [
+          { text: "Dil se khush hota hai aur party celebrate karta hai.", score: 0 },
+          { text: "'Badhiya hai bhai, chal ab treat kab de raha hai?' (Normal chill reaction).", score: 1 },
+          { text: "Pehle 2 second shakal utarti hai, fir bolta hai: 'Arey company toh average hi hai waise.'", score: 2 },
+          { text: `Peeth peeche dusro se bolta hai: 'Iska toh luck chal gaya bhai / setting thi iski toh.'`, score: 3 },
+        ],
+      },
+      {
+        question: `Aapne emotional hoke ${name} ko jo apna sabse bada private secret bataya tha, uska kya hua?`,
+        answers: [
+          { text: "Hamesha secret rakhta hai, full brotherhood trust.", score: 0 },
+          { text: "Kisi teesre mutual dost ko casually bata deta hai.", score: 1 },
+          { text: "Next day group me sabke saamne tease karta hai: 'Bata du kya kal tune kya bola tha?'", score: 2 },
+          { text: `Aapse choti si behas hote hi poore college/group me aapka secret reveal kar deta hai.`, score: 3 },
+        ],
+      },
+      {
+        question: `Plans ya hangout me ${name} adjust/compromise karne me kaisa hai?`,
+        answers: [
+          { text: "Samajhta hai aur dono ki suvidha ke hisaab se adjust kar leta hai.", score: 0 },
+          { text: "Thoda aana-kaani karta hai, par aakhri me maan jaata hai.", score: 1 },
+          { text: `Extreme selfish hai, har cheez sirf ${name} ke mann aur comfort ke mutabik honi chahiye.`, score: 2 },
+          { text: "Agar isko zara sa bhi compromise karne bolo, toh muh bana ke baith jaata hai ya seedha jhagda karne lagta hai.", score: 3 },
+        ],
+      },
+      {
+        question: `Weekend pe jab aap dono ka plan bana ho, tab ${name} kya harkat karta hai?`,
+        answers: [
+          { text: "Time pe ready rehta hai aur plan follow karta hai.", score: 0 },
+          { text: "Aakhri 15 minute pe bahaana banata hai: 'Bhai tabiyat down lag rahi hai.'", score: 1 },
+          { text: "Aapka plan cancel karke 2 ghante baad doosre group ke saath cafe ki story daalta hai.", score: 2 },
+          { text: "Aapko bataye bina poora trip plan kar leta hai aur bolta hai: 'Arey hume laga tu busy hoga.'", score: 3 },
+        ],
+      },
+      {
+        question: `Agar aapka kisi se breakup ya lafda ho jaye, toh ${name} kya karta hai?`,
+        answers: [
+          { text: "Aapke saath khada rehta hai aur distract karta hai.", score: 0 },
+          { text: "'Chhod na bhai, woh tere layak hi nahi thi.'", score: 1 },
+          { text: "Breakup ke 48 ghante ke andar aapke ex ko follow request bhej ke story like karne lagta hai.", score: 2 },
+          { text: `Ex ke saath secret texting shuru karke bolta hai: 'Mai toh bas hum dono ka patch-up karwane ki koshish kar raha tha.'`, score: 3 },
+        ],
+      },
+      {
+        question: `Jab ${name} aapko compliment deta hai, toh uska tone kaisa hota hai?`,
+        answers: [
+          { text: "Genuine tareef: 'Bhai mast lag raha hai / sahi kaam kiya.'", score: 0 },
+          { text: "'Theek hi lag raha hai waise, pehle se toh better hai.'", score: 1 },
+          { text: "'Kapde toh ache hain par tere rang/muh pe suit nahi kar rahe.' (Hidden insult).", score: 2 },
+          { text: "'Tujhe aisi ladki mil gayi? Bhai usko aankho me problem hai kya?'", score: 3 },
+        ],
+      },
+      {
+        question: `Jab aapko sach me kisi cheez ki urgently zaroorat ho (hospital, transport, emergency):`,
+        answers: [
+          { text: "Bina sawaal pooche 15 minute me haazir ho jaata hai.", score: 0 },
+          { text: "Call utha ke bolta hai 'Arey yaar mai abhi thoda door hu, dost ko bhejta hu.'", score: 1 },
+          { text: "Phone ring hota rahega, call nahi uthayega aur 6 ghante baad text aayega: 'Phone silent pe tha, kya hua?'", score: 2 },
+          { text: `Aapki zaroorat ke time gayab ho jaayega, aur agle din aake bolega: 'Bhai tera phone chhod, pata hai kal mera kitna bada nuksaan ho gaya?'`, score: 3 },
+        ],
+      },
+    ];
+  }
+
+  return DETECTORS[detectorId]?.questions || [];
+}

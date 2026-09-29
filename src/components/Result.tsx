@@ -36,6 +36,7 @@ export function Result({ outcome, onRetry }: Props) {
   const [battleCopied, setBattleCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
+  const [showReservation, setShowReservation] = useState(false);
   const resultKey = outcomeId(outcome);
   const [quotaApplied, setQuotaApplied] = useState<{ name: string; delta: number } | null>(() => {
     if (typeof window === "undefined") return null;

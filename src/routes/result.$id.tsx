@@ -7,7 +7,12 @@ export const Route = createFileRoute("/result/$id")({
   loader: async ({ params }) => {
     const outcome = outcomeFromId(params.id);
     if (!outcome) throw notFound();
-    const origin = await getRequestOrigin();
+    let origin = "";
+    try {
+      origin = (await getRequestOrigin()) || "";
+    } catch {
+      origin = "";
+    }
     return { outcome, origin };
   },
   head: ({ params, loaderData }) => {

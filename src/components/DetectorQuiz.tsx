@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import type { DetectorDefinition, DetectorBand } from "@/data/detectors";
+import { getDetectorQuestions } from "@/data/detectors";
 import { playClick, playOptionSelect, playRoastSoundForScore } from "@/lib/sound";
 import { DatingPitchCard } from "./DatingPitchCard";
 import { recordEvent } from "@/lib/analytics";
@@ -12,6 +13,7 @@ import {
   Award,
   CheckCircle,
   ExternalLink,
+  UserCheck,
 } from "lucide-react";
 
 interface Props {
@@ -20,30 +22,42 @@ interface Props {
 }
 
 export function DetectorQuiz({ detector, onExit }: Props) {
+  const isTargetMode = detector.id === "red-flag" || detector.id === "toxic-friend";
+  const [targetName, setTargetName] = useState("");
+  const [started, setStarted] = useState(!isTargetMode);
+
   const [currentStep, setCurrentStep] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>(
-    new Array(detector.questions.length).fill(null)
-  );
   const [completed, setCompleted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [animatingPercent, setAnimatingPercent] = useState(0);
 
-  // Track survey_started on mount
-  useEffect(() => {
-    recordEvent("survey_started", { mode: detector.id });
-  }, [detector.id]);
-
-  const questions = detector.questions;
+  const questions = useMemo(
+    () => getDetectorQuestions(detector.id, targetName),
+    [detector.id, targetName]
+  );
   const totalQuestions = questions.length;
   const currentQ = questions[currentStep];
 
-  // Calculate score: 10 questions * max 3 = 30 max points
+  const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>(
+    new Array(totalQuestions).fill(null)
+  );
+
+  // Track survey_started on mount (if direct start)
+  useEffect(() => {
+    if (!isTargetMode) {
+      recordEvent("survey_started", { mode: detector.id });
+    }
+  }, [detector.id, isTargetMode]);
+
+  const displayName = targetName.trim() || (detector.id === "red-flag" ? "Saamne wala" : "Aapka dost");
+
+  // Calculate score: totalQuestions * max 3
   const scorePct = useMemo(() => {
     const rawTotal = selectedAnswers.reduce<number>((acc, ansIdx, qIdx) => {
       if (ansIdx === null) return acc;
       return acc + (questions[qIdx]?.answers[ansIdx]?.score ?? 0);
     }, 0);
-    const maxScore = totalQuestions * 3;
+    const maxScore = (totalQuestions || 10) * 3;
     return Math.min(100, Math.max(10, Math.round((rawTotal / maxScore) * 100)));
   }, [selectedAnswers, questions, totalQuestions]);
 
@@ -71,6 +85,7 @@ export function DetectorQuiz({ detector, onExit }: Props) {
         mode: detector.id,
         score: scorePct,
         band: outcomeBand.title,
+        target: isTargetMode ? displayName : undefined,
       });
       recordEvent("result_viewed", {
         source: detector.id,
@@ -93,7 +108,16 @@ export function DetectorQuiz({ detector, onExit }: Props) {
     setSelectedAnswers(new Array(totalQuestions).fill(null));
     setCurrentStep(0);
     setCompleted(false);
-    recordEvent("survey_started", { mode: detector.id, retry: true });
+    recordEvent("survey_started", { mode: detector.id, retry: true, target: isTargetMode ? displayName : undefined });
+  };
+
+  const handleResetTarget = () => {
+    playClick();
+    setSelectedAnswers(new Array(totalQuestions).fill(null));
+    setCurrentStep(0);
+    setCompleted(false);
+    setTargetName("");
+    setStarted(false);
   };
 
   // Percent animation on finish & roast sound
@@ -112,12 +136,14 @@ export function DetectorQuiz({ detector, onExit }: Props) {
       if (progress < 1) requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);
-  }, [completed, scorePct]);
+  }, [completed, scorePct, detector.id]);
 
   // Share result
   const handleShare = async () => {
     playClick();
-    const shareText = `${detector.emoji} Maine abhi "${detector.title}" test liya aur mera score aaya: ${scorePct}% (${outcomeBand.title})!\n${outcomeBand.description}\nTest your own score here: ${window.location.origin}/test/${detector.id}`;
+    const shareText = isTargetMode
+      ? `${detector.emoji} Maine abhi "${displayName}" ka ${detector.title} test kiya aur score aaya: ${scorePct}% (${outcomeBand.title})!\n${outcomeBand.description}\nApne partner/crush ya dost ko test karo: ${window.location.origin}/test/${detector.id}`
+      : `${detector.emoji} Maine abhi "${detector.title}" test liya aur mera score aaya: ${scorePct}% (${outcomeBand.title})!\n${outcomeBand.description}\nTest your own score here: ${window.location.origin}/test/${detector.id}`;
 
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
@@ -203,16 +229,24 @@ export function DetectorQuiz({ detector, onExit }: Props) {
     ctx.lineTo(W - 120, 290);
     ctx.stroke();
 
+    // Subject Name if target mode
+    if (isTargetMode && displayName) {
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 32px 'Space Grotesk', sans-serif";
+      ctx.letterSpacing = "3px";
+      ctx.fillText(`SUBJECT: ${displayName.toUpperCase()}`, W / 2, 335);
+    }
+
     // Large Score
-    ctx.font = "900 140px 'Space Grotesk', sans-serif";
+    ctx.font = "900 135px 'Space Grotesk', sans-serif";
     ctx.fillStyle = detector.themeColor.primary;
-    ctx.fillText(`${scorePct}%`, W / 2, 450);
+    ctx.fillText(`${scorePct}%`, W / 2, 455);
 
     // Score label
     ctx.font = "bold 26px 'Space Grotesk', sans-serif";
     ctx.fillStyle = "#a1a1aa";
     ctx.letterSpacing = "4px";
-    ctx.fillText(`${detector.shortTitle.toUpperCase()} INDEX`, W / 2, 510);
+    ctx.fillText(`${detector.shortTitle.toUpperCase()} INDEX`, W / 2, 515);
 
     // Category Box
     ctx.fillStyle = "rgba(255,255,255,0.04)";
@@ -240,7 +274,8 @@ export function DetectorQuiz({ detector, onExit }: Props) {
 
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/png");
-    a.download = `${detector.id}-Verdict-${scorePct}pct.png`;
+    const filePrefix = isTargetMode ? `${displayName.replace(/\s+/g, "_")}-${detector.id}` : `${detector.id}`;
+    a.download = `${filePrefix}-Verdict-${scorePct}pct.png`;
     a.click();
   };
 
@@ -269,6 +304,96 @@ export function DetectorQuiz({ detector, onExit }: Props) {
     ctx.fillText(line, x, curY);
   }
 
+  // --- STEP 1: TARGET NAME INPUT SCREEN (for Red Flag & Toxic Friend) ---
+  if (!started && isTargetMode) {
+    const isRedFlag = detector.id === "red-flag";
+    const headerTitle = isRedFlag ? "Kiska Red Flag Scan Karna Hai? 🚩" : "Kis Dost Ko Expose Karna Hai? 🐍";
+    const headerDesc = isRedFlag
+      ? "Crush, partner ya dost ka naam daalo aur 10 forensic sawaalo ke baad uska confidential Red Flag dossier nikaalo."
+      : "Apne dost ka naam daalo aur dekho aasteen ka saanp hai ya sachha homie. 10 sawaalo me poora sach bahar!";
+    const placeholder = isRedFlag ? "Crush / Partner / Dost ka naam (e.g. Aryan, Simran, Priya...)" : "Dost ka naam (e.g. Rohan, Bunty, Shreya...)";
+
+    const handleFormSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!targetName.trim()) return;
+      playClick();
+      recordEvent("survey_started", { mode: detector.id, target: targetName.trim() });
+      setStarted(true);
+    };
+
+    return (
+      <section className="relative mx-auto flex min-h-[100svh] max-w-xl flex-col items-center justify-center px-4 py-12 text-center animate-fade-in">
+        {/* Floating Top-Left Back Button */}
+        <button
+          onClick={() => {
+            playClick();
+            onExit();
+          }}
+          className="fixed top-5 left-5 z-40 inline-flex items-center gap-2 rounded-full border border-border bg-card/85 px-4 py-2 text-xs font-bold uppercase tracking-wider text-muted-foreground backdrop-blur-md transition-all hover:border-accent hover:text-accent hover:scale-105 active:scale-95 shadow-sm"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back to Arcade
+        </button>
+
+        <div
+          className={`flex h-16 w-16 items-center justify-center rounded-2xl border-2 text-3xl shadow-lg transition-transform hover:scale-110 ${detector.themeColor.border} ${detector.themeColor.badgeBg}`}
+        >
+          {detector.emoji}
+        </div>
+
+        <span
+          className={`mt-4 inline-flex items-center gap-1 rounded-full border px-3 py-1 font-mono text-xs uppercase tracking-widest ${detector.themeColor.badgeBg}`}
+        >
+          ● {detector.shortTitle.toUpperCase()} RADAR
+        </span>
+
+        <h2 className="mt-3 text-balance text-3xl font-black tracking-tight sm:text-4xl text-foreground">
+          {headerTitle}
+        </h2>
+        <p className="mt-2.5 max-w-md text-sm text-muted-foreground sm:text-base leading-relaxed">
+          {headerDesc}
+        </p>
+
+        <form onSubmit={handleFormSubmit} className="mt-8 w-full max-w-sm">
+          <div className="text-left">
+            <label htmlFor="target-name-input" className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+              {isRedFlag ? "Target Name (Partner / Crush / Dost):" : "Dost Ka Naam:"}
+            </label>
+            <input
+              id="target-name-input"
+              type="text"
+              required
+              autoFocus
+              value={targetName}
+              onChange={(e) => setTargetName(e.target.value)}
+              placeholder={placeholder}
+              className={`w-full rounded-2xl border bg-background/80 px-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:border-transparent transition-all backdrop-blur-sm ${
+                isRedFlag
+                  ? "border-red-500/40 focus:ring-red-500"
+                  : "border-emerald-500/40 focus:ring-emerald-500"
+              }`}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={!targetName.trim()}
+            className={`mt-4 w-full rounded-full py-4 text-xs font-bold uppercase tracking-[0.15em] text-white shadow-lg transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none ${
+              isRedFlag
+                ? "bg-red-500 hover:bg-red-600 shadow-red-500/20"
+                : "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20"
+            }`}
+          >
+            Start {detector.shortTitle} Scan ➔
+          </button>
+        </form>
+
+        <p className="mt-6 text-[11px] text-muted-foreground/70 font-mono">
+          🔒 100% Confidential Roast • No Data Stored Outside Your Session
+        </p>
+      </section>
+    );
+  }
+
   // --- RESULT SCREEN ---
   if (completed) {
     return (
@@ -282,7 +407,7 @@ export function DetectorQuiz({ detector, onExit }: Props) {
             }}
           >
             <span>{detector.emoji}</span>
-            <span>{detector.title} Verdict</span>
+            <span>{isTargetMode ? `Dossier: ${displayName}` : `${detector.title} Verdict`}</span>
           </div>
 
           {/* Animated Percentage */}
@@ -316,7 +441,7 @@ export function DetectorQuiz({ detector, onExit }: Props) {
               }}
             >
               <Share2 className="h-4 w-4" />
-              {copied ? "Verdict Copied!" : "Share Verdict"}
+              {copied ? "Verdict Copied!" : isTargetMode ? `Send to ${displayName}` : "Share Verdict"}
             </button>
 
             <button
@@ -329,12 +454,23 @@ export function DetectorQuiz({ detector, onExit }: Props) {
           </div>
 
           {/* Subtle Dating / Move On Pitch (No auto redirect, compact & to the side) */}
-          {(detector.id === "red_flag" || detector.id === "delulu" || detector.id === "toxic_friend") && (
+          {(detector.id === "red-flag" || detector.id === "delulu" || detector.id === "toxic-friend") && (
             <DatingPitchCard className="mt-6" />
           )}
 
           {/* Secondary Controls: Retest & Arcade */}
-          <div className="mt-5 flex items-center justify-center gap-4 text-xs font-mono">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3 text-xs font-mono">
+            {isTargetMode && (
+              <>
+                <button
+                  onClick={handleResetTarget}
+                  className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <UserCheck className="h-3.5 w-3.5" /> Doosre Ko Scan Karo
+                </button>
+                <span className="text-border">•</span>
+              </>
+            )}
             <button
               onClick={handleRetry}
               className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
@@ -346,7 +482,7 @@ export function DetectorQuiz({ detector, onExit }: Props) {
               onClick={onExit}
               className="inline-flex items-center gap-1.5 text-accent hover:underline"
             >
-              ← Back to Detector Arcade
+              ← Back to Arcade
             </button>
           </div>
         </div>
@@ -376,7 +512,7 @@ export function DetectorQuiz({ detector, onExit }: Props) {
               color: detector.themeColor.primary,
             }}
           >
-            {detector.emoji} {detector.shortTitle}
+            {detector.emoji} {isTargetMode ? `Scanning ${displayName}` : detector.shortTitle}
           </span>
           <span className="font-mono text-xs font-bold tracking-widest text-muted-foreground">
             {String(currentStep + 1).padStart(2, "0")} / {String(totalQuestions).padStart(2, "0")}
