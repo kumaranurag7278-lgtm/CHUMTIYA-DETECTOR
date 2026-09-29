@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
+import { Route as ApiSuggestionsRouteImport } from './routes/api/suggestions'
 import { Route as ResultIdRouteImport } from './routes/result.$id'
 import { Route as TestTestIdRouteImport } from './routes/test.$testId'
 import { Route as VsOpponentIdRouteImport } from './routes/vs.$opponentId'
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   id: '/admin/analytics',
   path: '/admin/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSuggestionsRoute = ApiSuggestionsRouteImport.update({
+  id: '/api/suggestions',
+  path: '/api/suggestions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResultIdRoute = ResultIdRouteImport.update({
@@ -74,6 +80,7 @@ const ApiOgIdRoute = ApiOgIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/api/suggestions': typeof ApiSuggestionsRoute
   '/result/$id': typeof ResultIdRoute
   '/test/$testId': typeof TestTestIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/api/suggestions': typeof ApiSuggestionsRoute
   '/result/$id': typeof ResultIdRoute
   '/test/$testId': typeof TestTestIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/api/suggestions': typeof ApiSuggestionsRoute
   '/result/$id': typeof ResultIdRoute
   '/test/$testId': typeof TestTestIdRoute
   '/vs/$opponentId': typeof VsOpponentIdRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin/analytics'
+    | '/api/suggestions'
     | '/result/$id'
     | '/test/$testId'
     | '/vs/$opponentId'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin/analytics'
+    | '/api/suggestions'
     | '/result/$id'
     | '/test/$testId'
     | '/vs/$opponentId'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin/analytics'
+    | '/api/suggestions'
     | '/result/$id'
     | '/test/$testId'
     | '/vs/$opponentId'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  ApiSuggestionsRoute: typeof ApiSuggestionsRoute
   ResultIdRoute: typeof ResultIdRoute
   TestTestIdRoute: typeof TestTestIdRoute
   VsOpponentIdRoute: typeof VsOpponentIdRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/analytics'
       fullPath: '/admin/analytics'
       preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/suggestions': {
+      id: '/api/suggestions'
+      path: '/api/suggestions'
+      fullPath: '/api/suggestions'
+      preLoaderRoute: typeof ApiSuggestionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/result/$id': {
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
+  ApiSuggestionsRoute: ApiSuggestionsRoute,
   ResultIdRoute: ResultIdRoute,
   TestTestIdRoute: TestTestIdRoute,
   VsOpponentIdRoute: VsOpponentIdRoute,
