@@ -304,14 +304,26 @@ export function playMemeRimshot(): void {
   }
 }
 
-/** Auto play appropriate meme sound based on roast score */
-export function playRoastSoundForScore(scorePct: number): void {
+/** Auto play appropriate meme sound based on roast score & quiz mode */
+export function playRoastSoundForScore(scorePct: number, mode?: string): void {
   if (!isSoundEnabled()) return;
-  if (scorePct >= 70) {
+
+  // Delulu special: funny comic boing
+  if (mode === "delulu" && scorePct >= 50) {
+    playMemeBoing();
+    return;
+  }
+
+  // Extreme roast (>= 65%): Brutal Womp Womp (Sad Trombone)
+  if (scorePct >= 65) {
     playMemeSadTrombone();
-  } else if (scorePct >= 45) {
+  }
+  // Medium dramatic roast (40% - 64%): Indian soap opera dramatic Dun Dun DUUUN!
+  else if (scorePct >= 40) {
     playMemeDramaticSting();
-  } else {
+  }
+  // Safe / low roast (< 40%): Upbeat fanfare / comedy punchline
+  else {
     playFanfare();
   }
 }

@@ -177,11 +177,62 @@ function saveStore(store: StorageSchema) {
   }
 }
 
-export function recordAnalyticsEvent(
+async function loadStoreAsync(): Promise<StorageSchema> {
+  const kvUrl = process.env["KV_REST_API_URL"] || process.env["UPSTASH_REDIS_REST_URL"];
+  const kvToken = process.env["KV_REST_API_TOKEN"] || process.env["UPSTASH_REDIS_REST_TOKEN"];
+
+  if (kvUrl && kvToken) {
+    try {
+      const res = await fetch(`${kvUrl}/get/chumtiya_analytics_v2`, {
+        headers: { Authorization: `Bearer ${kvToken}` },
+        cache: "no-store",
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.result) {
+          const parsed = typeof json.result === "string" ? JSON.parse(json.result) : json.result;
+          if (parsed && parsed.allTime && parsed.daily) {
+            checkDayRollover(parsed);
+            memoryStore = parsed;
+            return parsed;
+          }
+        }
+      }
+    } catch {
+      /* fallback to local store */
+    }
+  }
+
+  return loadStore();
+}
+
+async function saveStoreAsync(store: StorageSchema): Promise<void> {
+  saveStore(store);
+
+  const kvUrl = process.env["KV_REST_API_URL"] || process.env["UPSTASH_REDIS_REST_URL"];
+  const kvToken = process.env["KV_REST_API_TOKEN"] || process.env["UPSTASH_REDIS_REST_TOKEN"];
+
+  if (kvUrl && kvToken) {
+    try {
+      await fetch(`${kvUrl}/set/chumtiya_analytics_v2`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${kvToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(JSON.stringify(store)),
+      });
+    } catch {
+      /* non-blocking */
+    }
+  }
+}
+
+export async function recordAnalyticsEvent(
   event: AnalyticsEventName,
   metadata?: Record<string, unknown>
-): void {
-  const store = loadStore();
+): Promise<void> {
+  const store = await loadStoreAsync();
   const today = getTodayStr();
   const currentHour = new Date().getHours();
 
@@ -294,7 +345,7 @@ export function recordAnalyticsEvent(
     }
   }
 
-  saveStore(store);
+  await saveStoreAsync(store);
 }
 
 // Optionally fetch official Vercel Analytics direct stats if credentials exist in env
@@ -327,7 +378,7 @@ async function tryFetchVercelDirectStats(): Promise<{
 }
 
 export async function getAnalyticsDashboardData(): Promise<AnalyticsDashboardStats> {
-  const store = loadStore();
+  const store = await loadStoreAsync();
   const today = getTodayStr();
 
   // Calculate timeframe aggregates (today, 7d, 30d, all-time)

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { outcomeId, type Outcome } from "@/lib/scoring";
 import { CertificateModal } from "./CertificateModal";
-import { MemeSoundboard } from "./MemeSoundboard";
 import { DatingPitchCard } from "./DatingPitchCard";
 import { playClick, playRoastSoundForScore } from "@/lib/sound";
 import { Award, Swords, Share2, RotateCcw } from "lucide-react";
@@ -163,9 +162,6 @@ export function Result({ outcome, onRetry }: Props) {
             {outcome.traitDescription}
           </p>
         </div>
-
-        {/* Meme Soundboard */}
-        <MemeSoundboard />
 
         {/* Action Grid: Certificate & 1v1 Battle */}
         <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">

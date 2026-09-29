@@ -20,7 +20,7 @@ export const Route = createFileRoute("/api/analytics/track")({
           const event = body?.event as AnalyticsEventName;
 
           if (event && ALLOWED_EVENTS.has(event)) {
-            recordAnalyticsEvent(event, body.metadata);
+            await recordAnalyticsEvent(event, body.metadata);
           }
 
           return new Response(JSON.stringify({ ok: true }), {

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { outcomeFromId, computeOutcome, outcomeId, type Outcome } from "@/lib/scoring";
 import { getRequestOrigin } from "@/lib/origin.functions";
 import { Survey } from "@/components/Survey";
-import { playClick, playFanfare } from "@/lib/sound";
+import { playClick, playRoastSoundForScore } from "@/lib/sound";
 import { Swords, Trophy, Share2, RotateCcw } from "lucide-react";
 import { recordEvent } from "@/lib/analytics";
 
@@ -72,7 +72,7 @@ function VsPage() {
     const outcome = computeOutcome(answers);
     setMyOutcome(outcome);
     setPhase("verdict");
-    playFanfare();
+    playRoastSoundForScore(outcome.percentage, "battle");
     recordEvent("survey_completed", { mode: "battle", score: outcome.percentage, band: outcome.band });
     recordEvent("result_viewed", { source: "battle_verdict", percentage: outcome.percentage });
   };

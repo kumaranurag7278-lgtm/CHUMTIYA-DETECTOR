@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import { getFriendQuestions } from "@/data/friendQuestions";
 import { playClick, playOptionSelect, playRoastSoundForScore } from "@/lib/sound";
-import { MemeSoundboard } from "./MemeSoundboard";
 import { UserCheck, Share2, Download, ArrowLeft, RotateCcw, Award } from "lucide-react";
 import { FriendCertificateModal } from "./FriendCertificateModal";
 import { recordEvent } from "@/lib/analytics";
@@ -280,9 +279,6 @@ export function DiagnoseFriend({ onBack }: Props) {
             "{archetype.desc}"
           </p>
         </div>
-
-        {/* Meme Soundboard */}
-        <MemeSoundboard />
 
         <div className="mt-8 flex flex-col gap-3 w-full max-w-md sm:flex-row sm:justify-center">
           <button
