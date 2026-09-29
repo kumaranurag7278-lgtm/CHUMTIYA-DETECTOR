@@ -515,6 +515,30 @@ export async function saveQuestionSuggestion(data: {
     store.suggestions = store.suggestions.slice(0, 200);
   }
 
+  // Optional: Instantly ping owner's Discord if DISCORD_WEBHOOK_URL is configured
+  const discordWebhook = process.env["DISCORD_WEBHOOK_URL"];
+  if (discordWebhook) {
+    try {
+      fetch(discordWebhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          embeds: [
+            {
+              title: `💡 New Question Suggestion! (${data.category || "General"})`,
+              description: `**Question:**\n${newSuggestion.question}\n\n**Options:**\n${newSuggestion.options || "N/A"}\n\n**By:** ${cleanAuthor} (${newSuggestion.authorHandle || "No handle"})`,
+              color: 0xff6a30,
+              footer: { text: "Chumtiya Detector Inbox" },
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        }),
+      }).catch(() => {});
+    } catch {
+      /* non-blocking */
+    }
+  }
+
   // Prepend to recent events stream so owner immediately sees it
   store.recentEvents.unshift({
     id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
