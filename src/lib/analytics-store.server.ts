@@ -188,16 +188,26 @@ function saveStore(store: StorageSchema) {
 
 let cachedBlobUrl: string | null = null;
 
+function getBlobToken(): string | undefined {
+  return process.env["BLOB_READ_WRITE_TOKEN"] || process.env["VERCEL_OIDC_TOKEN"];
+}
+
 async function loadFromVercelBlob(): Promise<StorageSchema | null> {
-  const token = process.env["BLOB_READ_WRITE_TOKEN"];
+  const token = getBlobToken();
   if (!token) return null;
+
+  const storeId = process.env["BLOB_STORE_ID"];
+  const baseHeaders: Record<string, string> = {
+    authorization: `Bearer ${token}`,
+  };
+  if (storeId) {
+    baseHeaders["x-store-id"] = storeId;
+  }
 
   try {
     if (cachedBlobUrl) {
       const res = await fetch(cachedBlobUrl, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: baseHeaders,
         cache: "no-store",
       });
       if (res.ok) {
@@ -208,7 +218,7 @@ async function loadFromVercelBlob(): Promise<StorageSchema | null> {
 
     const listRes = await fetch("https://blob.vercel-storage.com?prefix=chumtiya_analytics_v2.json", {
       headers: {
-        authorization: `Bearer ${token}`,
+        ...baseHeaders,
         "x-api-version": "7",
       },
       cache: "no-store",
@@ -220,9 +230,7 @@ async function loadFromVercelBlob(): Promise<StorageSchema | null> {
       if (blob?.url) {
         cachedBlobUrl = blob.url;
         const res = await fetch(blob.url, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
+          headers: baseHeaders,
           cache: "no-store",
         });
         if (res.ok) {
@@ -239,16 +247,24 @@ async function loadFromVercelBlob(): Promise<StorageSchema | null> {
 }
 
 async function saveToVercelBlob(store: StorageSchema): Promise<boolean> {
-  const token = process.env["BLOB_READ_WRITE_TOKEN"];
+  const token = getBlobToken();
   if (!token) return false;
+
+  const storeId = process.env["BLOB_STORE_ID"];
+  const baseHeaders: Record<string, string> = {
+    authorization: `Bearer ${token}`,
+    "x-api-version": "7",
+    "content-type": "application/json",
+  };
+  if (storeId) {
+    baseHeaders["x-store-id"] = storeId;
+  }
 
   try {
     let res = await fetch("https://blob.vercel-storage.com/chumtiya_analytics_v2.json?addRandomSuffix=false", {
       method: "PUT",
       headers: {
-        authorization: `Bearer ${token}`,
-        "x-api-version": "7",
-        "content-type": "application/json",
+        ...baseHeaders,
         "x-access": "private",
       },
       body: JSON.stringify(store),
@@ -259,9 +275,7 @@ async function saveToVercelBlob(store: StorageSchema): Promise<boolean> {
       res = await fetch("https://blob.vercel-storage.com/chumtiya_analytics_v2.json?addRandomSuffix=false", {
         method: "PUT",
         headers: {
-          authorization: `Bearer ${token}`,
-          "x-api-version": "7",
-          "content-type": "application/json",
+          ...baseHeaders,
           "x-access": "public",
         },
         body: JSON.stringify(store),
